@@ -68,6 +68,7 @@ public class LivePlayActivity extends BaseActivity {
     private int currentChannelIndex = 0;
     private LiveChannel currentChannel = null;
 
+    private int hideChannelListTimeOut = 8000;
 
     @Override
     protected int getLayoutResID() {
@@ -114,7 +115,7 @@ public class LivePlayActivity extends BaseActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 mHandler.removeCallbacks(mHideChannelListRun);
-                mHandler.postDelayed(mHideChannelListRun, 5000);
+                mHandler.postDelayed(mHideChannelListRun, hideChannelListTimeOut);
             }
         });
         groupAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -137,7 +138,7 @@ public class LivePlayActivity extends BaseActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 mHandler.removeCallbacks(mHideChannelListRun);
-                mHandler.postDelayed(mHideChannelListRun, 5000);
+                mHandler.postDelayed(mHideChannelListRun, hideChannelListTimeOut);
             }
         });
         channelAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -166,13 +167,13 @@ public class LivePlayActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
-            if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            if ((keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_S) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
                 playNext();
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_W) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
                 playPrevious();
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_A) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
                 preSourceUrl();
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_D) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
                 nextSourceUrl();
             } else if (((Hawk.get(HawkConfig.DEBUG_OPEN, false) && keyCode == KeyEvent.KEYCODE_0) || keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE/* || keyCode == KeyEvent.KEYCODE_0*/) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
                 showChannelList();
@@ -212,7 +213,7 @@ public class LivePlayActivity extends BaseActivity {
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
             if (tvLeftLinearLayout.getVisibility() == View.VISIBLE) {
-                mHandler.postDelayed(mHideChannelListRun, 5000);
+                mHandler.postDelayed(mHideChannelListRun, hideChannelListTimeOut);
             }
         }
         return super.dispatchKeyEvent(event);
@@ -225,7 +226,7 @@ public class LivePlayActivity extends BaseActivity {
             mVideoView.resume();
         }
         if (tvLeftLinearLayout.getVisibility() == View.VISIBLE) {
-            mHandler.postDelayed(mHideChannelListRun, 5000);
+            mHandler.postDelayed(mHideChannelListRun, hideChannelListTimeOut);
         }
     }
 
@@ -344,7 +345,7 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void refreshTextInfo() {
-        tvChannel.setText(String.format("%d", currentChannel.getChannelNum()));
+        tvChannel.setText(String.format("%d - %d", currentChannel.getChannelNum(), currentChannel.sourceIdx + 1));
     }
 
     private Runnable mHideChannelListRun = new Runnable() {
@@ -404,7 +405,7 @@ public class LivePlayActivity extends BaseActivity {
                     }
                 });
                 mHandler.removeCallbacks(mHideChannelListRun);
-                mHandler.postDelayed(mHideChannelListRun, 5000);
+                mHandler.postDelayed(mHideChannelListRun, hideChannelListTimeOut);
             }
         }
     };
@@ -422,6 +423,7 @@ public class LivePlayActivity extends BaseActivity {
             mGroupGridView.setSelection(currentGroupIndex);
             mChannelGridView.setSelection(currentChannelIndex);
             tvHint.setVisibility(View.VISIBLE);
+            tvChannel.setVisibility(View.VISIBLE);
             tvLeftLinearLayout.setVisibility(View.VISIBLE);
             mHandler.postDelayed(showListAfterScrollOk, 100);
         }
@@ -479,6 +481,7 @@ public class LivePlayActivity extends BaseActivity {
         mVideoView.release();
         mVideoView.setUrl(currentChannel.getUrls());
         mVideoView.start();
+        showChannelNum();
         return true;
     }
 
@@ -500,6 +503,9 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void playNext() {
+        channelGroupList.get(currentGroupIndex).getLiveChannels().get(currentChannelIndex).setDefault(false);
+        channelAdapter.notifyItemChanged(currentChannelIndex);
+
         currentChannelIndex++;
         if (currentChannelIndex >= channelGroupList.get(currentGroupIndex).getLiveChannels().size()) {
             currentChannelIndex = 0;
@@ -508,8 +514,10 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void playPrevious() {
-        int playIndex = channelGroupList.indexOf(currentChannel);
-            currentChannelIndex--;
+        channelGroupList.get(currentGroupIndex).getLiveChannels().get(currentChannelIndex).setDefault(false);
+        channelAdapter.notifyItemChanged(currentChannelIndex);
+
+        currentChannelIndex--;
         if (currentChannelIndex < 0) {
             currentChannelIndex = channelGroupList.get(currentGroupIndex).getLiveChannels().size() - 1;
         }

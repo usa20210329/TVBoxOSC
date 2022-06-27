@@ -38,8 +38,13 @@ public class LiveChannel {
     }
 
     public String getUrls() {
-        if (sourceIdx <= 0 || sourceIdx >= urls.size())
+        int size = urls == null? 0: urls.size();
+
+        if (sourceIdx < 0){
+            sourceIdx = size-1;
+        }else if(sourceIdx > size-1){
             sourceIdx = 0;
+        }
         return urls.get(sourceIdx);
     }
 
