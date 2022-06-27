@@ -345,7 +345,7 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void refreshTextInfo() {
-        tvChannel.setText(String.format("%d - %d", currentChannel.getChannelNum(), currentChannel.sourceIdx + 1));
+        tvChannel.setText(String.format("%d - %d", currentChannel.getChannelNum(), currentChannel.sourceIdx));
     }
 
     private Runnable mHideChannelListRun = new Runnable() {
