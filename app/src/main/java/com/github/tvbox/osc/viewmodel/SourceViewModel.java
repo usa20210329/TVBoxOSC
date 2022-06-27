@@ -29,6 +29,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,12 +67,13 @@ public class SourceViewModel extends ViewModel {
         }
         SourceBean sourceBean = ApiConfig.get().getSource(sourceKey);
         int type = sourceBean.getType();
+        List<String> categories = sourceBean.getCategories();
         if (type == 3) {
             spThreadPool.execute(new Runnable() {
                 @Override
                 public void run() {
                     Spider sp = ApiConfig.get().getCSP(sourceBean);
-                    sortJson(sortResult, sp.homeContent(true));
+                    sortJson(sortResult, sp.homeContent(true), categories);
                 }
             });
         } else if (type == 0 || type == 1) {
@@ -94,7 +96,7 @@ public class SourceViewModel extends ViewModel {
                                 sortXml(sortResult, xml);
                             } else if (type == 1) {
                                 String json = response.body();
-                                sortJson(sortResult, json);
+                                sortJson(sortResult, json, categories);
                             }
                         }
 
@@ -376,11 +378,15 @@ public class SourceViewModel extends ViewModel {
     }
 
     private void sortJson(MutableLiveData<AbsSortXml> result, String json) {
+        sortJson(result, json, null);
+    }
+
+    private void sortJson(MutableLiveData<AbsSortXml> result, String json, List<String> categories) {
         try {
             JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
             AbsSortJson sortJson = new Gson().fromJson(obj, new TypeToken<AbsSortJson>() {
             }.getType());
-            AbsSortXml data = sortJson.toAbsSortXml();
+            AbsSortXml data = sortJson.toAbsSortXml(categories);
             try {
                 if (obj.has("filters")) {
                     LinkedHashMap<String, ArrayList<MovieSort.SortFilter>> sortFilters = new LinkedHashMap<>();
@@ -414,7 +420,7 @@ public class SourceViewModel extends ViewModel {
 
     private void sortXml(MutableLiveData<AbsSortXml> result, String xml) {
         try {
-            XStream xstream = new XStream(new DomDriver());//创建Xstram对象
+            XStream xstream = new XStream(new DomDriver());//创建XStream对象
             xstream.autodetectAnnotations(true);
             xstream.processAnnotations(AbsSortXml.class);
             xstream.ignoreUnknownElements();

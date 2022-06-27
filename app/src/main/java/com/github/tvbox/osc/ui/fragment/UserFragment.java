@@ -104,7 +104,8 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         });
         tvHotList.setAdapter(adapter);
 
-        initHomeHotVod(adapter);
+        // 兴趣不同, 不展示豆瓣
+        // initHomeHotVod(adapter);
     }
 
     private void initHomeHotVod(HomeHotVodAdapter adapter) {

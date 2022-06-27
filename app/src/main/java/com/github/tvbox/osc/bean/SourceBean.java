@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author pj567
@@ -27,6 +28,7 @@ public class SourceBean {
     private int filterable; // 可筛选?
     private String playerUrl; // 站点解析Url
     private String ext; // 扩展数据
+    private List<String> categories; // 分类列表
     private SourceState state;
 
     public String getKey() {
@@ -141,5 +143,13 @@ public class SourceBean {
 
     public void setExt(String ext) {
         this.ext = ext;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

@@ -81,7 +81,8 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "");
+        // 设置默认配置链接, 主要自用, 每次改太麻烦
+        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://raw.iqiq.io/anaer/Sub/main/meow/meow.json");
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
@@ -231,10 +232,11 @@ public class ApiConfig {
             sb.setType(obj.get("type").getAsInt());
             sb.setApi(obj.get("api").getAsString().trim());
             sb.setSearchable(DefaultConfig.safeJsonInt(obj, "searchable", 1));
-            sb.setSearchable(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
+            sb.setQuickSearch(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
             sb.setFilterable(DefaultConfig.safeJsonInt(obj, "filterable", 1));
             sb.setPlayerUrl(DefaultConfig.safeJsonString(obj, "playUrl", ""));
             sb.setExt(DefaultConfig.safeJsonString(obj, "ext", ""));
+            sb.setCategories(DefaultConfig.safeJsonStringList(obj, "categories"));
             sourceBeanList.add(sb);
         }
         if (sourceBeanList != null && sourceBeanList.size() > 0) {
@@ -268,8 +270,10 @@ public class ApiConfig {
             String defaultParse = Hawk.get(HawkConfig.DEFAULT_PARSE, "");
             if (!TextUtils.isEmpty(defaultParse))
                 for (ParseBean pb : parseBeanList) {
-                    if (pb.getName().equals(defaultParse))
+                    if (pb.getName().equals(defaultParse)){
                         setDefaultParse(pb);
+                        break;
+                    }
                 }
             if (mDefaultParse == null)
                 setDefaultParse(parseBeanList.get(0));

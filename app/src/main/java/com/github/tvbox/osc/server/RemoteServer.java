@@ -327,7 +327,7 @@ public class RemoteServer extends NanoHTTPD {
             JsonObject fileObj = new JsonObject();
             fileObj.addProperty("name", f.getName());
             fileObj.addProperty("path", f.getAbsolutePath().replace(root + "/", ""));
-            fileObj.addProperty("time", fileTime(f.lastModified(), "yyyy/MM/dd aHH:mm:ss"));
+            fileObj.addProperty("time", fileTime(f.lastModified(), "yyyy/MM/dd HH:mm:ss"));
             fileObj.addProperty("dir", f.isDirectory() ? 1 : 0);
             result.add(fileObj);
         }

@@ -427,11 +427,12 @@ public class HomeActivity extends BaseActivity {
                 if (sortFocused != currentSelected) {
                     currentSelected = sortFocused;
                     mViewPager.setCurrentItem(sortFocused, false);
-                    if (sortFocused == 0) {
-                        changeTop(false);
-                    } else {
-                        changeTop(true);
-                    }
+                    // top不隐藏, 切来切去眼花
+                    // if (sortFocused == 0) {
+                    //     changeTop(false);
+                    // } else {
+                    //     changeTop(true);
+                    // }
                 }
             }
         }
