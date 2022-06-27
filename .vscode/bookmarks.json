@@ -1,0 +1,104 @@
+{
+	"files": [
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/api/ApiConfig.java",
+			"bookmarks": [
+				{
+					"line": 82,
+					"column": 26,
+					"label": "加载配置"
+				},
+				{
+					"line": 83,
+					"column": 0,
+					"label": "可以设置默认url"
+				},
+				{
+					"line": 220,
+					"column": 58,
+					"label": "解析json配置"
+				},
+				{
+					"line": 233,
+					"column": 78,
+					"label": "这里错了"
+				},
+				{
+					"line": 270,
+					"column": 57,
+					"label": "添加break"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/util/DefaultConfig.java",
+			"bookmarks": [
+				{
+					"line": 27,
+					"column": 78,
+					"label": "点播分类排序"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/server/RemoteServer.java",
+			"bookmarks": [
+				{
+					"line": 329,
+					"column": 90,
+					"label": "日期格式有问题?"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/HomeActivity.java",
+			"bookmarks": [
+				{
+					"line": 423,
+					"column": 42,
+					"label": "tv版 不需要微调"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/DetailActivity.java",
+			"bookmarks": [
+				{
+					"line": 443,
+					"column": 56,
+					"label": "可以优先查全词匹配的"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/HistoryActivity.java",
+			"bookmarks": [
+				{
+					"line": 146,
+					"column": 8,
+					"label": "可优化"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/util/CrashHandler.java",
+			"bookmarks": [
+				{
+					"line": 134,
+					"column": 61,
+					"label": "crash日志路径"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/viewmodel/SourceViewModel.java",
+			"bookmarks": [
+				{
+					"line": 416,
+					"column": 71,
+					"label": "拼写错误"
+				}
+			]
+		}
+	]
+}
