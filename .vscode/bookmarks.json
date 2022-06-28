@@ -9,7 +9,12 @@
 					"label": "加载配置"
 				},
 				{
-					"line": 221,
+					"line": 83,
+					"column": 0,
+					"label": "设置默认url"
+				},
+				{
+					"line": 220,
 					"column": 58,
 					"label": "解析json配置"
 				}
@@ -26,6 +31,36 @@
 			]
 		},
 		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/HomeActivity.java",
+			"bookmarks": [
+				{
+					"line": 430,
+					"column": 45,
+					"label": "top栏 隐藏逻辑"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/DetailActivity.java",
+			"bookmarks": [
+				{
+					"line": 418,
+					"column": 40,
+					"label": "可以自定义正则分词"
+				},
+				{
+					"line": 422,
+					"column": 59,
+					"label": "分词"
+				},
+				{
+					"line": 437,
+					"column": 56,
+					"label": "快捷搜索"
+				}
+			]
+		},
+		{
 			"path": "app/src/main/java/com/github/tvbox/osc/util/CrashHandler.java",
 			"bookmarks": [
 				{
@@ -36,12 +71,67 @@
 			]
 		},
 		{
-			"path": "app/src/main/java/com/github/tvbox/osc/viewmodel/SourceViewModel.java",
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/PlayActivity.java",
 			"bookmarks": [
 				{
-					"line": 383,
-					"column": 62,
-					"label": "改首页分类"
+					"line": 107,
+					"column": 60,
+					"label": "控制继续播放"
+				},
+				{
+					"line": 274,
+					"column": 25,
+					"label": "播放失败时, 隐藏解析窗口"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/util/PlayerHelper.java",
+			"bookmarks": [
+				{
+					"line": 19,
+					"column": 54,
+					"label": "更新播放器配置"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/base/BaseLazyFragment.java",
+			"bookmarks": [
+				{
+					"line": 280,
+					"column": 65,
+					"label": "打开活动页, 带参数"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/res/layout/fragment_model.xml",
+			"bookmarks": [
+				{
+					"line": 256,
+					"column": 38,
+					"label": "配置页面"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/ModelSettingFragment.java",
+			"bookmarks": [
+				{
+					"line": 112,
+					"column": 20,
+					"label": "配置页 点击事件处理"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/util/FastClickCheckUtil.java",
+			"bookmarks": [
+				{
+					"line": 16,
+					"column": 41,
+					"label": "重复点击控制"
 				}
 			]
 		}
