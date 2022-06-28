@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.github.tvbox.osc.util.PushHelper;
+import com.github.tvbox.osc.util.HawkConfig;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * @author acer
@@ -185,6 +188,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void uploadCrashInfo() {
         StringBuilder mStringBuilder = getInfoStr(mCrashInfo);
         mStringBuilder.append(mExceptionInfo);
+
+        // 调试模式下 可将Crash信息推送到手机上
+        if(Hawk.get(HawkConfig.DEBUG_OPEN, false)){
+            PushHelper.push("Crash==>"+mStringBuilder.toString());
+        }
         saveCrashInfo2File(mStringBuilder);
     }
 }

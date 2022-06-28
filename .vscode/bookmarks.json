@@ -64,7 +64,7 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/util/CrashHandler.java",
 			"bookmarks": [
 				{
-					"line": 134,
+					"line": 137,
 					"column": 61,
 					"label": "crash日志路径"
 				}
@@ -119,6 +119,11 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/ModelSettingFragment.java",
 			"bookmarks": [
 				{
+					"line": 72,
+					"column": 83,
+					"label": "调试模式开关"
+				},
+				{
 					"line": 112,
 					"column": 20,
 					"label": "配置页 点击事件处理"
@@ -132,6 +137,16 @@
 					"line": 16,
 					"column": 41,
 					"label": "重复点击控制"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/LivePlayActivity.java",
+			"bookmarks": [
+				{
+					"line": 347,
+					"column": 51,
+					"label": "右上角频道显示设置"
 				}
 			]
 		}
