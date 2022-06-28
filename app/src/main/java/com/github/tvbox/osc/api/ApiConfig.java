@@ -202,6 +202,12 @@ public class ApiConfig {
                     callback.error("");
                 }
             }
+
+            @Override
+            public void onError(Response<File> response) {
+                super.onError(response);
+                callback.error("");
+            }
         });
     }
 
