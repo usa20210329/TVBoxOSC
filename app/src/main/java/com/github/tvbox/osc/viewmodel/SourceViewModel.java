@@ -33,8 +33,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author pj567
@@ -58,7 +63,7 @@ public class SourceViewModel extends ViewModel {
         playResult = new MutableLiveData<>();
     }
 
-    public static final ExecutorService spThreadPool = Executors.newFixedThreadPool(3);
+    public static final ExecutorService spThreadPool = Executors.newSingleThreadExecutor();
 
     public void getSort(String sourceKey) {
         if (sourceKey == null) {
@@ -69,13 +74,40 @@ public class SourceViewModel extends ViewModel {
         int type = sourceBean.getType();
         List<String> categories = sourceBean.getCategories();
         if (type == 3) {
-            spThreadPool.execute(new Runnable() {
+            Runnable waitResponse = new Runnable() {
                 @Override
                 public void run() {
-                    Spider sp = ApiConfig.get().getCSP(sourceBean);
-                    sortJson(sortResult, sp.homeContent(true), categories);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Future<String> future = executor.submit(new Callable<String>() {
+                        @Override
+                        public String call() throws Exception {
+                            Spider sp = ApiConfig.get().getCSP(sourceBean);
+                            return sp.homeContent(true);
+                        }
+                    });
+                    String sortJson = null;
+                    try {
+                        sortJson = future.get(15, TimeUnit.SECONDS);
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                        future.cancel(true);
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (sortJson != null) {
+                            sortJson(sortResult, sortJson, categories);
+                        } else {
+                            sortResult.postValue(null);
+                        }
+                        try {
+                            executor.shutdown();
+                        } catch (Throwable th) {
+                            th.printStackTrace();
+                        }
+                    }
                 }
-            });
+            };
+            spThreadPool.execute(waitResponse);
         } else if (type == 0 || type == 1) {
             OkGo.<String>get(sourceBean.getApi())
                     .tag(sourceBean.getKey() + "_sort")

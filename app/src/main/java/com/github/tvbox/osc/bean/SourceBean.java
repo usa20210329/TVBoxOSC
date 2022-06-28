@@ -1,11 +1,5 @@
 package com.github.tvbox.osc.bean;
 
-import com.github.tvbox.osc.cache.RoomDataManger;
-import com.github.tvbox.osc.cache.SourceState;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +23,6 @@ public class SourceBean {
     private String playerUrl; // 站点解析Url
     private String ext; // 扩展数据
     private List<String> categories; // 分类列表
-    private SourceState state;
 
     public String getKey() {
         return key;
@@ -63,38 +56,6 @@ public class SourceBean {
         return playerUrl;
     }
 
-    public void setState(SourceState state) {
-        this.state = state;
-    }
-
-    public SourceState getState() {
-        if (state == null) {
-            state = new SourceState();
-            state.sourceKey = getKey();
-            state.active = true;
-            state.home = false;
-        }
-        return state;
-    }
-
-    public boolean isHome() {
-        return getState().home;
-    }
-
-    public void setHome(boolean home) {
-        getState().home = home;
-        RoomDataManger.addSourceState(getState());
-    }
-
-    public boolean isActive() {
-        return getState().active;
-    }
-
-    public void setActive(boolean act) {
-        getState().active = act;
-        RoomDataManger.addSourceState(getState());
-    }
-
     public int getType() {
         return type;
     }
@@ -103,18 +64,8 @@ public class SourceBean {
         this.type = type;
     }
 
-    public void setTidSort(HashMap<String, Integer> tidSort) {
-        getState().tidSort = new Gson().toJson(tidSort);
-        RoomDataManger.addSourceState(getState());
-    }
-
-    public HashMap<String, Integer> getTidSort() {
-        return new Gson().fromJson(state.tidSort, new TypeToken<HashMap<String, Integer>>() {
-        }.getType());
-    }
-
-    public int getSearchable() {
-        return searchable;
+    public boolean isSearchable() {
+        return searchable != 0;
     }
 
     public void setSearchable(int searchable) {
