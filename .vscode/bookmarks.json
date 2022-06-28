@@ -4,11 +4,6 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/api/ApiConfig.java",
 			"bookmarks": [
 				{
-					"line": 82,
-					"column": 26,
-					"label": "加载配置"
-				},
-				{
 					"line": 83,
 					"column": 0,
 					"label": "设置默认url"
@@ -147,6 +142,16 @@
 					"line": 347,
 					"column": 51,
 					"label": "右上角频道显示设置"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/viewmodel/SourceViewModel.java",
+			"bookmarks": [
+				{
+					"line": 145,
+					"column": 63,
+					"label": "首页分类查询"
 				}
 			]
 		}

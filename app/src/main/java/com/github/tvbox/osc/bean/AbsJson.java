@@ -2,7 +2,12 @@ package com.github.tvbox.osc.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
+
+import com.github.tvbox.osc.util.NumUtil;
+import com.github.tvbox.osc.util.PushHelper;
 
 /**
  * @author pj567
@@ -159,6 +164,22 @@ public class AbsJson implements Serializable {
         }
         movie.recordcount = total;
         List<Movie.Video> videoList = new ArrayList<>();
+
+        // 先按年份排序, 再按vod_id排序
+        /*
+        Collections.sort(list, new Comparator<AbsJsonVod>() {
+            @Override
+            public int compare(AbsJsonVod e1, AbsJsonVod e2) {
+                Integer vod1Year = NumUtil.toInt(e1.vod_year, 0);
+                Integer vod2Year = NumUtil.toInt(e2.vod_year, 0);
+                if(vod1Year.equals(vod2Year)){
+                    return e2.vod_id.compareTo(e1.vod_id);
+                }
+                return Integer.compare(vod2Year, vod1Year);
+            }
+        });
+         */
+
         for (AbsJsonVod vod : list) {
             try {
                 videoList.add(vod.toXmlVideo());
