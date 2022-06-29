@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -409,12 +410,7 @@ public class LightLivePlayActivity extends BaseActivity {
     }
 
     private void refreshTextInfo() {
-        try{
-
         tvChannel.setText(String.format("%s 频道%d 源%d",currentChannel.getChannelName(), currentChannel.getChannelNum(), currentChannel.getSourceIndex()+ 1));
-        }catch(Exception e){
-            
-        }
     }
 
     private Runnable mHideChannelListRun = new Runnable() {
@@ -584,13 +580,21 @@ public class LightLivePlayActivity extends BaseActivity {
     }
 
     public void preSourceUrl() {
-        currentChannel.preSource();
-        playChannel(currentChannelIndex, true);
+        if(currentChannel.getSourceNum()>1){
+            currentChannel.preSource();
+            playChannel(currentChannelIndex, true);
+        }else{
+            showChannelNum();
+        }
     }
 
     public void nextSourceUrl() {
-        currentChannel.nextSource();
-        playChannel(currentChannelIndex, true);
+        if(currentChannel.getSourceNum()>1){
+            currentChannel.nextSource();
+            playChannel(currentChannelIndex, true);
+        }else{
+            showChannelNum();
+        }
     }
 
     public void selectChannelGroup(int groupIndex) {
