@@ -51,7 +51,7 @@ import xyz.doikki.videoplayer.player.VideoView;
  * @date :2021/1/12
  * @description:
  */
-public class LivePlayActivity extends BaseActivity {
+public class LightLivePlayActivity extends BaseActivity {
     private VideoView mVideoView;
     private TextView tvHint;
     private TextView tvChannel;
@@ -339,7 +339,7 @@ public class LivePlayActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        LivePlayActivity.this.showSuccess();
+                        LightLivePlayActivity.this.showSuccess();
                         initLiveState();
                     }
                 });
@@ -409,7 +409,12 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void refreshTextInfo() {
-        tvChannel.setText(String.format("%d", currentChannel.getChannelNum()));
+        try{
+
+        tvChannel.setText(String.format("%s 频道%d 源%d",currentChannel.getChannelName(), currentChannel.getChannelNum(), currentChannel.getSourceIndex()+ 1));
+        }catch(Exception e){
+            
+        }
     }
 
     private Runnable mHideChannelListRun = new Runnable() {

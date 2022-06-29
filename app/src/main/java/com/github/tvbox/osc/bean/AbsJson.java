@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Collections;
 
 import com.github.tvbox.osc.util.NumUtil;
-import com.github.tvbox.osc.util.PushHelper;
 
 /**
  * @author pj567
@@ -166,7 +165,7 @@ public class AbsJson implements Serializable {
         List<Movie.Video> videoList = new ArrayList<>();
 
         // 先按年份排序, 再按vod_id排序
-        /*
+        // 一般不是最新的 不会去看
         Collections.sort(list, new Comparator<AbsJsonVod>() {
             @Override
             public int compare(AbsJsonVod e1, AbsJsonVod e2) {
@@ -178,7 +177,6 @@ public class AbsJson implements Serializable {
                 return Integer.compare(vod2Year, vod1Year);
             }
         });
-         */
 
         for (AbsJsonVod vod : list) {
             try {
