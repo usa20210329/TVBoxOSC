@@ -22,12 +22,27 @@
 					"line": 27,
 					"column": 78,
 					"label": "点播分类排序"
+				},
+				{
+					"line": 35,
+					"column": 60,
+					"label": "添加长者页"
 				}
 			]
 		},
 		{
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/HomeActivity.java",
 			"bookmarks": [
+				{
+					"line": 341,
+					"column": 43,
+					"label": "加载我的页面"
+				},
+				{
+					"line": 342,
+					"column": 61,
+					"label": "增加长者页"
+				},
 				{
 					"line": 430,
 					"column": 45,
@@ -47,6 +62,11 @@
 					"line": 422,
 					"column": 59,
 					"label": "分词"
+				},
+				{
+					"line": 427,
+					"column": 107,
+					"label": "分词概率调整"
 				},
 				{
 					"line": 437,
@@ -152,6 +172,26 @@
 					"line": 145,
 					"column": 63,
 					"label": "首页分类查询"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/GridFragment.java",
+			"bookmarks": [
+				{
+					"line": 151,
+					"column": 47,
+					"label": "加载分类页面数据"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/UserFragment.java",
+			"bookmarks": [
+				{
+					"line": 41,
+					"column": 83,
+					"label": "我的页面"
 				}
 			]
 		}
