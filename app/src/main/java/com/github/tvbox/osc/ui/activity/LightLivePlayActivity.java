@@ -46,6 +46,7 @@ import java.util.List;
 
 import xyz.doikki.videocontroller.component.GestureView;
 import xyz.doikki.videoplayer.player.VideoView;
+import com.github.tvbox.osc.util.DangBeiKeyEvent;
 
 /**
  * @author pj567
@@ -226,17 +227,23 @@ public class LightLivePlayActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
-            if ((keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_S) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            // Toast.makeText(LightLivePlayActivity.this, "按键:"+keyCode, Toast.LENGTH_SHORT).show();
+
+            boolean isChannelVisible = tvLeftLinearLayout.getVisibility() == View.VISIBLE;
+
+            if (keyCode == DangBeiKeyEvent.DOWN && !isChannelVisible) {
                 playNext();
-            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_W) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if (keyCode == DangBeiKeyEvent.UP && !isChannelVisible) {
                 playPrevious();
-            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_A) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if (keyCode == DangBeiKeyEvent.LEFT && !isChannelVisible) {
                 preSourceUrl();
-            } else if ((keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_D) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if (keyCode == DangBeiKeyEvent.RIGHT && !isChannelVisible) {
                 nextSourceUrl();
-            } else if (((Hawk.get(HawkConfig.DEBUG_OPEN, false) && keyCode == KeyEvent.KEYCODE_0) || keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE/* || keyCode == KeyEvent.KEYCODE_0*/) && tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if (keyCode == DangBeiKeyEvent.MENU && !isChannelVisible) {
                 showChannelList();
-            } else if (tvLeftLinearLayout.getVisibility() == View.INVISIBLE) {
+            } else if (keyCode == DangBeiKeyEvent.OK && !isChannelVisible){
+                togglePlay();
+            } else if (!isChannelVisible) {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_0:
                         inputChannelNum("0");
@@ -276,6 +283,16 @@ public class LightLivePlayActivity extends BaseActivity {
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    private void togglePlay(){
+        if(mVideoView != null){
+            if(mVideoView.isPlaying()){
+                mVideoView.pause();
+            }else{
+                mVideoView.resume();
+            }
+        }
     }
 
     @Override
