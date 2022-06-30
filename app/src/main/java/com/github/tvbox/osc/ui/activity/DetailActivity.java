@@ -538,7 +538,7 @@ public class DetailActivity extends BaseActivity {
 
         ArrayList<String> siteKey = new ArrayList<>();
         for (SourceBean bean : searchRequestList) {
-            if (!bean.isSearchable() || !bean.isQuickSearch()) {
+            if (!bean.isQuickSearch()) {
                 continue;
             }
             siteKey.add(bean.getKey());

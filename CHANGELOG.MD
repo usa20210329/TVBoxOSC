@@ -5,6 +5,7 @@
 1. 调整launch.json和tasks.json, 终于会连MuMu模拟器了
 2. 调试模式打开时, 直播界面添加显示按键code, 不过发现mac的方向键无效 
 3. 设置界面添加直播频道名配置菜单, 可动态配置直播名
+4. 点播详情页的快速搜索 只判断quickSearch是否开启, 便于跟搜索页区分
 PS: 直接在gradlew文件中配置JAVA_HOME
 
 ## 220629
