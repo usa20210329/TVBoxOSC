@@ -4,9 +4,8 @@
         {
             "label": "run gradle",
             "type": "shell",
-            "command": "${workspaceFolder}/gradlew",
+            "command": "${workspaceFolder}/gradlew assembleDebug --build-cache --parallel --daemon --warning-mode all",
             "args": [
-                "assembleDebug"
             ],
             "presentation": {
                 "echo": true,

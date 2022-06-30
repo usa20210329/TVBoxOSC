@@ -227,7 +227,11 @@ public class LightLivePlayActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
-            // Toast.makeText(LightLivePlayActivity.this, "按键:"+keyCode, Toast.LENGTH_SHORT).show();
+
+            // Debug模式下 直播间显示按键信息
+            if(Hawk.get(HawkConfig.DEBUG_OPEN, false)){
+                Toast.makeText(LightLivePlayActivity.this, "按键:"+keyCode, Toast.LENGTH_SHORT).show();
+            }
 
             boolean isChannelVisible = tvLeftLinearLayout.getVisibility() == View.VISIBLE;
 
@@ -427,7 +431,14 @@ public class LightLivePlayActivity extends BaseActivity {
     }
 
     private void refreshTextInfo() {
-        tvChannel.setText(String.format("%s 频道%d 源%d",currentChannel.getChannelName(), currentChannel.getChannelNum(), currentChannel.getSourceIndex()+ 1));
+        String channelHint = Hawk.get(HawkConfig.CHANNEL_HINT, "");
+
+        channelHint = channelHint.replace("%n", currentChannel.getChannelName());
+        channelHint = channelHint.replace("%c", String.valueOf(currentChannel.getChannelNum()));
+        channelHint = channelHint.replace("%s", String.valueOf(currentChannel.getSourceIndex()+1));
+        channelHint = channelHint.replace("%a", String.valueOf(currentChannel.getSourceNum()));
+
+        tvChannel.setText(channelHint);
     }
 
     private Runnable mHideChannelListRun = new Runnable() {

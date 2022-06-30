@@ -19,4 +19,5 @@ public class HawkConfig {
     public static final String PLAY_SCALE = "play_scale"; //0 texture 2
     public static final String PLAY_TIME_STEP = "play_time_step"; //0 texture 2
     public static final String DOH_URL = "doh_url";
+    public static final String CHANNEL_HINT = "channel_hint"; // n: 频道名 c:频道编号 s:源序号 a:源数
 }
