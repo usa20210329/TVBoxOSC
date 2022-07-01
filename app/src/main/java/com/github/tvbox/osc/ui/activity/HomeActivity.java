@@ -140,7 +140,9 @@ public class HomeActivity extends BaseActivity {
                     textView.getPaint().setFakeBoldText(true);
                     textView.setTextColor(HomeActivity.this.getResources().getColor(R.color.color_FFFFFF));
                     textView.invalidate();
-                    if (!sortAdapter.getItem(position).filters.isEmpty())
+
+                    MovieSort.SortData sortData = sortAdapter.getItem(position);
+                    if (sortData != null && sortData.filters != null && !sortData.filters.isEmpty())
                         view.findViewById(R.id.tvFilter).setVisibility(View.VISIBLE);
                     HomeActivity.this.sortFocusView = view;
                     HomeActivity.this.sortFocused = position;
@@ -176,6 +178,7 @@ public class HomeActivity extends BaseActivity {
             }
         });
         setLoadSir(this.contentLayout);
+        
         //mHandler.postDelayed(mFindFocus, 500);
     }
 

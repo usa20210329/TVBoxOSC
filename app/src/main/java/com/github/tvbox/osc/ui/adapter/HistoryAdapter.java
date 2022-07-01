@@ -17,6 +17,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
+import android.view.View;
+import com.github.tvbox.osc.util.LOG;
+import com.google.gson.Gson;
 
 /**
  * @author pj567
@@ -30,6 +33,7 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, VodInfo item) {
+        // LOG.e("=========>"+new Gson().toJson(item));
         TextView tvYear = helper.getView(R.id.tvYear);
         /*if (item.year <= 0) {
             tvYear.setVisibility(View.GONE);
@@ -52,17 +56,17 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
             tvArea.setText(item.area);
             tvArea.setVisibility(View.VISIBLE);
         }
+        */
 
         TextView tvNote = helper.getView(R.id.tvNote);
-        if (TextUtils.isEmpty(item.note)) {
-            tvNote.setVisibility(View.GONE);
-        } else {
+        if(item.playIndex > 0){
+            tvNote.setText(item.note+", 已看"+(item.playIndex+1)+"集");
+        }else{
             tvNote.setText(item.note);
-            tvNote.setVisibility(View.VISIBLE);
-        }*/
+        }
         helper.setVisible(R.id.tvLang, false);
         helper.setVisible(R.id.tvArea, false);
-        helper.setVisible(R.id.tvNote, false);
+        helper.setVisible(R.id.tvNote, true);
         helper.setText(R.id.tvName, item.name);
         // helper.setText(R.id.tvActor, item.actor);
         ImageView ivThumb = helper.getView(R.id.ivThumb);
