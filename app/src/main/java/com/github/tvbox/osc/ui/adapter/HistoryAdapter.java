@@ -20,6 +20,7 @@ import me.jessyan.autosize.utils.AutoSizeUtils;
 import android.view.View;
 import com.github.tvbox.osc.util.LOG;
 import com.google.gson.Gson;
+import com.github.tvbox.osc.util.*;
 
 /**
  * @author pj567
@@ -33,42 +34,18 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, VodInfo item) {
-        // LOG.e("=========>"+new Gson().toJson(item));
-        TextView tvYear = helper.getView(R.id.tvYear);
-        /*if (item.year <= 0) {
-            tvYear.setVisibility(View.GONE);
-        } else {
-            tvYear.setText(String.valueOf(item.year));
-            tvYear.setVisibility(View.VISIBLE);
-        }*/
-        tvYear.setText(ApiConfig.get().getSource(item.sourceKey).getName());
-        /*TextView tvLang = helper.getView(R.id.tvLang);
-        if (TextUtils.isEmpty(item.lang)) {
-            tvLang.setVisibility(View.GONE);
-        } else {
-            tvLang.setText(item.lang);
-            tvLang.setVisibility(View.VISIBLE);
-        }
-        TextView tvArea = helper.getView(R.id.tvArea);
-        if (TextUtils.isEmpty(item.area)) {
-            tvArea.setVisibility(View.GONE);
-        } else {
-            tvArea.setText(item.area);
-            tvArea.setVisibility(View.VISIBLE);
-        }
-        */
 
-        TextView tvNote = helper.getView(R.id.tvNote);
-        if(item.playIndex > 0){
-            tvNote.setText(item.note+", 已看"+(item.playIndex+1)+"集");
-        }else{
-            tvNote.setText(item.note);
-        }
-        helper.setVisible(R.id.tvLang, false);
-        helper.setVisible(R.id.tvArea, false);
-        helper.setVisible(R.id.tvNote, true);
-        helper.setText(R.id.tvName, item.name);
-        // helper.setText(R.id.tvActor, item.actor);
+        showText(helper, R.id.tvYear, ApiConfig.get().getSource(item.sourceKey).getName());
+
+        showText(helper, R.id.tvArea, "");
+
+        showText(helper, R.id.tvLang, TextUtils.isEmpty(item.playNote)?"":item.playNote);
+    
+        showText(helper, R.id.tvNote, item.note);
+
+        showText(helper, R.id.tvName, item.name);
+
+
         ImageView ivThumb = helper.getView(R.id.ivThumb);
         //由于部分电视机使用glide报错
         if (!TextUtils.isEmpty(item.pic)) {
@@ -83,6 +60,15 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
                     .into(ivThumb);
         } else {
             ivThumb.setImageResource(R.drawable.img_loading_placeholder);
+        }
+    }
+
+    private void showText(BaseViewHolder helper, int id, String text){
+        if(TextUtils.isEmpty(text)){
+            helper.setVisible(id, false);
+        }else{
+            helper.setVisible(id, true);
+            helper.setText(id, text);
         }
     }
 }

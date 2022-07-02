@@ -541,7 +541,7 @@ public class SourceViewModel extends ViewModel {
             JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
             AbsSortJson sortJson = new Gson().fromJson(obj, new TypeToken<AbsSortJson>() {
             }.getType());
-            AbsSortXml data = sortJson.toAbsSortXml(categories);
+            AbsSortXml data = sortJson.toAbsSortXml();
             try {
                 if (obj.has("filters")) {
                     LinkedHashMap<String, ArrayList<MovieSort.SortFilter>> sortFilters = new LinkedHashMap<>();

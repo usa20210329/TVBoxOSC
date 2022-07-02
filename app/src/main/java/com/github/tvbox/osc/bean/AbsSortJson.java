@@ -16,6 +16,7 @@ public class AbsSortJson implements Serializable {
     @SerializedName(value = "list")
     public ArrayList<AbsJson.AbsJsonVod> list;
 
+
     public AbsSortXml toAbsSortXml() {
         AbsSortXml absSortXml = new AbsSortXml();
         MovieSort movieSort = new MovieSort();
@@ -51,7 +52,7 @@ public class AbsSortJson implements Serializable {
         movieSort.sortList = new ArrayList<>();
 
         Map<String, String> map = new HashMap<>();
-        for (AbsJsonClass cls : classList) {
+        for (AbsJsonClass cls : classes) {
             map.put(cls.type_name, cls.type_id);
 
             if(cls.type_name.contains(" ")){
