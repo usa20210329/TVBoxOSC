@@ -1,18 +1,8 @@
 package com.github.tvbox.osc.bean;
 
-import java.util.List;
+import java.util.ArrayList;
 
-/**
- * @author pj567
- * @date :2020/12/18
- * @description:
- */
 public class SourceBean {
-    /**
-     * name : 最大资源网
-     * api : http://www.zdziyuan.com/inc/api.php
-     * download : http://www.zdziyuan.com/inc/apidown.php
-     */
     private String key;
     private String name;
     private String api;
@@ -22,7 +12,7 @@ public class SourceBean {
     private int filterable; // 可筛选?
     private String playerUrl; // 站点解析Url
     private String ext; // 扩展数据
-    private List<String> categories; // 分类列表
+    private ArrayList<String> categories = null; // 分类&排序
 
     public String getKey() {
         return key;
@@ -96,11 +86,11 @@ public class SourceBean {
         this.ext = ext;
     }
 
-    public List<String> getCategories() {
+    public ArrayList<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
     }
 }
