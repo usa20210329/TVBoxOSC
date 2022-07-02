@@ -50,7 +50,11 @@ public class DefaultConfig {
         if (withMy)
             data.add(0, new MovieSort.SortData("my0", "我的"));
         
-        data.add(1, new MovieSort.SortData("", "最近更新"));
+        // 如果有取到分类, 再添加最近更新
+        if(data.size()>1){
+            data.add(1, new MovieSort.SortData("", "最近更新"));
+        }
+
         Collections.sort(data);
         return data;
     }
