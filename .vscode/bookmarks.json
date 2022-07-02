@@ -29,12 +29,12 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/HomeActivity.java",
 			"bookmarks": [
 				{
-					"line": 344,
+					"line": 345,
 					"column": 43,
 					"label": "加载我的页面"
 				},
 				{
-					"line": 434,
+					"line": 431,
 					"column": 45,
 					"label": "top栏 隐藏逻辑"
 				}
@@ -104,12 +104,12 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/ModelSettingFragment.java",
 			"bookmarks": [
 				{
-					"line": 72,
+					"line": 69,
 					"column": 83,
 					"label": "调试模式开关"
 				},
 				{
-					"line": 112,
+					"line": 106,
 					"column": 20,
 					"label": "配置页 点击事件处理"
 				}
@@ -129,7 +129,7 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/viewmodel/SourceViewModel.java",
 			"bookmarks": [
 				{
-					"line": 145,
+					"line": 141,
 					"column": 63,
 					"label": "首页分类查询"
 				}
