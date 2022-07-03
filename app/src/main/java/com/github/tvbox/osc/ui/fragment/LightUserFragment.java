@@ -44,6 +44,7 @@ import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.util.PushHelper;
 import android.widget.Toast;
+import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
 
 /**
  * @author anaer
@@ -86,6 +87,8 @@ public class LightUserFragment extends BaseLazyFragment implements View.OnClickL
         tvSetting.setOnFocusChangeListener(focusChangeListener);
         tvCollect.setOnFocusChangeListener(focusChangeListener);
         TvRecyclerView tvHotList = findViewById(R.id.tvHotList);
+
+        tvHotList.setLayoutManager(new V7GridLayoutManager(this.mContext, 5));
 
         historyAdapter = new HistoryAdapter();
         historyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
