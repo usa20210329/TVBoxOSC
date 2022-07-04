@@ -80,7 +80,7 @@ public class ApiConfig {
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         // 设置默认配置链接, 主要自用, 每次改太麻烦
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://raw.iqiq.io/anaer/Sub/main/meow/meow.json");
+        String apiUrl = Hawk.get(HawkConfig.API_URL, "");
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;

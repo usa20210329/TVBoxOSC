@@ -49,16 +49,6 @@
 					"label": "可以自定义正则分词"
 				},
 				{
-					"line": 422,
-					"column": 59,
-					"label": "分词"
-				},
-				{
-					"line": 427,
-					"column": 107,
-					"label": "分词概率调整"
-				},
-				{
 					"line": 437,
 					"column": 56,
 					"label": "快捷搜索"
@@ -152,6 +142,16 @@
 					"line": 41,
 					"column": 83,
 					"label": "我的页面"
+				}
+			]
+		},
+		{
+			"path": "app/src/main/java/com/github/tvbox/osc/base/App.java",
+			"bookmarks": [
+				{
+					"line": 54,
+					"column": 31,
+					"label": "Hawk初始化"
 				}
 			]
 		}
