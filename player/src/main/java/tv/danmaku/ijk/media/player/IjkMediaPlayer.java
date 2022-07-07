@@ -188,7 +188,9 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
                 if (libLoader == null)
                     libLoader = sLocalLibLoader;
 
-                libLoader.loadLibrary("player");
+                libLoader.loadLibrary("ijkffmpeg");
+                libLoader.loadLibrary("ijksdl");
+                libLoader.loadLibrary("ijkplayer");
                 mIsLibLoaded = true;
             }
         }
@@ -200,7 +202,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
         synchronized (IjkMediaPlayer.class) {
             if (!mIsNativeInitialized) {
                 native_init();
-                IjkMediaPlayer.native_setDot(dotOpen ? dotPort : 0);
+//                IjkMediaPlayer.native_setDot(dotOpen ? dotPort : 0);
                 mIsNativeInitialized = true;
             }
         }
