@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">TVBox</string>
+    <string name="app_name">影视</string>
+    <string name="about">本应用仅提供播放功能，任何第三方接口、订阅规则、搜索引擎均系他人提供, 您可能从第三方提供的服务上获得相关内容。本应用对其合法性概不负责，亦不承担任何法律责任，您应当对使用这些服务的结果自行承担风险。\n任何单位或个人认为本应用通过第三方服务链接到的第三方内容可能涉嫌侵犯其信息网络传播权，应该及时提出书面权力通知，并提供身份证明，权属证明及详细第三方服务侵权情况证明，本应用收到上述法律文件后，将会依法尽快断开相关链接内容。\n\n开源仓库: <a href="https://github.com/ixiumu/TVBox">ixiumu/TVBox</a>\n鸣谢: <a href="https://github.com/CatVodTVOfficial/TVBoxOSC">CatVodTVOfficial/TVBoxOSC</a>、<a href="https://github.com/Doikki/DKVideoPlayer">Doikki/DKVideoPlayer</a>、<a href="https://github.com/bilibili/ijkplayer">bilibili/ijkplayer</a>、<a href="https://github.com/FFmpeg/FFmpeg">FFmpeg</a></string>
 </resources>
