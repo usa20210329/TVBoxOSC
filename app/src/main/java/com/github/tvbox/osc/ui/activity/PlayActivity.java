@@ -46,6 +46,7 @@ import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
+import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.util.AdBlocker;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
@@ -241,6 +242,10 @@ public class PlayActivity extends BaseActivity {
                                     }
                                     case 11: {
                                         callResult = ReexPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        break;
+                                    }
+                                    case 12: {
+                                        callResult = DangbeiPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
                                         break;
                                     }
                                 }

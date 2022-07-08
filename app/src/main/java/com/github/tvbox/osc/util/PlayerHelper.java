@@ -147,6 +147,8 @@ public class PlayerHelper {
             return "MXPlayer";
         } else if (playType == 11) {
             return "Reex";
+        } else if (playType == 12) {
+            return "当贝播放器";
         } else {
             return "系统播放器";
         }

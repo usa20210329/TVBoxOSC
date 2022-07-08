@@ -32,14 +32,21 @@ jobs:
           ./gradlew assemblerelease --build-cache --parallel --daemon --warning-mode all
       - name: Prepare App
         run: |
+          current=`date "+%Y%m%d%H%M%S"`
           rm -rf ${{ github.workspace }}/apk/
           mkdir -p ${{ github.workspace }}/apk/
           for file in `find ~ -name "*.apk" -print`; do
-            mv "$file" ${{ github.workspace }}/apk/
+            mv "$file" ${{ github.workspace }}/apk/tvbox_${current}.apk
           done
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v3
         with:
           name: com.github.tvbox.osc
           path: ${{ github.workspace }}/apk/*
-  
+      - name: Release and Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ github.workspace }}/apk/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

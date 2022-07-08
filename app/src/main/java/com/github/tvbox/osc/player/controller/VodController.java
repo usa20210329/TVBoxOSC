@@ -19,6 +19,7 @@ import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
+import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
@@ -242,6 +243,8 @@ public class VodController extends BaseController {
                             playerVail = mxPlayerExist;
                         } else if (playerType == 11) {
                             playerVail = reexPlayerExist;
+                        } else if (playerType == 12) {
+                            playerVail = dangbeiPlayerExist;
                         } else if (playerType > 11) {
                             playerType = 0;
                             playerVail = true;
@@ -344,12 +347,14 @@ public class VodController extends BaseController {
 
     private boolean mxPlayerExist = false;
     private boolean reexPlayerExist = false;
+    private boolean dangbeiPlayerExist = false;
 
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
         mxPlayerExist = MXPlayer.getPackageInfo() != null;
         reexPlayerExist = ReexPlayer.getPackageInfo() != null;
+        dangbeiPlayerExist = DangbeiPlayer.getPackageInfo() != null;
     }
 
     void updatePlayerCfgView() {
