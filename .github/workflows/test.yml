@@ -33,6 +33,7 @@ jobs:
       - name: Prepare App
         run: |
           current=`date "+%Y%m%d%H%M%S"`
+          echo "current=$current" >> $GITHUB_ENV
           rm -rf ${{ github.workspace }}/apk/
           mkdir -p ${{ github.workspace }}/apk/
           for file in `find ~ -name "*.apk" -print`; do
@@ -46,7 +47,7 @@ jobs:
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${current}
+          tag_name: ${env.current}
           files: |
             ${{ github.workspace }}/apk/*
         env:
