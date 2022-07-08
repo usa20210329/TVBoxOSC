@@ -115,6 +115,8 @@ public class LivePlayActivity extends BaseActivity {
         initSettingItemView();
         initLiveChannelList();
         initLiveSettingGroupList();
+        showTime();
+        showNetSpeed();
     }
 
     @Override
