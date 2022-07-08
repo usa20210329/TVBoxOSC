@@ -47,7 +47,7 @@ jobs:
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${env.current}
+          tag_name: ${{ env.current }}
           files: |
             ${{ github.workspace }}/apk/*
         env:
