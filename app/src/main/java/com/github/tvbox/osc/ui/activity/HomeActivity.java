@@ -204,6 +204,7 @@ public class HomeActivity extends BaseActivity {
         if (dataInitOk && jarInitOk) {
             showLoading();
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
+            ((TextView) findViewById(R.id.tvName)).setText(ApiConfig.get().getHomeSourceBean().getName());
             if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 LOG.e("有");
             } else {
