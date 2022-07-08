@@ -204,10 +204,7 @@ public class HomeActivity extends BaseActivity {
         if (dataInitOk && jarInitOk) {
             showLoading();
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
-            // view source name
             ((TextView) findViewById(R.id.tvName)).setText(ApiConfig.get().getHomeSourceBean().getName());
-            // background
-            //getWindow().getDecorView().setBackgroundResource(R.drawable.app_bg);
             if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 LOG.e("有");
             } else {
