@@ -57,6 +57,7 @@ public class App extends MultiDexApplication {
         putAbsent(HawkConfig.DEBUG_OPEN, false);
         putAbsent(HawkConfig.API_URL, "https://raw.iqiq.io/anaer/Sub/main/meow/meow.json");
         putAbsent(HawkConfig.PLAY_TYPE, 1);
+        putAbsent(HawkConfig.CHANNEL_HINT,"%n 频道%c 源%s/%a");
     }
 
     /**

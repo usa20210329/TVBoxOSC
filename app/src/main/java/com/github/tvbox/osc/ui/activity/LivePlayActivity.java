@@ -83,7 +83,7 @@ public class LivePlayActivity extends BaseActivity {
     protected void init() {
         setLoadSir(findViewById(R.id.live_root));
         mVideoView = findViewById(R.id.mVideoView);
-        PlayerHelper.updateCfg(mVideoView);
+        PlayerHelper.updateLiveCfg(mVideoView);
 
         tvLeftLinearLayout = findViewById(R.id.tvLeftLinearLayout);
         mGroupGridView = findViewById(R.id.mGroupGridView);

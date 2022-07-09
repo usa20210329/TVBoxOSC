@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/input_dialog_api_input"
-                    android:hint="请输入配置地址"
+                    android:hint="请输入频道名配置"
                     android:inputType="text"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/vs_2"
