@@ -182,8 +182,16 @@ public class DetailActivity extends BaseActivity {
         tvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoomDataManger.insertVodCollect(sourceKey, vodInfo);
-                Toast.makeText(DetailActivity.this, "已加入收藏夹", Toast.LENGTH_SHORT).show();
+                String text = tvCollect.getText().toString(); 
+                if("加入收藏".equals(text)){
+                    RoomDataManger.insertVodCollect(sourceKey, vodInfo);
+                    Toast.makeText(DetailActivity.this, "已加入收藏", Toast.LENGTH_SHORT).show();
+                    tvCollect.setText("取消收藏");
+                }else{
+                    RoomDataManger.deleteVodCollect(sourceKey, vodInfo);
+                    Toast.makeText(DetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+                    tvCollect.setText("加入收藏");
+                }
             }
         });
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -203,7 +211,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
         mGridViewFlag.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            private void refresh(View itemView, int position) {
+            private void refresh(View itemView, int position, boolean isClick) {
                 String newFlag = seriesFlagAdapter.getData().get(position).name;
                 if (vodInfo != null && !vodInfo.playFlag.equals(newFlag)) {
                     for (int i = 0; i < vodInfo.seriesFlags.size(); i++) {
@@ -219,6 +227,14 @@ public class DetailActivity extends BaseActivity {
                     vodInfo.playFlag = newFlag;
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
+                }else if (isClick && vodInfo.playFlag.equals(newFlag)){
+                    // 如果是在当前分类上点击, 而且剧集数大于1, 则调整排序
+                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 1) {
+                        vodInfo.reverseSort = !vodInfo.reverseSort;
+                        vodInfo.reverse();
+                        insertVod(sourceKey, vodInfo);
+                        seriesAdapter.notifyDataSetChanged();
+                    }
                 }
                 seriesFlagFocus = itemView;
             }
@@ -230,12 +246,12 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position);
+                refresh(itemView, position, false);
             }
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position);
+                refresh(itemView, position, true);
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -262,7 +278,7 @@ public class DetailActivity extends BaseActivity {
     private List<Runnable> pauseRunnable = null;
 
     private void jumpToPlay() {
-        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+        if (vodInfo != null && vodInfo.seriesMap != null && vodInfo.seriesMap.get(vodInfo.playFlag) != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
@@ -320,12 +336,12 @@ public class DetailActivity extends BaseActivity {
                     tvName.setText(mVideo.name);
                     setTextShow(tvSite, "来源：", ApiConfig.get().getSource(mVideo.sourceKey).getName());
                     setTextShow(tvYear, "年份：", mVideo.year == 0 ? "" : String.valueOf(mVideo.year));
-                    setTextShow(tvArea, "地区：", mVideo.area);
-                    setTextShow(tvLang, "语言：", mVideo.lang);
+                    // setTextShow(tvArea, "地区：", mVideo.area);
+                    // setTextShow(tvLang, "语言：", mVideo.lang);
                     setTextShow(tvType, "类型：", mVideo.type);
-                    setTextShow(tvActor, "演员：", mVideo.actor);
                     setTextShow(tvDirector, "导演：", mVideo.director);
-                    setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
+                    setTextShow(tvActor, "演员：", mVideo.actor);
+                    setTextShow(tvDes, "简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
@@ -416,6 +432,13 @@ public class DetailActivity extends BaseActivity {
             sourceKey = key;
             showLoading();
             sourceViewModel.getDetail(sourceKey, vodId);
+
+            boolean isVodCollect = RoomDataManger.isVodCollect(sourceKey, vodId);
+            if(isVodCollect){
+                tvCollect.setText("取消收藏");
+            }else{
+                tvCollect.setText("加入收藏");
+            }
         }
     }
 

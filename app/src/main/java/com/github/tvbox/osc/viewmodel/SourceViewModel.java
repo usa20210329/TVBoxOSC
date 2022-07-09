@@ -76,7 +76,6 @@ public class SourceViewModel extends ViewModel {
         }
         SourceBean sourceBean = ApiConfig.get().getSource(sourceKey);
         int type = sourceBean.getType();
-        List<String> categories = sourceBean.getCategories();
         if (type == 3) {
             Runnable waitResponse = new Runnable() {
                 @Override
@@ -622,7 +621,7 @@ public class SourceViewModel extends ViewModel {
 
     private AbsXml xml(MutableLiveData<AbsXml> result, String xml, String sourceKey) {
         try {
-            XStream xstream = new XStream(new DomDriver());//创建Xstram对象
+            XStream xstream = new XStream(new DomDriver());//创建Xstream对象
             xstream.autodetectAnnotations(true);
             xstream.processAnnotations(AbsXml.class);
             xstream.ignoreUnknownElements();

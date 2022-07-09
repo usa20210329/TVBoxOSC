@@ -517,7 +517,7 @@ public class VodController extends BaseController {
         return mBottomRoot.getVisibility() == VISIBLE;
     }
 
-    void showBottom() {
+    public void showBottom() {
         mHandler.removeMessages(1003);
         mHandler.sendEmptyMessage(1002);
     }

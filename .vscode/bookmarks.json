@@ -44,12 +44,17 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/DetailActivity.java",
 			"bookmarks": [
 				{
-					"line": 418,
+					"line": 353,
+					"column": 46,
+					"label": "封面设置"
+				},
+				{
+					"line": 441,
 					"column": 40,
 					"label": "可以自定义正则分词"
 				},
 				{
-					"line": 437,
+					"line": 460,
 					"column": 56,
 					"label": "快捷搜索"
 				}
@@ -64,7 +69,7 @@
 					"label": "控制继续播放"
 				},
 				{
-					"line": 279,
+					"line": 280,
 					"column": 25,
 					"label": "播放失败时, 隐藏解析窗口"
 				}
@@ -94,12 +99,12 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/fragment/ModelSettingFragment.java",
 			"bookmarks": [
 				{
-					"line": 69,
+					"line": 74,
 					"column": 83,
 					"label": "调试模式开关"
 				},
 				{
-					"line": 106,
+					"line": 113,
 					"column": 20,
 					"label": "配置页 点击事件处理"
 				}
@@ -119,7 +124,7 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/viewmodel/SourceViewModel.java",
 			"bookmarks": [
 				{
-					"line": 141,
+					"line": 140,
 					"column": 63,
 					"label": "首页分类查询"
 				}

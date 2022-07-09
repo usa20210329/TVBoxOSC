@@ -110,7 +110,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvActor"
+                    android:id="@+id/tvDirector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/vs_5"
@@ -120,7 +120,7 @@
                     android:textSize="@dimen/ts_20" />
 
                 <TextView
-                    android:id="@+id/tvDirector"
+                    android:id="@+id/tvActor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/vs_5"
@@ -185,6 +185,7 @@
                         android:focusable="true"
                         android:gravity="center"
                         android:text="倒序"
+                        android:visibility="gone"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/vs_20" />
 
