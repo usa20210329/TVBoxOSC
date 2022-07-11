@@ -523,7 +523,6 @@ public class DetailActivity extends BaseActivity {
                     public void onSuccess(Response<String> response) {
                         String json = response.body();
                         quickSearchWord.clear();
-                        quickSearchWord.add(searchTitle);
                         try {
                             for (JsonElement je : new Gson().fromJson(json, JsonArray.class)) {
                                 quickSearchWord.add(je.getAsJsonObject().get("t").getAsString());
@@ -531,6 +530,11 @@ public class DetailActivity extends BaseActivity {
                         } catch (Throwable th) {
                             th.printStackTrace();
                         }
+                        // 如果分词结果不包含搜索标题 就添加, 避免重复
+                        if(!quickSearchWord.contains(searchTitle)){
+                            quickSearchWord.add(0, searchTitle);
+                        }
+
                         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
                     }
 
