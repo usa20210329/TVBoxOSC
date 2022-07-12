@@ -67,6 +67,14 @@ public class DangbeiPlayer {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setPackage(packageInfo.packageName);
         intent.setComponent(new ComponentName(packageInfo.packageName, packageInfo.activityName));
+
+        // 因为不知道当贝播放器的标题要怎么设置, 看实际展示是url直接截取的, 所以将标题拼到url上.
+        if(url.contains("?")){
+            url = url+"&"+title;
+        }else{
+            url = url+"?"+title;
+        }
+
         intent.setData(Uri.parse(url));
         intent.putExtra("title", title);
         try {
