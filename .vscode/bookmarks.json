@@ -34,7 +34,7 @@
 					"label": "加载我的页面"
 				},
 				{
-					"line": 431,
+					"line": 426,
 					"column": 45,
 					"label": "top栏 隐藏逻辑"
 				}
@@ -44,17 +44,12 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/DetailActivity.java",
 			"bookmarks": [
 				{
-					"line": 353,
+					"line": 346,
 					"column": 46,
 					"label": "封面设置"
 				},
 				{
-					"line": 441,
-					"column": 40,
-					"label": "可以自定义正则分词"
-				},
-				{
-					"line": 460,
+					"line": 453,
 					"column": 56,
 					"label": "快捷搜索"
 				}

@@ -39,7 +39,7 @@ public class HistoryAdapter extends BaseQuickAdapter<VodInfo, BaseViewHolder> {
 
         showText(helper, R.id.tvArea, "");
 
-        showText(helper, R.id.tvLang, TextUtils.isEmpty(item.playNote)?"":item.playNote);
+        showText(helper, R.id.tvLang, item.playNote);
     
         showText(helper, R.id.tvNote, item.note);
 

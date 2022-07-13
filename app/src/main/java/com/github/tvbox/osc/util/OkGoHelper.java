@@ -25,6 +25,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.internal.Version;
 import xyz.doikki.videoplayer.exo.ExoMediaSourceHelper;
+import okhttp3.Interceptor;
+import okhttp3.Response;
+import java.io.IOException;
+import android.os.Environment;
 
 public class OkGoHelper {
     public static final long DEFAULT_MILLISECONDS = 10000;      //默认的超时时间
@@ -105,7 +109,11 @@ public class OkGoHelper {
 
     public static void init() {
         initDnsOverHttps();
+        initExoOkHttpClient();
+        initPicasso();
+    }
 
+    static void initPicasso() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
 
@@ -132,26 +140,24 @@ public class OkGoHelper {
             th.printStackTrace();
         }
 
+        File cacheDirectory = new File(App.getInstance().getCacheDir().getAbsolutePath(), "picasso_cache");
+        builder.cache(new Cache(cacheDirectory, Integer.MAX_VALUE));
+
         HttpHeaders.setUserAgent(Version.userAgent());
 
         OkHttpClient okHttpClient = builder.build();
         OkGo.getInstance().setOkHttpClient(okHttpClient);
 
-        initExoOkHttpClient();
-        initPicasso(okHttpClient);
-    }
-
-    static void initPicasso(OkHttpClient client) {
-        OkHttp3Downloader downloader = new OkHttp3Downloader(client);
+        OkHttp3Downloader downloader = new OkHttp3Downloader(okHttpClient);
         Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).build();
         if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
             // 缓存指示器，查看图片来源于何处
             // 蓝色：从内存中获取，性能最佳；
             // 绿色：从本地获取，性能一般；
             // 红色：从网络加载，性能最差。
-            picasso.setIndicatorsEnabled(true); 
+            picasso.setIndicatorsEnabled(true);
             // 查看图片加载用时
-            picasso.setLoggingEnabled(true); 
+            picasso.setLoggingEnabled(true);
         }
         Picasso.setSingletonInstance(picasso);
     }
