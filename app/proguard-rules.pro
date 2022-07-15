@@ -188,7 +188,8 @@
 # ExoPlayer
 -keep class com.google.android.exoplayer2.** { *; }
 -dontwarn com.google.android.exoplayer2.**
-
+# 磁力
+-keep class com.xunlei.downloadlib.** {*;}
 # 实体类
 #-keep class com.github.tvbox.osc.bean.** { *; }
 #CardView
