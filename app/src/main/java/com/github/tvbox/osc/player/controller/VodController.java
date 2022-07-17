@@ -241,7 +241,7 @@ public class VodController extends BaseController {
                         if (playerType <= 2) {
                             playerVail = true;
                         } else if (playerType == 8) {
-                            playerVail = ucPlayerExist;    
+                            playerVail = ucplayerExist;    
                         } else if (playerType == 9) {
                             playerVail = browserExist;    
                         } else if (playerType == 10) {
@@ -347,7 +347,7 @@ public class VodController extends BaseController {
     }
 
     private JSONObject mPlayerConfig = null;
-    private boolean ucPlayerExist = false;
+    private boolean ucplayerExist = false;
     private boolean browserExist = false;
     private boolean mxPlayerExist = false;
     private boolean reexPlayerExist = false;
@@ -355,7 +355,7 @@ public class VodController extends BaseController {
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
-        ucPlayerExist = ucPlayer.getPackageInfo() != null;
+        ucplayerExist = ucplayer.getPackageInfo() != null;
         browserExist = browser.getPackageInfo() != null;
         mxPlayerExist = MXPlayer.getPackageInfo() != null;
         reexPlayerExist = ReexPlayer.getPackageInfo() != null;
