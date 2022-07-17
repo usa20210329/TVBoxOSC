@@ -18,7 +18,7 @@ import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.player.thirdparty.browser;
-import com.github.tvbox.osc.player.thirdparty.ucPlayer;
+import com.github.tvbox.osc.player.thirdparty.ucplayer;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
