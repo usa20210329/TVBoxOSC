@@ -106,40 +106,35 @@ public class PlayActivity extends BaseActivity {
         initViewModel();
         initData();
     }
-    private void initLiveSettingGroupList() {
-        ArrayList<String> groupNames = new ArrayList<>(Arrays.asList("线路选择", "画面比例", "播放解码", "超时换源", "偏好设置"));
-        ArrayList<ArrayList<String>> itemsArrayList = new ArrayList<>();
-        ArrayList<String> sourceItems = new ArrayList<>();
-        ArrayList<String> scaleItems = new ArrayList<>(Arrays.asList("默认", "16:9", "4:3", "填充", "原始", "裁剪"));
-        ArrayList<String> playerDecoderItems = new ArrayList<>(Arrays.asList("系统", "ijk硬解", "ijk软解", "exo"));
-        ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("5s", "10s", "15s", "20s", "25s", "30s"));
-        ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速", "换台反转", "跨选分类"));
+    private void initSettingGroupList() {
+        ArrayList<String> groupNames = new ArrayList<>(Arrays.asList( "偏好设置"));
+        ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速"));
         itemsArrayList.add(sourceItems);
         itemsArrayList.add(scaleItems);
         itemsArrayList.add(playerDecoderItems);
         itemsArrayList.add(timeoutItems);
         itemsArrayList.add(personalSettingItems);
 
-        liveSettingGroupList.clear();
+     SettingGroupList.clear();
         for (int i = 0; i < groupNames.size(); i++) {
-            LiveSettingGroup liveSettingGroup = new LiveSettingGroup();
-            ArrayList<LiveSettingItem> liveSettingItemList = new ArrayList<>();
-            liveSettingGroup.setGroupIndex(i);
-            liveSettingGroup.setGroupName(groupNames.get(i));
+            SettingGroup SettingGroup = new SettingGroup();
+            ArrayList<SettingItem> SettingItemList = new ArrayList<>();
+            SettingGroup.setGroupIndex(i);
+            SettingGroup.setGroupName(groupNames.get(i));
             for (int j = 0; j < itemsArrayList.get(i).size(); j++) {
-                LiveSettingItem liveSettingItem = new LiveSettingItem();
-                liveSettingItem.setItemIndex(j);
-                liveSettingItem.setItemName(itemsArrayList.get(i).get(j));
-                liveSettingItemList.add(liveSettingItem);
+                SettingItem SettingItem = new SettingItem();
+                SettingItem.setItemIndex(j);
+                SettingItem.setItemName(itemsArrayList.get(i).get(j));
+                SettingItemList.add(SettingItem);
             }
-            liveSettingGroup.setLiveSettingItems(liveSettingItemList);
-            liveSettingGroupList.add(liveSettingGroup);
+            SettingGroup.setSettingItems(SettingItemList);
+            SettingGroupList.add(SettingGroup);
         }
-        liveSettingGroupList.get(3).getLiveSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
-        liveSettingGroupList.get(4).getLiveSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(3).setItemSelected(Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false));
+        SettingGroupList.get(3).getSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
+        SettingGroupList.get(4).getSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
+        SettingGroupList.get(4).getSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
+        SettingGroupList.get(4).getSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
+        SettingGroupList.get(4).getSettingItems().get(3).setItemSelected(Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false));
     }
 
     private void initView() {
