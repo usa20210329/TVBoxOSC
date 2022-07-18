@@ -106,36 +106,7 @@ public class PlayActivity extends BaseActivity {
         initViewModel();
         initData();
     }
-    private void initSettingGroupList() {
-        ArrayList<String> groupNames = new ArrayList<>(Arrays.asList( "偏好设置"));
-        ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速"));
-        itemsArrayList.add(sourceItems);
-        itemsArrayList.add(scaleItems);
-        itemsArrayList.add(playerDecoderItems);
-        itemsArrayList.add(timeoutItems);
-        itemsArrayList.add(personalSettingItems);
-
-     SettingGroupList.clear();
-        for (int i = 0; i < groupNames.size(); i++) {
-            SettingGroup SettingGroup = new SettingGroup();
-            ArrayList<SettingItem> SettingItemList = new ArrayList<>();
-            SettingGroup.setGroupIndex(i);
-            SettingGroup.setGroupName(groupNames.get(i));
-            for (int j = 0; j < itemsArrayList.get(i).size(); j++) {
-                SettingItem SettingItem = new SettingItem();
-                SettingItem.setItemIndex(j);
-                SettingItem.setItemName(itemsArrayList.get(i).get(j));
-                SettingItemList.add(SettingItem);
-            }
-            SettingGroup.setSettingItems(SettingItemList);
-            SettingGroupList.add(SettingGroup);
-        }
-        SettingGroupList.get(3).getSettingItems().get(Hawk.get(HawkConfig.CONNECT_TIMEOUT, 1)).setItemSelected(true);
-        SettingGroupList.get(4).getSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.SHOW_TIME, false));
-        SettingGroupList.get(4).getSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.SHOW_NET_SPEED, false));
-   
-    }
-
+  
     private void initView() {
         mHandler = new Handler(new Handler.Callback() {
             @Override
