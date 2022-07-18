@@ -59,12 +59,12 @@
 			"path": "app/src/main/java/com/github/tvbox/osc/ui/activity/PlayActivity.java",
 			"bookmarks": [
 				{
-					"line": 108,
+					"line": 109,
 					"column": 60,
 					"label": "控制继续播放"
 				},
 				{
-					"line": 280,
+					"line": 282,
 					"column": 25,
 					"label": "播放失败时, 隐藏解析窗口"
 				}

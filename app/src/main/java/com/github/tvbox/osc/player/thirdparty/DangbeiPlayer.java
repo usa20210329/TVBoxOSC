@@ -68,11 +68,11 @@ public class DangbeiPlayer {
         intent.setPackage(packageInfo.packageName);
         intent.setComponent(new ComponentName(packageInfo.packageName, packageInfo.activityName));
 
-        // 因为不知道当贝播放器的标题要怎么设置, 看实际展示是url直接截取的, 所以将标题拼到url上.
+        // 标题取的url最后一个/后的内容
         if(url.contains("?")){
-            url = url+"&"+title;
+            url = url+"&__=/"+title;
         }else{
-            url = url+"?"+title;
+            url = url+"?__=/"+title;
         }
 
         intent.setData(Uri.parse(url));

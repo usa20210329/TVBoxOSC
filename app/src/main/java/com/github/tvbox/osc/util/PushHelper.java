@@ -7,11 +7,18 @@ import com.orhanobut.hawk.Hawk;
 import com.github.tvbox.osc.util.LOG;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import com.github.tvbox.osc.util.HawkConfig;
 
 /**
  * @author anaer
  */
 public class PushHelper {
+
+    public static void debugPush(String message){
+        if(Hawk.get(HawkConfig.DEBUG_OPEN, false)){
+            push(message);
+        }
+    }
 
     /**
      * 推送消息
