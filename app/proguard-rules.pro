@@ -199,3 +199,4 @@
 }
 
 -keep class com.github.catvod.crawler.*{*;}
+-keep class com.xunlei.downloadlib.** {*;}
