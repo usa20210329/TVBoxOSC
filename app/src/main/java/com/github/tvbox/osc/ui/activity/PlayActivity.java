@@ -130,11 +130,10 @@ public class PlayActivity extends BaseActivity {
             SettingGroup.setSettingItems(SettingItemList);
             SettingGroupList.add(SettingGroup);
         }
-        SettingGroupList.get(3).getSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
-        SettingGroupList.get(4).getSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
-        SettingGroupList.get(4).getSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
-        SettingGroupList.get(4).getSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
-        SettingGroupList.get(4).getSettingItems().get(3).setItemSelected(Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false));
+        SettingGroupList.get(3).getSettingItems().get(Hawk.get(HawkConfig.CONNECT_TIMEOUT, 1)).setItemSelected(true);
+        SettingGroupList.get(4).getSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.SHOW_TIME, false));
+        SettingGroupList.get(4).getSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.SHOW_NET_SPEED, false));
+   
     }
 
     private void initView() {
