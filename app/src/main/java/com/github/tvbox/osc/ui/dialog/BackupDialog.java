@@ -160,7 +160,7 @@ public class BackupDialog extends BaseDialog {
             if (!file.exists())
                 file.mkdirs();
             Date now = new Date();
-            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
+            SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
             File backup = new File(file, f.format(now));
             backup.mkdirs();
             File db = new File(backup, "sqlite");
