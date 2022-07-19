@@ -51,10 +51,15 @@ import org.json.JSONObject;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
+import java.util.Arrays;
 
 /**
  * @author pj567
@@ -489,7 +494,7 @@ public class DetailActivity extends BaseActivity {
     private String searchTitle = "";
     private boolean hadQuickStart = false;
     private List<Movie.Video> quickSearchData = new ArrayList<>();
-    private List<String> quickSearchWord = new ArrayList<>();
+    private Set<String> quickSearchWord = new LinkedHashSet<>();
     private ExecutorService searchExecutorService = null;
 
     private void switchSearchWord(String word) {
@@ -504,49 +509,30 @@ public class DetailActivity extends BaseActivity {
             return;
         hadQuickStart = true;
         OkGo.getInstance().cancelTag("quick_search");
-        quickSearchWord.clear();
         searchTitle = mVideo.name;
         quickSearchData.clear();
+        quickSearchWord.clear();
         quickSearchWord.add(searchTitle);
-        // 分词
-        OkGo.<String>get("http://api.pullword.com/get.php?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
-                .tag("fenci")
-                .execute(new AbsCallback<String>() {
-                    @Override
-                    public String convertResponse(okhttp3.Response response) throws Throwable {
-                        if (response.body() != null) {
-                            return response.body().string();
-                        } else {
-                            throw new IllegalStateException("网络请求错误");
-                        }
-                    }
 
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String json = response.body();
-                        quickSearchWord.clear();
-                        try {
-                            for (JsonElement je : new Gson().fromJson(json, JsonArray.class)) {
-                                quickSearchWord.add(je.getAsJsonObject().get("t").getAsString());
-                            }
-                        } catch (Throwable th) {
-                            th.printStackTrace();
-                        }
-                        // 如果分词结果不包含搜索标题 就添加, 避免重复
-                        if(!quickSearchWord.contains(searchTitle)){
-                            quickSearchWord.add(0, searchTitle);
-                        }
-
-                        quickSearchWord.add(searchTitle);
-                        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                    }
-                });
-
+        String[] splits = new String[]{"之", " ", "第"};
+        for(String str: splits){
+            if(searchTitle.contains(str)){
+                String[] subStrs = searchTitle.split(str);
+                quickSearchWord.add(subStrs[0]);
+                break; // 包含一个, 就结束
+            }
+        }
+        
+        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版"};
+        
+        for(String str: array){
+            if(searchTitle.contains(str)){
+                quickSearchWord.add(searchTitle.replace(str, ""));
+                break; // 包含一个 就结束
+            }
+        }
+        
+        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
         searchResult();
     }
 
