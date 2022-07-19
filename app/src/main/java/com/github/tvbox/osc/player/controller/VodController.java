@@ -17,8 +17,9 @@ import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
-import com.github.tvbox.osc.player.thirdparty.browser;
+import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.player.thirdparty.ucplayer;
+import com.github.tvbox.osc.player.thirdparty.browser;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
@@ -240,6 +241,8 @@ public class VodController extends BaseController {
                         playerType++;
                         if (playerType <= 2) {
                             playerVail = true;
+                        } else if (playerType == 7) {
+                            playerVail = dangbeiPlayerExist;    
                         } else if (playerType == 8) {
                             playerVail = ucplayerExist;    
                         } else if (playerType == 9) {
@@ -347,14 +350,16 @@ public class VodController extends BaseController {
     }
 
     private JSONObject mPlayerConfig = null;
-    private boolean ucplayerExist = false;
+    private boolean dangbeiPlayerExist = false;
     private boolean browserExist = false;
+    private boolean ucplayerExist = false;
     private boolean mxPlayerExist = false;
     private boolean reexPlayerExist = false;
 
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
+        dangbeiPlayerExist = DangbeiPlayer.getPackageInfo() != null;
         ucplayerExist = ucplayer.getPackageInfo() != null;
         browserExist = browser.getPackageInfo() != null;
         mxPlayerExist = MXPlayer.getPackageInfo() != null;
