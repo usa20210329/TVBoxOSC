@@ -15,8 +15,6 @@ import com.orhanobut.hawk.Hawk;
 import me.jessyan.autosize.AutoSize;
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.unit.Subunits;
-import com.tencent.bugly.crashreport.CrashReport;
-import android.text.TextUtils;
 /**
  * @author pj567
  * @date :2020/12/17
@@ -29,7 +27,6 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        CrashReport.initCrashReport(getApplicationContext(), "27447de2a7", false);
         initParams();
         // OKGo
         OkGoHelper.init();
