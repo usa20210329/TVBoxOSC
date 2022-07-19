@@ -261,6 +261,7 @@ public class PlayActivity extends BaseActivity {
                                     }
                                 }
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + (callResult ? "成功" : "失败"), callResult, !callResult);
+                                mController.showBottom();
                                 return;
                             }
                         } catch (JSONException e) {
