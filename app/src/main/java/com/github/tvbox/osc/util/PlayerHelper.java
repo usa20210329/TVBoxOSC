@@ -143,14 +143,16 @@ public class PlayerHelper {
             return "IJK播放器";
         } else if (playType == 2) {
             return "Exo播放器";
+        } else if (playType == 7) {
+            return "当贝播放器";  
         } else if (playType == 8) {
-            return "ucplayer";
+            return "UC播放器";
         } else if (playType == 9) {
-            return "浏览器（可选）";     
+            return "浏览器播放";     
         } else if (playType == 10) {
-            return "MXPlayer";
+            return "MX播放器";
         } else if (playType == 11) {
-            return "Reex";
+            return "Reex播放器";
         } else {
             return "系统播放器";
         }
