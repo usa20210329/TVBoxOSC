@@ -144,6 +144,15 @@ public class OkGoHelper {
     static void initPicasso(OkHttpClient client) {
         OkHttp3Downloader downloader = new OkHttp3Downloader(client);
         Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).build();
+        if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
+            // 缓存指示器，查看图片来源于何处
+            // 蓝色：从内存中获取，性能最佳；
+            // 绿色：从本地获取，性能一般；
+            // 红色：从网络加载，性能最差。
+            picasso.setIndicatorsEnabled(true); 
+            // 查看图片加载用时
+            picasso.setLoggingEnabled(true); 
+        }
         Picasso.setSingletonInstance(picasso);
     }
 
