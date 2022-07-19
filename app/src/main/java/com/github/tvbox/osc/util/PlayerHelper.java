@@ -76,8 +76,8 @@ public class PlayerHelper {
         videoView.setScreenScaleType(scale);
     }
 
-    public static void updateLiveCfg(VideoView videoView) {
-        int playType = Hawk.get(HawkConfig.LIVE_PLAY_TYPE, 0);
+    public static void updateCfg(VideoView videoView) {
+        int playType = Hawk.get(HawkConfig.PLAY_TYPE, 0);
         PlayerFactory playerFactory;
         if (playType == 1) {
             playerFactory = new PlayerFactory<IjkMediaPlayer>() {
