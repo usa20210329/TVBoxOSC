@@ -49,14 +49,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
                 int screenHeight = dm.heightPixels;
                 screenRatio = (float) Math.max(screenWidth, screenHeight) / (float) Math.min(screenWidth, screenHeight);
             }
+            super.onCreate(savedInstanceState);
+            setContentView(getLayoutResID());
+            mContext = this;
+            AppManager.getInstance().addActivity(this);
+            init();    
         } catch (Throwable th) {
             th.printStackTrace();
         }
-        super.onCreate(savedInstanceState);
-        setContentView(getLayoutResID());
-        mContext = this;
-        AppManager.getInstance().addActivity(this);
-        init();
     }
 
     @Override
