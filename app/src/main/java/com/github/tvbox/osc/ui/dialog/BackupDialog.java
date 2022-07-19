@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,10 +32,18 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 
 public class BackupDialog extends BaseDialog {
 
-    public BackupDialog(@NonNull @NotNull Context context) {
+    public BackupDialog(@NonNull Context context) {
         super(context);
         setContentView(R.layout.dialog_backup);
         TvRecyclerView tvRecyclerView = ((TvRecyclerView) findViewById(R.id.list));
@@ -103,7 +112,7 @@ public class BackupDialog extends BaseDialog {
             });
             if (file.exists()) {
                 for (File f : list) {
-                    if (result.size() > 10) {
+                    if (result.size() > 2) {
                         FileUtils.recursiveDelete(f);
                         continue;
                     }
@@ -157,8 +166,9 @@ public class BackupDialog extends BaseDialog {
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
             File file = new File(root + "/tvbox_backup/");
-            if (!file.exists())
+            if (!file.exists()) {
                 file.mkdirs();
+            }    
             Date now = new Date();
             SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
             File backup = new File(file, f.format(now));
