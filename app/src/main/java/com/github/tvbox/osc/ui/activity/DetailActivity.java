@@ -532,6 +532,11 @@ public class DetailActivity extends BaseActivity {
                         } catch (Throwable th) {
                             th.printStackTrace();
                         }
+                        // 如果分词结果不包含搜索标题 就添加, 避免重复
+                        if(!quickSearchWord.contains(searchTitle)){
+                            quickSearchWord.add(0, searchTitle);
+                        }
+
                         quickSearchWord.add(searchTitle);
                         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
                     }
