@@ -639,12 +639,10 @@ public class LightLivePlayActivity extends BaseActivity {
     }
 
     public void selectLiveChannel(int channelIndex) {
-        channelGroupList.get(currentGroupIndex).getLiveChannels().get(currentChannelIndex).setSelected(false);
-        channelAdapter.notifyItemChanged(currentChannelIndex);
+        setFocused(currentGroupIndex, currentChannelIndex, false);
         currentChannelIndex = channelIndex;
         currentGroupIndex = selectedGroupIndex;
-        channelGroupList.get(currentGroupIndex).getLiveChannels().get(currentChannelIndex).setSelected(true);
-        channelAdapter.notifyItemChanged(currentChannelIndex);
+        setFocused(currentGroupIndex, currentChannelIndex, true);
     }
 
     public void focusChannelGroup(int groupIndex) {
@@ -672,16 +670,24 @@ public class LightLivePlayActivity extends BaseActivity {
             focusedGroupIndex = -1;
         }
         if (focusedChannelIndex > -1) {
-            channelGroupList.get(selectedGroupIndex).getLiveChannels().get(focusedChannelIndex).setFocused(false);
-            channelAdapter.notifyItemChanged(focusedChannelIndex);
+            setFocused(selectedGroupIndex, focusedChannelIndex, false);
         }
         focusedChannelIndex = channelIndex;
-        channelGroupList.get(selectedGroupIndex).getLiveChannels().get(focusedChannelIndex).setFocused(true);
-        channelAdapter.notifyItemChanged(focusedChannelIndex);
+        setFocused(selectedGroupIndex, focusedChannelIndex, true);
     }
 
     public void defocusLiveChannel(int channelIndex) {
-        channelGroupList.get(selectedGroupIndex).getLiveChannels().get(channelIndex).setFocused(false);
-        channelAdapter.notifyItemChanged(channelIndex);
+        setFocused(selectedGroupIndex, channelIndex, false);
+    }
+
+    private void setFocused(int groupIndex, int channelIndex, boolean focused){
+        int groupSize = channelGroupList.size();
+        if(groupIndex < groupSize){
+            List<LiveChannel> list = channelGroupList.get(groupIndex).getLiveChannels();
+            if(channelIndex < list.size()){
+                list.get(channelIndex).setFocused(focused);
+                channelAdapter.notifyItemChanged(channelIndex);
+            }
+        }
     }
 }
