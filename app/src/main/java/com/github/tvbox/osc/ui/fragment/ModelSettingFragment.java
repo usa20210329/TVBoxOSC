@@ -35,7 +35,12 @@ import java.util.List;
 
 import okhttp3.HttpUrl;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-
+import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
+import com.github.tvbox.osc.player.thirdparty.ucplayer;
+import com.github.tvbox.osc.player.thirdparty.browser;
+import com.github.tvbox.osc.player.thirdparty.MXPlayer;
+import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
+import com.github.tvbox.osc.constant.Constants;
 /**
  * @author pj567
  * @date :2020/12/23
@@ -46,6 +51,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvMediaCodec;
     private TextView tvParseWebView;
     private TextView tvPlay;
+    private TextView tvLivePlay;
     private TextView tvRender;
     private TextView tvScale;
     private TextView tvApi;
@@ -73,6 +79,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvParseWebView = findViewById(R.id.tvParseWebView);
         tvMediaCodec = findViewById(R.id.tvMediaCodec);
         tvPlay = findViewById(R.id.tvPlay);
+        tvLivePlay = findViewById(R.id.tvLivePlay);
         tvRender = findViewById(R.id.tvRenderType);
         tvScale = findViewById(R.id.tvScaleType);
         tvApi = findViewById(R.id.tvApi);
@@ -90,7 +97,9 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvHomeApi.setText(ApiConfig.get().getHomeSourceBean().getName());
         tvScale.setText(PlayerHelper.getScaleName(Hawk.get(HawkConfig.PLAY_SCALE, 0)));
         tvPlay.setText(PlayerHelper.getPlayerName(Hawk.get(HawkConfig.PLAY_TYPE, 0)));
+        tvLivePlay.setText(PlayerHelper.getPlayerName(Hawk.get(HawkConfig.LIVE_PLAY_TYPE, 0)));
         tvRender.setText(PlayerHelper.getRenderName(Hawk.get(HawkConfig.PLAY_RENDER, 0)));
+        tvChannelHint.setText(Hawk.get(HawkConfig.CHANNEL_HINT, ""));
         findViewById(R.id.llDebug).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,14 +325,28 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 FastClickCheckUtil.check(v);
                 int defaultPos = Hawk.get(HawkConfig.PLAY_TYPE, 0);
                 ArrayList<Integer> players = new ArrayList<>();
-                players.add(0);
-                players.add(1);
-                players.add(2);
-                players.add(7);
-                players.add(8);
-                players.add(9);
-                players.add(10);
-                players.add(11);  
+                players.add(Constants.PLAYER_SYSTEM);
+                players.add(Constants.PLAYER_IJK);
+                players.add(Constants.PLAYER_EXO);
+                if(DangbeiPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_DANGBEI);
+                }
+
+                if(ucplayer.isAvailable()){
+                    players.add(Constants.PLAYER_UC);
+                }
+
+                if(browser.isAvailable()){
+                    players.add(Constants.PLAYER_BROWER);
+                }
+
+                if(ReexPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_REEX);
+                }
+
+                if((MXPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_MX);
+                }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
                 dialog.setTip("请选择默认播放器");
                 dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
@@ -352,6 +375,64 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.show();
             }
         });
+        
+        findViewById(R.id.llLivePlay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                int defaultPos = Hawk.get(HawkConfig.LIVE_PLAY_TYPE, 0);
+                ArrayList<Integer> players = new ArrayList<>();
+                players.add(Constants.PLAYER_SYSTEM);
+                players.add(Constants.PLAYER_IJK);
+                players.add(Constants.PLAYER_EXO);
+                
+                if(DangbeiPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_DANGBEI);
+                }
+
+                if(ucplayer.isAvailable()){
+                    players.add(Constants.PLAYER_UC);
+                }
+
+                if(browser.isAvailable()){
+                    players.add(Constants.PLAYER_BROWER);
+                }
+
+                if(ReexPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_REEX);
+                }
+
+                if((MXPlayer.isAvailable()){
+                    players.add(Constants.PLAYER_MX);
+                }
+                SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
+                dialog.setTip("请选择默认播放器");
+                dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
+                    @Override
+                    public void click(Integer value, int pos) {
+                        Hawk.put(HawkConfig.LIVE_PLAY_TYPE, value);
+                        tvLivePlay.setText(PlayerHelper.getPlayerName(value));
+                        PlayerHelper.init();
+                    }
+
+                    @Override
+                    public String getDisplay(Integer val) {
+                        return PlayerHelper.getPlayerName(val);
+                    }
+                }, new DiffUtil.ItemCallback<Integer>() {
+                    @Override
+                    public boolean areItemsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
+                        return oldItem.intValue() == newItem.intValue();
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
+                        return oldItem.intValue() == newItem.intValue();
+                    }
+                }, players, defaultPos);
+                dialog.show();
+            }
+        });        
         findViewById(R.id.llRender).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
