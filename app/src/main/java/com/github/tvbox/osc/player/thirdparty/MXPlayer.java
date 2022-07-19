@@ -53,6 +53,13 @@ public class MXPlayer {
         }
         return null;
     }
+    /**
+     * 判断是否可用.
+     * @return
+     */
+    public static boolean isAvailable(){
+        return getPackageInfo() != null;
+    }
 
     private static class Subtitle {
         final Uri uri;
