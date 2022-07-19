@@ -50,7 +50,13 @@ public class ucplayer {
         }
         return null;
     }
-
+    /**
+     * 判断是否可用.
+     * @return
+     */
+    public static boolean isAvailable(){
+        return getPackageInfo() != null;
+    }
     public static boolean run(Activity activity, String url, String title, String subtitle, HashMap<String, String> headers) {
         ucPackageInfo packageInfo = getPackageInfo();
         if (packageInfo == null)
