@@ -328,23 +328,23 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 players.add(Constants.PLAYER_SYSTEM);
                 players.add(Constants.PLAYER_IJK);
                 players.add(Constants.PLAYER_EXO);
-                if(DangbeiPlayer.isAvailable()){
+                if(DangbeiPlayer.isAvailable()) {
                     players.add(Constants.PLAYER_DANGBEI);
                 }
 
-                if(ucplayer.isAvailable()){
+                if(ucplayer.isAvailable()) {
                     players.add(Constants.PLAYER_UC);
                 }
 
-                if(browser.isAvailable()){
+                if(browser.isAvailable()) {
                     players.add(Constants.PLAYER_BROWER);
                 }
 
-                if(ReexPlayer.isAvailable()){
+                if(ReexPlayer.isAvailable()) {
                     players.add(Constants.PLAYER_REEX);
                 }
 
-                if((MXPlayer.isAvailable()){
+                if(MXPlayer.isAvailable()) {
                     players.add(Constants.PLAYER_MX);
                 }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
@@ -402,7 +402,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                     players.add(Constants.PLAYER_REEX);
                 }
 
-                if((MXPlayer.isAvailable()){
+                if(MXPlayer.isAvailable()){
                     players.add(Constants.PLAYER_MX);
                 }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
