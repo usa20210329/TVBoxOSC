@@ -228,8 +228,8 @@ public class DetailActivity extends BaseActivity {
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
                 }else if (isClick && vodInfo.playFlag.equals(newFlag)){
-                    // 如果是在当前分类上点击, 而且剧集数大于1, 则调整排序
-                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 1) {
+                    // 如果是在当前分类上点击, 则调整排序
+                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
                         vodInfo.reverseSort = !vodInfo.reverseSort;
                         vodInfo.reverse();
                         insertVod(sourceKey, vodInfo);
