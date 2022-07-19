@@ -86,6 +86,7 @@ import java.util.concurrent.Executors;
 import me.jessyan.autosize.AutoSize;
 import xyz.doikki.videoplayer.player.ProgressManager;
 import xyz.doikki.videoplayer.player.VideoView;
+import com.github.tvbox.osc.util.PushHelper;
 
 public class PlayActivity extends BaseActivity {
     private VideoView mVideoView;
@@ -232,10 +233,13 @@ public class PlayActivity extends BaseActivity {
                     mVideoView.release();
                     if (url != null) {
                         try {
+                            VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                            String playTitle = mVodInfo.name + " " + vs.name;
+                            PushHelper.debugPush("正在播放: "+ playTitle + "\n"+url);
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 8) {
-                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                String playTitle = mVodInfo.name + " " + vs.name;
+                            if (playerType >= 7) {
+                                //VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                                //String playTitle = mVodInfo.name + " " + vs.name;
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
                                 boolean callResult = false;
                                 switch (playerType) {
