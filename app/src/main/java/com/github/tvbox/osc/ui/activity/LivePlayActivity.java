@@ -97,7 +97,6 @@ public class LivePlayActivity extends BaseActivity {
     protected void init() {
         setLoadSir(findViewById(R.id.live_root));
         mVideoView = findViewById(R.id.mVideoView);
-        PlayerHelper.updateLiveCfg(mVideoView);
         tvLeftChannelListLayout = findViewById(R.id.tvLeftChannnelListLayout);
         mChannelGroupView = findViewById(R.id.mGroupGridView);
         mLiveChannelView = findViewById(R.id.mChannelGridView);
