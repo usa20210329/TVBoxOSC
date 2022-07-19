@@ -50,7 +50,13 @@ public class ReexPlayer {
         }
         return null;
     }
-
+    /**
+     * 判断是否可用.
+     * @return
+     */
+    public static boolean isAvailable(){
+        return getPackageInfo() != null;
+    }
     public static boolean run(Activity activity, String url, String title, String subtitle, HashMap<String, String> headers) {
         ReexPackageInfo packageInfo = getPackageInfo();
         if (packageInfo == null)
