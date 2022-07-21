@@ -59,7 +59,7 @@ public class ParseBean {
     }
 
     public void setSpider(String Spider) {
-        return Spider;
+         this.Spider = Spider;
     }
     public String mixUrl() {
         if (!ext.isEmpty()) {
