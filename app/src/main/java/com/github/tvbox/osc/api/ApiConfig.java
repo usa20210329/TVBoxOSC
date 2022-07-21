@@ -282,9 +282,9 @@ public class ApiConfig {
     }
 
     private void parseJson(String apiUrl, String jsonStr) {
-        String ext = jsonStr;
-        if (ext.contains("\"./")) {
-            ext = ext.replace("./", apiUrl.substring(0, apiUrl.lastIndexOf("/") + 1));
+        String spider = jsonStr;
+        if (spider.contains("\"./")) {
+            spider = ext.replace("./", apiUrl.substring(0, apiUrl.lastIndexOf("/") + 1));
         }
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
         // spider
