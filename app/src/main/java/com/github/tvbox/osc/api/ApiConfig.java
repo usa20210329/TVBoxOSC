@@ -288,9 +288,10 @@ public class ApiConfig {
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
         // spider
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "asset://spider/custom_spider.jar");
-        JsonObject parseJson = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
+        setSpider = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
+        JsonElement opt : infoJson.get("sites").getAsJsonArray();
         SourceBean firstSite = null;
-        for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
+        for (infoJson.hasNext()))) {
             JsonObject obj = (JsonObject) opt;
             SourceBean sb = new SourceBean();
             String siteKey = obj.get("key").getAsString().trim();
