@@ -58,8 +58,8 @@ public class ParseBean {
         this.ext = ext;
     }
 
-    public void setSpider(String Spider) {
-         this.Spider = Spider;
+    public void setSpider(String spider) {
+         this.spider = spider;
     }
     public String mixUrl() {
         if (!ext.isEmpty()) {
