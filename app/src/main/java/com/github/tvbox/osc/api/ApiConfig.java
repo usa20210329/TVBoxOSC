@@ -282,14 +282,13 @@ public class ApiConfig {
     }
 
     private void parseJson(String apiUrl, String jsonStr) {
-         String jsonStr = jsonStr;
         if (jsonStr.contains("\"./")) {
             jsonStr = jsonStr.replace("./", apiUrl.substring(0, apiUrl.lastIndexOf("/") + 1));
         }
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
         // spider
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "asset://spider/custom_spider.jar");
-        parseJson = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
+        JsonObject parseJson = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
             JsonObject obj = (JsonObject) opt;
