@@ -14,6 +14,7 @@ public class ParseBean {
     private String name;
     private String url;
     private String ext;
+    private String spider;
     private int type;   // 0 普通嗅探 1 json 2 Json扩展 3 聚合
 
     private boolean isDefault = false;
