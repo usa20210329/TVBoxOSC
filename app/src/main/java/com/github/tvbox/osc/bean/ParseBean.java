@@ -58,6 +58,9 @@ public class ParseBean {
         this.ext = ext;
     }
 
+    public void setSpider(String Spider) {
+        return Spider;
+    }
     public String mixUrl() {
         if (!ext.isEmpty()) {
             int idx = url.indexOf("?");
