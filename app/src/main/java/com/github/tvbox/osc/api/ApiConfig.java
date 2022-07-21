@@ -291,7 +291,7 @@ public class ApiConfig {
         setSpider = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
         Iterator it = ((obj.get) infoJson.clanContentFix.get("sites")).clanToAddress().iterator();   
         SourceBean firstSite = null;
-        for (infoJson.hasNext()) {
+        for (it.hasNext()) {
             JsonObject obj = (JsonObject) opt;
             SourceBean sb = new SourceBean();
             String siteKey = obj.get("key").getAsString().trim();
