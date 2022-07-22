@@ -14,7 +14,6 @@ public class ParseBean {
     private String name;
     private String url;
     private String ext;
-    private String spider;
     private int type;   // 0 普通嗅探 1 json 2 Json扩展 3 聚合
 
     private boolean isDefault = false;
@@ -59,9 +58,6 @@ public class ParseBean {
         this.ext = ext;
     }
 
-    public void setSpider(String spider) {
-         this.spider = spider;
-    }
     public String mixUrl() {
         if (!ext.isEmpty()) {
             int idx = url.indexOf("?");
