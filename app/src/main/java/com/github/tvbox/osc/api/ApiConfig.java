@@ -282,16 +282,11 @@ public class ApiConfig {
     }
 
     private void parseJson(String apiUrl, String jsonStr) {
-        if (jsonStr.contains("\"./")) {
-            jsonStr = jsonStr.replace("./", apiUrl.substring(0, apiUrl.lastIndexOf("/") + 1));
-        }
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
         // spider
-        spider = DefaultConfig.safeJsonString(infoJson, "spider", "asset://spider/custom_spider.jar");
-        setSpider = Boolean.valueOf(DefaultConfig.safeJsonString(infoJson, "writable", "true").equals("true"));
-        Iterator it = ((obj.get) infoJson.clanContentFix.get("sites")).clanToAddress().iterator();   
+        spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         SourceBean firstSite = null;
-        for (it.hasNext()) {
+        for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
             JsonObject obj = (JsonObject) opt;
             SourceBean sb = new SourceBean();
             String siteKey = obj.get("key").getAsString().trim();
@@ -305,7 +300,6 @@ public class ApiConfig {
             sb.setPlayerUrl(DefaultConfig.safeJsonString(obj, "playUrl", ""));
             sb.setExt(DefaultConfig.safeJsonString(obj, "ext", ""));
             sb.setCategories(DefaultConfig.safeJsonStringList(obj, "categories"));
-            sb.setSpider(DefaultConfig.safeJsonString(obj, "spider", null));
             if (firstSite == null)
                 firstSite = sb;
             sourceBeanList.put(siteKey, sb);
