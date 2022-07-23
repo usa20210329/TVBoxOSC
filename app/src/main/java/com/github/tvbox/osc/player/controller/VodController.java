@@ -99,6 +99,7 @@ public class VodController extends BaseController {
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
     TextView mPlayerTimeStartBtn;
+    TextView mPlayerTimeResetBtn;
     TextView mPlayerTimeSkipBtn;
     TextView mPlayerTimeStepBtn;
 
@@ -123,6 +124,7 @@ public class VodController extends BaseController {
         mPlayerBtn = findViewById(R.id.play_player);
         mPlayerIJKBtn = findViewById(R.id.play_ijk);
         mPlayerTimeStartBtn = findViewById(R.id.play_time_start);
+        mPlayerTimeResetBtn = findViewById(R.id.play_time_reset);
         mPlayerTimeSkipBtn = findViewById(R.id.play_time_end);
         mPlayerTimeStepBtn = findViewById(R.id.play_time_step);
 
@@ -292,7 +294,7 @@ public class VodController extends BaseController {
                 }
             }
         });
-     findViewById(R.id.play_time_reset).setOnClickListener(new OnClickListener() {
+     mPlayerTimeResetBtn.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
