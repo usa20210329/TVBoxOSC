@@ -176,9 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         return !(screenRatio >= 4.0f);
     }
 
-}
-
-    //protected static BitmapDrawable globalWp = null;
+    protected static BitmapDrawable globalWp = null;
 
     public void changeWallpaper(boolean force) {
         if (!force && globalWp != null)
