@@ -99,6 +99,7 @@ public class VodController extends BaseController {
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
     TextView mPlayerTimeStartBtn;
+    TextView mPlayerTimeResetBtn;
     TextView mPlayerTimeSkipBtn;
     TextView mPlayerTimeStepBtn;
 
