@@ -141,7 +141,8 @@ public class OkGoHelper {
         }
         
         File cacheDirectory = new File(App.getInstance().getCacheDir().getAbsolutePath(), "picasso_cache");
-        builder.cache(new Cache(cacheDirectory, Integer.MAX_VALUE));
+        // 缓存目录大小 100M
+        builder.cache(new Cache(cacheDirectory, 100*1024*1024));
 
         HttpHeaders.setUserAgent(Version.userAgent());
 
