@@ -927,13 +927,13 @@ public class SourceViewModel extends ViewModel {
     private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey) {
              return json(result, json, sourceKey, null);
     }
-    private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey, String wd)    
+    private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey, String wd) {
         try {
             AbsJson absJson = new Gson().fromJson(json, new TypeToken<AbsJson>() {
             }.getType());
             AbsXml data = absJson.toAbsXml();
             absXml(data, sourceKey);
-            
+
             SearchResultWrapper wrapper = new SearchResultWrapper();
             wrapper.setData(data);
             wrapper.setWd(wd);
@@ -942,11 +942,7 @@ public class SourceViewModel extends ViewModel {
             } else if (quickSearchResult == result) {
                 EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, wrapper));
             } else if (result != null) {
-                if (result == detailResult) {
-                    checkThunder(data);
-                } else {
-                    result.postValue(data);
-                }
+                result.postValue(data);
             }
             return data;
         } catch (Exception e) {
@@ -960,7 +956,7 @@ public class SourceViewModel extends ViewModel {
             return null;
         }
     }
-
+    
     @Override
     protected void onCleared() {
         super.onCleared();
