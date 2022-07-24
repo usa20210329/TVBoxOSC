@@ -924,9 +924,9 @@ public class SourceViewModel extends ViewModel {
         }
     }
 
-    private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey) {
-             return json(result, json, sourceKey, null);
-    }
+    //private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey) {
+             //return json(result, json, sourceKey, null);
+    //}
     private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey, String wd)    
         try {
             AbsJson absJson = new Gson().fromJson(json, new TypeToken<AbsJson>() {
