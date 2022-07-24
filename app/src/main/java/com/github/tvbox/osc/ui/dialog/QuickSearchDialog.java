@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class QuickSearchDialog extends BaseDialog {
     private SearchWordAdapter searchWordAdapter;
@@ -46,7 +47,7 @@ public class QuickSearchDialog extends BaseDialog {
             }
         } else if (event.type == RefreshEvent.TYPE_QUICK_SEARCH_WORD) {
             if (event.obj != null) {
-                List<String> data = (List<String>) event.obj;
+                List<String> data = new ArrayList<>((Set<String>) event.obj);
                 searchWordAdapter.setNewData(data);
             }
         }
