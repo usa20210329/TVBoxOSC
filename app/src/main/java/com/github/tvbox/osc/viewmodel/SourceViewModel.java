@@ -15,6 +15,7 @@ import com.github.tvbox.osc.bean.AbsSortXml;
 import com.github.tvbox.osc.bean.AbsXml;
 import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.bean.MovieSort;
+import com.github.tvbox.osc.bean.SearchResultWrapper;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.util.DefaultConfig;
@@ -455,18 +456,22 @@ public class SourceViewModel extends ViewModel {
                         public void onSuccess(Response<String> response) {
                             if (type == 0) {
                                 String xml = response.body();
-                                xml(detailResult, xml, sourceBean.getKey());
+                                xml(quickSearchResult, xml, sourceBean.getKey(), wd);
                             } else {
                                 String json = response.body();
                                 LOG.i(json);
-                                json(detailResult, json, sourceBean.getKey());                              
+                                json(quickSearchResult, json, sourceBean.getKey(), wd);                              
                             }
                         }
 
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
-                            detailResult.postValue(null);
+                            // quickSearchResult.postValue(null);
+                            EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, null));
+                            // 请求失败时, 设置源过滤快搜
+                            sourceBean.setQuickSearch(0);
+                            // PushHelper.debugPush("快搜失败 key:" + sourceKey + " wd:" + wd);
                         }
                     });
         } else {
@@ -875,6 +880,9 @@ public class SourceViewModel extends ViewModel {
 
 
     private AbsXml xml(MutableLiveData<AbsXml> result, String xml, String sourceKey) {
+        return xml(result, xml, sourceKey, null);
+        }
+    private AbsXml xml(MutableLiveData<AbsXml> result, String xml, String sourceKey, String wd) {
         try {
             XStream xstream = new XStream(new DomDriver());//创建Xstram对象
             xstream.autodetectAnnotations(true);
@@ -888,10 +896,14 @@ public class SourceViewModel extends ViewModel {
             }
             AbsXml data = (AbsXml) xstream.fromXML(xml);
             absXml(data, sourceKey);
+          
+            SearchResultWrapper wrapper = new SearchResultWrapper();
+            wrapper.setData(data);
+            wrapper.setWd(wd);
             if (searchResult == result) {
-                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_SEARCH_RESULT, data));
+                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_SEARCH_RESULT, wrapper));
             } else if (quickSearchResult == result) {
-                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, data));
+                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, wrapper));
             } else if (result != null) {
                 if (result == detailResult) {
                     checkThunder(data);
@@ -913,15 +925,22 @@ public class SourceViewModel extends ViewModel {
     }
 
     private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey) {
+             return json(result, json, sourceKey, null);
+    }
+    private AbsXml json(MutableLiveData<AbsXml> result, String json, String sourceKey, String wd)    
         try {
             AbsJson absJson = new Gson().fromJson(json, new TypeToken<AbsJson>() {
             }.getType());
             AbsXml data = absJson.toAbsXml();
             absXml(data, sourceKey);
+            
+            SearchResultWrapper wrapper = new SearchResultWrapper();
+            wrapper.setData(data);
+            wrapper.setWd(wd);
             if (searchResult == result) {
-                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_SEARCH_RESULT, data));
+                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_SEARCH_RESULT, wrapper));
             } else if (quickSearchResult == result) {
-                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, data));
+                EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, wrapper));
             } else if (result != null) {
                 if (result == detailResult) {
                     checkThunder(data);
