@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.io.IOException;
 
 public class BackupDialog extends BaseDialog {
 
@@ -161,7 +160,7 @@ public class BackupDialog extends BaseDialog {
              if (!file.exists())
                 file.mkdirs(); 
             Date now = new Date();
-            SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
+            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
             File backup = new File(file, f.format(now));
             backup.mkdirs();
             File db = new File(backup, "sqlite");
