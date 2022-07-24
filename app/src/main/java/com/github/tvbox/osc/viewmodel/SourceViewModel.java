@@ -456,22 +456,18 @@ public class SourceViewModel extends ViewModel {
                         public void onSuccess(Response<String> response) {
                             if (type == 0) {
                                 String xml = response.body();
-                                xml(quickSearchResult, xml, sourceBean.getKey(), wd);
+                                xml(detailResult, xml, sourceBean.getKey());
                             } else {
                                 String json = response.body();
                                 LOG.i(json);
-                                json(quickSearchResult, json, sourceBean.getKey(), wd);                              
+                                json(detailResult, json, sourceBean.getKey());                              
                             }
                         }
 
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
-                            // quickSearchResult.postValue(null);
-                            EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, null));
-                            // 请求失败时, 设置源过滤快搜
-                            sourceBean.setQuickSearch(0);
-                            // PushHelper.debugPush("快搜失败 key:" + sourceKey + " wd:" + wd);
+                            detailResult.postValue(null);
                         }
                     });
         } else {
@@ -508,10 +504,10 @@ public class SourceViewModel extends ViewModel {
                         public void onSuccess(Response<String> response) {
                             if (type == 0) {
                                 String xml = response.body();
-                                xml(searchResult, xml, sourceBean.getKey());
+                                xml(searchResult, xml, sourceBean.getKey(), wd);
                             } else {
                                 String json = response.body();
-                                json(searchResult, json, sourceBean.getKey());
+                                json(searchResult, json, sourceBean.getKey(), wd);
                             }
                         }
 
@@ -586,10 +582,10 @@ public class SourceViewModel extends ViewModel {
                         public void onSuccess(Response<String> response) {
                             if (type == 0) {
                                 String xml = response.body();
-                                xml(quickSearchResult, xml, sourceBean.getKey());
+                                xml(quickSearchResult, xml, sourceBean.getKey(), wd);
                             } else {
                                 String json = response.body();
-                                json(quickSearchResult, json, sourceBean.getKey());
+                                json(quickSearchResult, json, sourceBean.getKey(), wd);
                             }
                         }
 
@@ -598,6 +594,9 @@ public class SourceViewModel extends ViewModel {
                             super.onError(response);
                             // quickSearchResult.postValue(null);
                             EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_RESULT, null));
+                            // 请求失败时, 设置源过滤快搜
+                            sourceBean.setQuickSearch(0);
+                            // PushHelper.debugPush("快搜失败 key:" + sourceKey + " wd:" + wd);
                         }
                     });
         }else if (type == 4) {
