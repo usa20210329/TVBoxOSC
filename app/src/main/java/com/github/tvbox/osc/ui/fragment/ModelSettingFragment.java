@@ -49,7 +49,7 @@ import com.github.tvbox.osc.constant.Constants;
 /**
  * @author pj567
  * @date :2020/12/23
- * @description:
+ * @description:设置页面
  */
 public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvDebugOpen;
