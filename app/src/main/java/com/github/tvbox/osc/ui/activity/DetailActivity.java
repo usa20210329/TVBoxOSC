@@ -60,6 +60,7 @@ import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
 import java.util.Arrays;
+import com.github.tvbox.osc.bean.SearchResultWrapper;
 
 /**
  * @author pj567
@@ -484,7 +485,7 @@ public class DetailActivity extends BaseActivity {
             }
         } else if (event.type == RefreshEvent.TYPE_QUICK_SEARCH_RESULT) {
             try {
-                searchData(event.obj == null ? null : (AbsXml) event.obj);
+                 searchData(event.obj == null ? null : (SearchResultWrapper) event.obj);
             } catch (Exception e) {
                 searchData(null);
             }
@@ -514,7 +515,7 @@ public class DetailActivity extends BaseActivity {
         quickSearchWord.clear();
         quickSearchWord.add(searchTitle);
 
-        String[] splits = new String[]{"之", " ", "第"};
+        String[] splits = new String[]{"之", " ", "第", "-"};
         for(String str: splits){
             if(searchTitle.contains(str)){
                 String[] subStrs = searchTitle.split(str);
@@ -523,7 +524,7 @@ public class DetailActivity extends BaseActivity {
             }
         }
         
-        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版"};
+        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版", "台湾剧", "台剧"};
         
         for(String str: array){
             if(searchTitle.contains(str)){
@@ -569,14 +570,21 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    private void searchData(AbsXml absXml) {
+    private void searchData(SearchResultWrapper wrapper){
+        String wd = wrapper.getWd();
+        AbsXml absXml = wrapper.getData();
         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
             List<Movie.Video> data = new ArrayList<>();
             for (Movie.Video video : absXml.movie.videoList) {
                 // 去除当前相同的影片
                 if (video.sourceKey.equals(sourceKey) && video.id.equals(vodId))
-                    continue;
-                data.add(video);
+                    continue;                
+                // 快捷搜索只展示标题一致, 或者以这标题开头的数据
+                if(video.name.equals(wd)){
+                    data.add(0, video);
+                }else if(video.name.startsWith(wd)){
+                    data.add(video);
+                }
             }
             quickSearchData.addAll(data);
             EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH, data));
