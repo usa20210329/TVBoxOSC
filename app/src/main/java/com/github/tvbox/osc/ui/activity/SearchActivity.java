@@ -18,6 +18,7 @@ import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.bean.AbsXml;
 import com.github.tvbox.osc.bean.Movie;
+import com.github.tvbox.osc.bean.SearchResultWrapper;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.event.ServerEvent;
@@ -291,7 +292,7 @@ public class SearchActivity extends BaseActivity {
     public void refresh(RefreshEvent event) {
         if (event.type == RefreshEvent.TYPE_SEARCH_RESULT) {
             try {
-                searchData(event.obj == null ? null : (AbsXml) event.obj);
+                searchData(event.obj == null ? null : (SearchResultWrapper) event.obj);
             } catch (Exception e) {
                 searchData(null);
             }
@@ -347,12 +348,17 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
-    private void searchData(AbsXml absXml) {
+    private void searchData(SearchResultWrapper wrapper){
+        String wd = wrapper.getWd();
+        AbsXml absXml = wrapper.getData();
         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
             List<Movie.Video> data = new ArrayList<>();
             for (Movie.Video video : absXml.movie.videoList) {
-                if (video.name.contains(searchTitle))
+                if (video.name.equals(wd)){
+                    data.add(0, video);
+                }else if(video.name.contains(wd)){
                     data.add(video);
+                } 
             }
             if (searchAdapter.getData().size() > 0) {
                 searchAdapter.addData(data);
