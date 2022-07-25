@@ -160,7 +160,7 @@ public class DetailActivity extends BaseActivity {
         tvSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vodInfo != null && vodInfo.seriesMap.size() > 0) {
+                if (vodInfo != null && !vodInfo.isSeriesEmpty()) {
                     vodInfo.reverseSort = !vodInfo.reverseSort;
                     vodInfo.reverse();
                     insertVod(sourceKey, vodInfo);
@@ -260,9 +260,11 @@ public class DetailActivity extends BaseActivity {
                     refreshList();
                  }else if (isClick && vodInfo.playFlag.equals(newFlag)){
                     // 如果是在当前分类上点击, 则调整排序
-                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
+                    if (!vodInfo.isSeriesEmpty()) {
                         vodInfo.reverseSort = !vodInfo.reverseSort;
                         vodInfo.reverse();
+                        // 调整排序时 同时更新播放位置坐标
+                        vodInfo.playIndex = vodInfo.getFlagSeries(vodInfo.playFlag).size() - vodInfo.playIndex - 1;
                         insertVod(sourceKey, vodInfo);
                         seriesAdapter.notifyDataSetChanged();
                     }    
@@ -311,7 +313,7 @@ public class DetailActivity extends BaseActivity {
     private List<Runnable> pauseRunnable = null;
 
     private void jumpToPlay() {
-        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+        if (vodInfo != null && !vodInfo.isFlagSeriesEmpty(vodInfo.playFlag)) {
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
@@ -326,15 +328,17 @@ public class DetailActivity extends BaseActivity {
     }
 
     void refreshList() {
-        if (vodInfo.seriesMap.get(vodInfo.playFlag).size() <= vodInfo.playIndex) {
+        List<VodInfo.VodSeries> list = vodInfo.getFlagSeries(vodInfo.playFlag);
+
+        if (list.size() <= vodInfo.playIndex) {
             vodInfo.playIndex = 0;
         }
 
-        if (vodInfo.seriesMap.get(vodInfo.playFlag) != null) {
-            vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = true;
+        if(list.size() > 0){
+            list.get(vodInfo.playIndex).selected = true;
         }
 
-        seriesAdapter.setNewData(vodInfo.seriesMap.get(vodInfo.playFlag));
+        seriesAdapter.setNewData(list);
         mGridView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -393,7 +397,7 @@ public class DetailActivity extends BaseActivity {
                         ivThumb.setImageResource(R.drawable.img_loading_placeholder);
                     }
 
-                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
+                    if (!vodInfo.isSeriesEmpty()) {
                         mGridViewFlag.setVisibility(View.VISIBLE);
                         mGridView.setVisibility(View.VISIBLE);
                         tvPlay.setVisibility(View.VISIBLE);
@@ -417,8 +421,11 @@ public class DetailActivity extends BaseActivity {
                             vodInfo.reverse();
                         }
 
-                        if (vodInfo.playFlag == null || !vodInfo.seriesMap.containsKey(vodInfo.playFlag))
-                            vodInfo.playFlag = (String) vodInfo.seriesMap.keySet().toArray()[0];
+                        if (vodInfo.playFlag == null || vodInfo.isFlagSeriesEmpty(vodInfo.playFlag)){
+                            if(!vodInfo.isSeriesEmpty() && vodInfo.seriesMap.keySet().size()>0){
+                                vodInfo.playFlag = (String) vodInfo.seriesMap.keySet().toArray()[0];
+                            }
+                        }
 
                         int flagScrollTo = 0;
                         for (int j = 0; j < vodInfo.seriesFlags.size(); j++) {
@@ -634,11 +641,8 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void insertVod(String sourceKey, VodInfo vodInfo) {
-        try {
-            vodInfo.playNote = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).name;
-        } catch (Throwable th) {
-            vodInfo.playNote = "";
-        }
+        VodInfo.VodSeries vodSeries = vodInfo.getVodSeries(vodInfo.playFlag, vodInfo.playIndex);
+        vodInfo.playNote = vodSeries == null ? "":vodSeries.name;
         RoomDataManger.insertVodRecord(sourceKey, vodInfo);
         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_HISTORY_REFRESH));
     }
