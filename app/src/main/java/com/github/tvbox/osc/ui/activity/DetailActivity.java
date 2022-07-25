@@ -58,10 +58,15 @@ import org.json.JSONObject;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
+import java.util.Arrays;
 
 /**
  * @author pj567
@@ -208,8 +213,16 @@ public class DetailActivity extends BaseActivity {
         tvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoomDataManger.insertVodCollect(sourceKey, vodInfo);
-                Toast.makeText(DetailActivity.this, "已加入收藏夹", Toast.LENGTH_SHORT).show();
+                String text = tvCollect.getText().toString(); 
+                if("加入收藏".equals(text)){
+                    RoomDataManger.insertVodCollect(sourceKey, vodInfo);
+                    Toast.makeText(DetailActivity.this, "已加入收藏", Toast.LENGTH_SHORT).show();
+                    tvCollect.setText("取消收藏");
+                }else{
+                    RoomDataManger.deleteVodCollect(sourceKey, vodInfo);
+                    Toast.makeText(DetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+                    tvCollect.setText("加入收藏");
+                }
             }
         });
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -229,7 +242,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
         mGridViewFlag.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            private void refresh(View itemView, int position) {
+            private void refresh(View itemView, int position, boolean isClick)
                 String newFlag = seriesFlagAdapter.getData().get(position).name;
                 if (vodInfo != null && !vodInfo.playFlag.equals(newFlag)) {
                     for (int i = 0; i < vodInfo.seriesFlags.size(); i++) {
@@ -245,6 +258,14 @@ public class DetailActivity extends BaseActivity {
                     vodInfo.playFlag = newFlag;
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
+                 }else if (isClick && vodInfo.playFlag.equals(newFlag)){
+                    // 如果是在当前分类上点击, 则调整排序
+                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
+                        vodInfo.reverseSort = !vodInfo.reverseSort;
+                        vodInfo.reverse();
+                        insertVod(sourceKey, vodInfo);
+                        seriesAdapter.notifyDataSetChanged();
+                    }    
                 }
                 seriesFlagFocus = itemView;
             }
