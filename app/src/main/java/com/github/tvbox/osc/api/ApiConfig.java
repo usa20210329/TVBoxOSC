@@ -462,7 +462,7 @@ public class ApiConfig {
                 ext = null;
             }
         }
-        return jarLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), sourceBean.getExt(), sourceBean.getJar());
+        return jarLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), ext, sourceBean.getJar());
     }
 
     public Object[] proxyLocal(Map param) {
