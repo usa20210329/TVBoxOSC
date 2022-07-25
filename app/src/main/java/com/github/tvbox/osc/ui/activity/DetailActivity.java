@@ -58,15 +58,10 @@ import org.json.JSONObject;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
-import java.util.Arrays;
 
 /**
  * @author pj567
@@ -213,16 +208,8 @@ public class DetailActivity extends BaseActivity {
         tvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = tvCollect.getText().toString(); 
-                if("加入收藏".equals(text)){
-                    RoomDataManger.insertVodCollect(sourceKey, vodInfo);
-                    Toast.makeText(DetailActivity.this, "已加入收藏", Toast.LENGTH_SHORT).show();
-                    tvCollect.setText("取消收藏");
-                }else{
-                    RoomDataManger.deleteVodCollect(sourceKey, vodInfo);
-                    Toast.makeText(DetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
-                    tvCollect.setText("加入收藏");
-                }
+                RoomDataManger.insertVodCollect(sourceKey, vodInfo);
+                Toast.makeText(DetailActivity.this, "已加入收藏夹", Toast.LENGTH_SHORT).show();
             }
         });
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -242,7 +229,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
         mGridViewFlag.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            private void refresh(View itemView, int position, boolean isClick) {
+            private void refresh(View itemView, int position) {
                 String newFlag = seriesFlagAdapter.getData().get(position).name;
                 if (vodInfo != null && !vodInfo.playFlag.equals(newFlag)) {
                     for (int i = 0; i < vodInfo.seriesFlags.size(); i++) {
@@ -258,14 +245,6 @@ public class DetailActivity extends BaseActivity {
                     vodInfo.playFlag = newFlag;
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
-                }else if (isClick && vodInfo.playFlag.equals(newFlag)){
-                    // 如果是在当前分类上点击, 则调整排序
-                    if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {
-                        vodInfo.reverseSort = !vodInfo.reverseSort;
-                        vodInfo.reverse();
-                        insertVod(sourceKey, vodInfo);
-                        seriesAdapter.notifyDataSetChanged();
-                    }    
                 }
                 seriesFlagFocus = itemView;
             }
@@ -277,12 +256,12 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position, false);
+                refresh(itemView, position);
             }
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position, true);
+                refresh(itemView, position);
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -299,6 +278,7 @@ public class DetailActivity extends BaseActivity {
                     }
                     seriesAdapter.getData().get(vodInfo.playIndex).selected = true;
                     seriesAdapter.notifyItemChanged(vodInfo.playIndex);
+                    jumpToPlay();
                     if (showPreview && !fullWindows)
                         toggleFullPreview();
                 }
@@ -310,7 +290,7 @@ public class DetailActivity extends BaseActivity {
     private List<Runnable> pauseRunnable = null;
 
     private void jumpToPlay() {
-        if (vodInfo != null && vodInfo.seriesMap != null && vodInfo.seriesMap.get(vodInfo.playFlag) != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
@@ -372,14 +352,12 @@ public class DetailActivity extends BaseActivity {
                     tvName.setText(mVideo.name);
                     setTextShow(tvSite, "来源：", ApiConfig.get().getSource(mVideo.sourceKey).getName());
                     setTextShow(tvYear, "年份：", mVideo.year == 0 ? "" : String.valueOf(mVideo.year));
-                    //setTextShow(tvArea, "地区：", mVideo.area);
-                    //setTextShow(tvLang, "语言：", mVideo.lang);
+                    setTextShow(tvArea, "地区：", mVideo.area);
+                    setTextShow(tvLang, "语言：", mVideo.lang);
                     setTextShow(tvType, "类型：", mVideo.type);
-                    //setTextShow(tvActor, "演员：", mVideo.actor);
-                    setTextShow(tvDirector, "导演：", mVideo.director);
-                    //setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     setTextShow(tvActor, "演员：", mVideo.actor);
-                    setTextShow(tvDes, "简介：", removeHtmlTag(mVideo.des));
+                    setTextShow(tvDirector, "导演：", mVideo.director);
+                    setTextShow(tvDes, "内容简介：", removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
                         Picasso.get()
                                 .load(DefaultConfig.checkReplaceProxy(mVideo.pic))
@@ -477,13 +455,6 @@ public class DetailActivity extends BaseActivity {
             sourceKey = key;
             showLoading();
             sourceViewModel.getDetail(sourceKey, vodId);
-            
-            boolean isVodCollect = RoomDataManger.isVodCollect(sourceKey, vodId);
-            if(isVodCollect){
-                tvCollect.setText("取消收藏");
-            }else{
-                tvCollect.setText("加入收藏");
-            }
         }
     }
 
@@ -493,7 +464,7 @@ public class DetailActivity extends BaseActivity {
             if (event.obj != null) {
                 if (event.obj instanceof Integer) {
                     int index = (int) event.obj;
-                    //if (index != vodInfo.playIndex) {
+                    // if (index != vodInfo.playIndex) {
                     seriesAdapter.getData().get(vodInfo.playIndex).selected = false;
                     seriesAdapter.notifyItemChanged(vodInfo.playIndex);
                     seriesAdapter.getData().get(index).selected = true;
@@ -532,7 +503,7 @@ public class DetailActivity extends BaseActivity {
     private String searchTitle = "";
     private boolean hadQuickStart = false;
     private List<Movie.Video> quickSearchData = new ArrayList<>();
-    private Set<String> quickSearchWord = new LinkedHashSet<>();
+    private List<String> quickSearchWord = new ArrayList<>();
     private ExecutorService searchExecutorService = null;
 
     private void switchSearchWord(String word) {
@@ -547,30 +518,44 @@ public class DetailActivity extends BaseActivity {
             return;
         hadQuickStart = true;
         OkGo.getInstance().cancelTag("quick_search");
+        quickSearchWord.clear();
         searchTitle = mVideo.name;
         quickSearchData.clear();
-        quickSearchWord.clear();
         quickSearchWord.add(searchTitle);
+        // 分词
+        OkGo.<String>get("http://api.pullword.com/get.php?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
+                .tag("fenci")
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        if (response.body() != null) {
+                            return response.body().string();
+                        } else {
+                            throw new IllegalStateException("网络请求错误");
+                        }
+                    }
 
-        String[] splits = new String[]{"之", " ", "第"};
-        for(String str: splits){
-            if(searchTitle.contains(str)){
-                String[] subStrs = searchTitle.split(str);
-                quickSearchWord.add(subStrs[0]);
-                break; // 包含一个, 就结束
-            }
-        }
-        
-        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版"};
-        
-        for(String str: array){
-            if(searchTitle.contains(str)){
-                quickSearchWord.add(searchTitle.replace(str, ""));
-                break; // 包含一个 就结束
-            }
-        }
-        
-        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String json = response.body();
+                        quickSearchWord.clear();
+                        try {
+                            for (JsonElement je : new Gson().fromJson(json, JsonArray.class)) {
+                                quickSearchWord.add(je.getAsJsonObject().get("t").getAsString());
+                            }
+                        } catch (Throwable th) {
+                            th.printStackTrace();
+                        }
+                        quickSearchWord.add(searchTitle);
+                        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                    }
+                });
+
         searchResult();
     }
 
@@ -674,7 +659,7 @@ public class DetailActivity extends BaseActivity {
         }
         return super.dispatchKeyEvent(event);
     }
-    
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (showPreview && !fullWindows) {
