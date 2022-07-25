@@ -193,7 +193,7 @@
                         android:background="@drawable/button_detail_sort"
                         android:focusable="true"
                         android:gravity="center"
-                        android:visibility="gone" 
+                        android:visibility="倒序" 
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/vs_20" />
 
