@@ -476,6 +476,12 @@ public class DetailActivity extends BaseActivity {
             sourceKey = key;
             showLoading();
             sourceViewModel.getDetail(sourceKey, vodId);
+            boolean isVodCollect = RoomDataManger.isVodCollect(sourceKey, vodId);
+            if(isVodCollect){
+                tvCollect.setText("取消收藏");
+            }else{
+                tvCollect.setText("加入收藏");
+            }
         }
     }
 
