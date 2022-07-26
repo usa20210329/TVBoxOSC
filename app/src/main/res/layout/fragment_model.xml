@@ -580,7 +580,7 @@
                     android:layout_marginStart="@dimen/vs_5"
                     android:layout_marginLeft="@dimen/vs_5"
                     android:layout_weight="1"
-                                       android:focusable="false"
+                    android:focusable="false"
                     android:orientation="horizontal">
 
                     <LinearLayout
