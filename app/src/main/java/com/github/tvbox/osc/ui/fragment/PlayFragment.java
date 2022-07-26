@@ -334,7 +334,7 @@ public class PlayFragment extends BaseLazyFragment {
         sourceKey = bundle.getString("sourceKey");
         sourceBean = ApiConfig.get().getSource(sourceKey);
         initPlayerCfg();
-        play();
+        play(false);
     }
 
     private void initData() {
@@ -378,7 +378,6 @@ public class PlayFragment extends BaseLazyFragment {
         mController.setPlayerConfig(mVodPlayerCfg);
     }
 
-    @Override
     public boolean onBackPressed() {
         if (mController.onBackPressed()) {
             return true;
