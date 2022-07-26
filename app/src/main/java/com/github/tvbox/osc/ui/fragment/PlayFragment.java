@@ -1,4 +1,4 @@
-package com.github.tvbox.osc.ui.activity;
+package com.github.tvbox.osc.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -37,7 +37,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
-import com.github.tvbox.osc.base.BaseActivity;
+import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.VodInfo;
@@ -87,7 +87,7 @@ import me.jessyan.autosize.AutoSize;
 import xyz.doikki.videoplayer.player.ProgressManager;
 import xyz.doikki.videoplayer.player.VideoView;
 
-public class PlayActivity extends BaseActivity {
+public class PlayFragment extends BaseLazyFragment {
     private VideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
@@ -125,7 +125,7 @@ public class PlayActivity extends BaseActivity {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
-        mController = new VodController(this);
+        mController = new VodController(requireContext());
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
         mController.setGestureEnabled(true);
@@ -158,14 +158,14 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void playNext(boolean rmProgress) {
                 String preProgressKey = progressKey;
-                PlayActivity.this.playNext();
+                PlayFragment.this.playNext();
                 if (rmProgress && preProgressKey != null)
                     CacheManager.delete(MD5.string2MD5(preProgressKey), 0);
             }
 
             @Override
             public void playPre() {
-                PlayActivity.this.playPrevious();
+                 PlayFragment.this.playPrevious();
             }
 
             @Override
@@ -209,12 +209,11 @@ public class PlayActivity extends BaseActivity {
 
     void errorWithRetry(String err, boolean finish) {
         if (!autoRetry()) {
-            runOnUiThread(new Runnable() {
+            requireActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (finish) {
-                        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
-                        finish();
+                        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();                    
                     } else {
                         setTip(err, false, true);
                     }
@@ -224,7 +223,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     void playUrl(String url, HashMap<String, String> headers) {
-        runOnUiThread(new Runnable() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 stopParse();
@@ -232,31 +231,31 @@ public class PlayActivity extends BaseActivity {
                     mVideoView.release();
                     if (url != null) {
                         try {
-                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                String playTitle = mVodInfo.name + " " + vs.name;
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 7) {
-                                setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
-                                boolean callResult = false;
-                                switch (playerType) {
+                            if (playerType >= 7) {   
+                            VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                            String playTitle = mVodInfo.name + " " + vs.name;
+                            setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
+                            boolean callResult = false;
+                            switch (playerType) {
                                     case 7: {
-                                        callResult = DangbeiPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        callResult = DangbeiPlayer.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
                                     }   
                                     case 8: {
-                                        callResult =ucplayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        callResult =ucplayer.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
                                     } 
                                     case 9: {
-                                        callResult =browser.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        callResult =browser.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
                                     }
                                     case 10: {
-                                        callResult = MXPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        callResult = MXPlayer.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
                                     }
                                     case 11: {
-                                        callResult = ReexPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        callResult = ReexPlayer.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
                                     }
                                 }
@@ -330,16 +329,19 @@ public class PlayActivity extends BaseActivity {
         });
     }
 
+    public void setData(Bundle bundle) {
+        mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
+        sourceKey = bundle.getString("sourceKey");
+        sourceBean = ApiConfig.get().getSource(sourceKey);
+        initPlayerCfg();
+        play();
+    }
+
     private void initData() {
+        /*Intent intent = getIntent();
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
-            Bundle bundle = intent.getExtras();
-            mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
-            sourceKey = bundle.getString("sourceKey");
-            sourceBean = ApiConfig.get().getSource(sourceKey);
-            initPlayerCfg();
-            play(false);
-        }
+        }*/
     }
 
     void initPlayerCfg() {
@@ -377,25 +379,32 @@ public class PlayActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         if (mController.onBackPressed()) {
-            return;
+            return true;
         }
-        super.onBackPressed();
+        return false;
     }
 
-    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event != null) {
             if (mController.onKeyEvent(event)) {
                 return true;
             }
         }
-        return super.dispatchKeyEvent(event);
+                return false;
     }
 
     @Override
-    protected void onResume() {
+    public void onPause() {
+        super.onPause();
+        if (mVideoView != null) {
+            mVideoView.pause();
+        }
+    }
+
+    @Override
+     public void onResume() {
         super.onResume();
         if (mVideoView != null) {
             mVideoView.resume();
@@ -404,16 +413,21 @@ public class PlayActivity extends BaseActivity {
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (mVideoView != null) {
-            mVideoView.pause();
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            if (mVideoView != null) {
+                mVideoView.pause();
+            }
+        } else {
+            if (mVideoView != null) {
+                mVideoView.resume();
+            }
         }
+        super.onHiddenChanged(hidden);
     }
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (mVideoView != null) {
             mVideoView.release();
             mVideoView = null;
@@ -441,7 +455,7 @@ public class PlayActivity extends BaseActivity {
             }
         }
         if (!hasNext) {
-            Toast.makeText(this, "已经是最后一集了!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "已经是最后一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
         //修正倒序排序时上一集与下一集播放顺序相反的问题
@@ -468,7 +482,7 @@ public class PlayActivity extends BaseActivity {
             }
         }
         if (!hasPre) {
-            Toast.makeText(this, "已经是第一集了!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "已经是第一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
         //修正倒序排序时上一集与下一集播放顺序相反的问题
@@ -716,7 +730,7 @@ public class PlayActivity extends BaseActivity {
                             }
                         }
                         if (rs.has("jxFrom")) {
-                            runOnUiThread(new Runnable() {
+                            requireActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(mContext, "解析来自:" + rs.optString("jxFrom"), Toast.LENGTH_SHORT).show();
@@ -757,7 +771,7 @@ public class PlayActivity extends BaseActivity {
                         errorWithRetry("解析错误", false);
                     } else {
                         if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
-                            runOnUiThread(new Runnable() {
+                            requireActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     String mixParseUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
@@ -786,7 +800,7 @@ public class PlayActivity extends BaseActivity {
                                 }
                             }
                             if (rs.has("jxFrom")) {
-                                runOnUiThread(new Runnable() {
+                                requireActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(mContext, "解析来自:" + rs.optString("jxFrom"), Toast.LENGTH_SHORT).show();
@@ -854,7 +868,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     void loadUrl(String url) {
-        runOnUiThread(new Runnable() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mXwalkWebView != null) {
@@ -872,7 +886,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     void stopLoadWebView(boolean destroy) {
-        runOnUiThread(new Runnable() {
+       requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
@@ -918,7 +932,7 @@ public class PlayActivity extends BaseActivity {
         public void setOverScrollMode(int mode) {
             super.setOverScrollMode(mode);
             if (mContext instanceof Activity)
-                AutoSize.autoConvertDensityOfCustomAdapt((Activity) mContext, PlayActivity.this);
+                AutoSize.autoConvertDensityOfCustomAdapt((Activity) mContext, PlayFragment.this);
         }
 
         @Override
@@ -936,7 +950,7 @@ public class PlayActivity extends BaseActivity {
         public void setOverScrollMode(int mode) {
             super.setOverScrollMode(mode);
             if (mContext instanceof Activity)
-                AutoSize.autoConvertDensityOfCustomAdapt((Activity) mContext, PlayActivity.this);
+                AutoSize.autoConvertDensityOfCustomAdapt((Activity) mContext, PlayFragment.this);
         }
 
         @Override
@@ -956,7 +970,7 @@ public class PlayActivity extends BaseActivity {
         webView.setFocusableInTouchMode(false);
         webView.clearFocus();
         webView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-        addContentView(webView, layoutParams);
+        requireActivity().addContentView(webView, layoutParams);
         /* 添加webView配置 */
         final WebSettings settings = webView.getSettings();
         settings.setNeedInitialFocus(false);
@@ -1119,7 +1133,7 @@ public class PlayActivity extends BaseActivity {
         webView.setFocusableInTouchMode(false);
         webView.clearFocus();
         webView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-        addContentView(webView, layoutParams);
+        requireActivity().addContentView(webView, layoutParams);
         /* 添加webView配置 */
         final XWalkSettings settings = webView.getSettings();
         settings.setAllowContentAccess(true);
