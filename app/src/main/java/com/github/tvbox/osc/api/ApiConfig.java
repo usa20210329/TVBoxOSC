@@ -288,6 +288,9 @@ public class ApiConfig {
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+        if(wallpaper!=null && !wallpaper.isEmpty()){
+            Hawk.put(HawkConfig.WALLPAPER, wallpaper);
+        }
         // 远端站点源
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
