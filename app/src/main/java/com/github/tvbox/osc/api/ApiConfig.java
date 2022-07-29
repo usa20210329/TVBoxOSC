@@ -360,10 +360,6 @@ public class ApiConfig {
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
                        } 
-                   else if (extUrlFix.startsWith("asset://")) {
-                        extUrlFix = assetContentFix(assetToAddress(apiUrl), extUrlFix);
-                        extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
-                        url = url.replace(extUrl, extUrlFix);
                     } 
                 }
                 LiveChannelGroup liveChannelGroup = new LiveChannelGroup();
@@ -569,17 +565,5 @@ public class ApiConfig {
     String clanContentFix(String lanLink, String content) {
         String fix = lanLink.substring(0, lanLink.indexOf("/file/") + 6);
         return content.replace("clan://", fix);
-    }
-        
-    String assetToAddress(String assetLink) {
-        if (assetLink.startsWith("asset://")) {
-            return assetLink.replace("asset://", App.getInstance().getAssets().open(assetLink));
-        } 
-    }
-    
-    String assetContentFix(String assetLink, String content) {
-    String asset = App.getInstance().getAssets().open(assetLink);
-    return content.replace("asset://", asset);
-    }
-    
+    }   
 }
