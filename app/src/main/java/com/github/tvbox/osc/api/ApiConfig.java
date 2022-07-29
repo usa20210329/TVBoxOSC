@@ -578,7 +578,7 @@ public class ApiConfig {
     }
     
     String assetContentFix(String assetLink, String content) {
-    String asset = App.getInstance().getAssets().open(assetLink)
+    String asset = App.getInstance().getAssets().open(assetLink);
     return content.replace("asset://", asset);
     }
     
