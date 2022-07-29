@@ -170,7 +170,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                     });
             }
         });
-        /*findViewById(R.id.llWpRecovery).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.llWpRecovery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
@@ -179,7 +179,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                     wp.delete();
                 ((BaseActivity) requireActivity()).changeWallpaper(true);
             }
-        });*/
+        });
         findViewById(R.id.llHomeApi).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
