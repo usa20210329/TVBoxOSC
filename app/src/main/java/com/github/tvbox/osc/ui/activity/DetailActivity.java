@@ -38,6 +38,7 @@ import com.github.tvbox.osc.ui.dialog.QuickSearchDialog;
 import com.github.tvbox.osc.ui.fragment.PlayFragment;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
+import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
@@ -46,6 +47,7 @@ import com.google.gson.JsonElement;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
+import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -121,12 +123,6 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tvPlay.requestFocus();
-            }
-        },500);
         llLayout = findViewById(R.id.llLayout);
         llPlayerPlace = findViewById(R.id.previewPlayerPlace);
         llPlayerFragmentContainer = findViewById(R.id.previewPlayer);
@@ -164,6 +160,12 @@ public class DetailActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().show(playFragment).commitAllowingStateLoss();
             tvPlay.setText("全屏");
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tvPlay.requestFocus();
+            }
+        },500);
         tvSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +283,7 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-
+                refresh(itemView, position, true);
             }
 
             @Override
@@ -291,7 +293,7 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position, true);
+                
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -308,10 +310,9 @@ public class DetailActivity extends BaseActivity {
                     }
                     seriesAdapter.getData().get(vodInfo.playIndex).selected = true;
                     seriesAdapter.notifyItemChanged(vodInfo.playIndex);
+                    //选集全屏 想选集不全屏的注释下面一行
+                    //if (showPreview && !fullWindows) toggleFullPreview();
                     jumpToPlay();
-                    //全屏
-                    //if (showPreview && !fullWindows)
-                       // toggleFullPreview();
                 }
             }
         });
@@ -712,7 +713,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     // preview
-    boolean showPreview = true; // true 开启 false 关闭
+    boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true); // true 开启 false 关闭
     boolean fullWindows = false;
     ViewGroup.LayoutParams windowsPreview = null;
     ViewGroup.LayoutParams windowsFull = null;
