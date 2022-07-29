@@ -1,4 +1,4 @@
-{
+﻿{
 "wallpaper":"https://api.ixiaowai.cn/gqapi/gqapi.php",   
 "sites": [
 {"key":"csp_Kunyu77"       ,"name":"🐞酷云七七","type":3,"api":"csp_Kunyu77","searchable":1,"quickSearch":1,"filterable":1},
@@ -381,7 +381,7 @@
 ],
 "lives": [
 {"group": "redirect","channels": [{"name": "redirect","urls": [
-"proxy://do=live&type=txt&ext=aHR0cDovLzl4aTRvLnRrL3N1Yi9teXR2LnR4dA=="
+"proxy://do=live&type=txt&ext=YXNzZXQ6Ly9saXZlLnR4dA=="
 ]}]}],
 "spider":"asset://spider.jar",
 "flags":["youku","qq","iqiyi","qiyi","letv","sohu","tudou","pptv","mgtv","wasu","bilibili","renrenmi"],
