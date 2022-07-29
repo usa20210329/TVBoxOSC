@@ -360,6 +360,12 @@ public class ApiConfig {
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
                     }
+                    else if (extUrlFix.startsWith("asset://")) {
+                        extUrlFix = readAssetsText(apiUrl.replace("asset://",""));
+                        extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
+                        url = url.replace(extUrl, extUrlFix);
+                    }
+                        
                 }
                 LiveChannelGroup liveChannelGroup = new LiveChannelGroup();
                 liveChannelGroup.setGroupName(url);
