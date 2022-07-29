@@ -355,13 +355,13 @@ public class ApiConfig {
                 String extUrl = Uri.parse(url).getQueryParameter("ext");
                 if (extUrl != null && !extUrl.isEmpty()) {
                     String extUrlFix = new String(Base64.decode(extUrl, Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
-                   /* if (extUrlFix.startsWith("clan://")) {
+                   if (extUrlFix.startsWith("clan://")) {
                         extUrlFix = clanContentFix(clanToAddress(apiUrl), extUrlFix);
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
-                       } */
-                     if (extUrlFix.startsWith("asset://")) {
-                        extUrlFix = readAssetsText(extUrl.replace("asset://",""));
+                       } 
+                   else if (extUrlFix.startsWith("asset://")) {
+                        extUrlFix = assetContentFix(assetToAddress(apiUrl), extUrlFix);
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
                     } 
@@ -570,4 +570,16 @@ public class ApiConfig {
         String fix = lanLink.substring(0, lanLink.indexOf("/file/") + 6);
         return content.replace("clan://", fix);
     }
+        
+    String assetToAddress(String assetLink) {
+        if (assetLink.startsWith("asset://")) {
+            return assetLink.replace("asset://", App.getInstance().getAssets().open(assetLink));
+        } 
+    }
+    
+    String assetContentFix(String assetLink, String content) {
+    String asset = App.getInstance().getAssets().open(assetLink)
+    return content.replace("asset://", asset);
+    }
+    
 }
