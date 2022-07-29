@@ -359,11 +359,11 @@ public class ApiConfig {
                         extUrlFix = clanContentFix(clanToAddress(apiUrl), extUrlFix);
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
+                       } 
                      else if (extUrlFix.startsWith("asset://")) {
                         extUrlFix = readAssetsText(extUrlFix);
                         extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                         url = url.replace(extUrl, extUrlFix);
-                       }   
                     } 
                 }
                 LiveChannelGroup liveChannelGroup = new LiveChannelGroup();
