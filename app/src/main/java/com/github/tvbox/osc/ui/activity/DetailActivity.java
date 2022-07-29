@@ -283,7 +283,7 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position, true);
+                
             }
 
             @Override
@@ -293,7 +293,7 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                
+                refresh(itemView, position, true);
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
