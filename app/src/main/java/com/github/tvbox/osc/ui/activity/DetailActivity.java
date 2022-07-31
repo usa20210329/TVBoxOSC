@@ -166,6 +166,7 @@ public class DetailActivity extends BaseActivity {
                 tvPlay.requestFocus();
             }
         },500);*/
+        tvPlay.requestFocus();
         tvSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
