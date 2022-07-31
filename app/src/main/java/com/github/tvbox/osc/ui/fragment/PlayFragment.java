@@ -195,7 +195,8 @@ public class PlayFragment extends BaseLazyFragment {
     }
 
     void setTip(String msg, boolean loading, boolean err) {
-        runOnUiThread(new Runnable() {//解决解析偶发闪退
+        //解决解析偶发闪退
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mPlayLoadTip.setText(msg);
