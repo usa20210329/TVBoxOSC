@@ -611,8 +611,8 @@ public class VodController extends BaseController {
             return super.dispatchKeyEvent(event);
         }
         boolean isInPlayback = isInPlaybackState();
-        int keyCode = event.getKeyCode();
-        int action = event.getAction();
+        //int keyCode = event.getKeyCode();
+        //int action = event.getAction();
         if (action == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                 if (isInPlayback) {
