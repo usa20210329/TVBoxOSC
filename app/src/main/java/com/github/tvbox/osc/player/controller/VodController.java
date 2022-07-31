@@ -608,11 +608,12 @@ public class VodController extends BaseController {
         int action = event.getAction();
         if (isBottomVisible()) {
             myHandle.postDelayed(myRunnable, myHandleSeconds);
+            if (keyCode == KeyEvent.KEYCODE_DPAD_UP ) {
+                return true;
+            }
             return super.dispatchKeyEvent(event);
         }
         boolean isInPlayback = isInPlaybackState();
-        //int keyCode = event.getKeyCode();
-        //int action = event.getAction();
         if (action == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                 if (isInPlayback) {
