@@ -160,12 +160,12 @@ public class DetailActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().show(playFragment).commitAllowingStateLoss();
             tvPlay.setText("全屏");
         }
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 tvPlay.requestFocus();
             }
-        },500);
+        },500);*/
         tvSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,7 +283,7 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-                seriesSelect = false;
+                //seriesSelect = false;
             }
 
             @Override
@@ -312,10 +312,9 @@ public class DetailActivity extends BaseActivity {
                     }
                     seriesAdapter.getData().get(vodInfo.playIndex).selected = true;
                     seriesAdapter.notifyItemChanged(vodInfo.playIndex);
-                    if (reload || !showPreview)
-                        jumpToPlay();
+                    //选集全屏 想选集不全屏的注释下面一行
                     if (showPreview && !fullWindows)
-                        toggleFullPreview();
+                    if (reload || !showPreview) jumpToPlay();
                 }
             }
         });
