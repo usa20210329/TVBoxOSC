@@ -160,12 +160,12 @@ public class DetailActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().show(playFragment).commitAllowingStateLoss();
             tvPlay.setText("全屏");
         }
-        /*new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 tvPlay.requestFocus();
             }
-        },500);*/
+        },500);
         tvPlay.requestFocus();
         tvSort.setOnClickListener(new View.OnClickListener() {
             @Override
