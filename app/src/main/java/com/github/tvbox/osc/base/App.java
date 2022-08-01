@@ -48,18 +48,21 @@ public class App extends MultiDexApplication {
     private void initParams() {
         // Hawk
         Hawk.init(this).build();
-        putAbsent(HawkConfig.DEBUG_OPEN, false);
+        Hawk.put(HawkConfig.DEBUG_OPEN, false);
+        if (!Hawk.contains(HawkConfig.PLAY_TYPE)) {
+            Hawk.put(HawkConfig.PLAY_TYPE, 1);
+       /* putAbsent(HawkConfig.DEBUG_OPEN, false);
         putAbsent(HawkConfig.API_URL, "asset://cfg.json");
         putAbsent(HawkConfig.PLAY_TYPE, 1);
-    }
+    }*/
     /**
      * 如果不存在则设置值.
      * @param key
      * @param value
      */
-    private void putAbsent(String key, Object value){
+    /*private void putAbsent(String key, Object value){
         if(!Hawk.contains(key)){
-            Hawk.put(key, value);
+            Hawk.put(key, value);*/
         }
     }
 
