@@ -314,8 +314,12 @@ public class DetailActivity extends BaseActivity {
                         vodInfo.playIndex = position;
                         reload = true;
                     }
-                    seriesAdapter.getData().get(vodInfo.playIndex).selected = true;
-                    seriesAdapter.notifyItemChanged(vodInfo.playIndex);
+                    //seriesAdapter.getData().get(vodInfo.playIndex).selected = true;
+                    //seriesAdapter.notifyItemChanged(vodInfo.playIndex);
+                    //解决当前集不刷新的BUG
+                    if(!vodInfo.playFlag.equals(preFlag)) {
+                        reload = true;
+                    }
                     //选集全屏 想选集不全屏的注释下面一行
                     if (showPreview && !fullWindows)
                     if (reload || !showPreview) jumpToPlay();
@@ -327,8 +331,10 @@ public class DetailActivity extends BaseActivity {
 
     private List<Runnable> pauseRunnable = null;
 
+    private String preFlag="";
     private void jumpToPlay() {
         if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+            preFlag = vodInfo.playFlag;
             Bundle bundle = new Bundle();
             //保存历史
             insertVod(sourceKey, vodInfo);
@@ -752,7 +758,7 @@ public class DetailActivity extends BaseActivity {
 //            playerParent.addView(playerRoot);
 //            llLayoutParent.addView(llLayout);
 //        }
-        llPlayerFragmentContainerBlock.setVisibility(fullWindows ? View.GONE : View.VISIBLE);
         llPlayerFragmentContainer.setLayoutParams(fullWindows ? windowsFull : windowsPreview);
+        llPlayerFragmentContainerBlock.setVisibility(fullWindows ? View.GONE : View.VISIBLE);
     }
 }
