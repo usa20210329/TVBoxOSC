@@ -112,7 +112,7 @@ public class BackupDialog extends BaseDialog {
             });
             if (file.exists()) {
                 for (File f : list) {
-                    if (result.size() > 2) {
+                    if (result.size() > 10) {
                         FileUtils.recursiveDelete(f);
                         continue;
                     }
