@@ -198,7 +198,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
                 int scaleX = imageWidth / picWidth;
                 int scaleY = imageHeight / picHeight;
                 int scale = Math.max(Math.max(scaleX, scaleY), 1);
-                int scale = 1;
+                //int scale = 1;
                 if (scaleX > scaleY && scaleY >= 1) {
                     scale = scaleX;
                 }
