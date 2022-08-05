@@ -488,15 +488,6 @@
                             android:textSize="@dimen/ts_30" />
                 </LinearLayout>
                     
-                <LinearLayout
-                    android:layout_width="@dimen/vs_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/vs_5"
-                    android:layout_marginRight="@dimen/vs_5"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:orientation="horizontal">
-
                     <LinearLayout
                         android:id="@+id/llWp"
                         android:layout_width="@dimen/vs_0"
@@ -567,7 +558,8 @@
                             android:text=">"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/ts_30" />
-                    </LinearLayout>                      
+                    </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -577,7 +569,7 @@
                     android:focusable="false"
                     android:orientation="horizontal">
 
-                 <LinearLayout
+                <LinearLayout
                     android:id="@+id/llHistoryNum"
                     android:layout_width="@dimen/vs_0"
                     android:layout_height="match_parent"
@@ -618,7 +610,9 @@
                         android:text=">"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/ts_30" />
-                </LinearLayout>                   
+                        
+                </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="@dimen/vs_0"
@@ -713,8 +707,12 @@
                             android:text=">"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/ts_30" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
             </LinearLayout>
-        </LinearLayout> 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/vs_60"
