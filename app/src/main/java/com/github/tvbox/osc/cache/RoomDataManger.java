@@ -141,6 +141,7 @@ public class RoomDataManger {
         VodCollect record = AppDataManager.get().getVodCollectDao().getVodCollect(sourceKey, vodId);
         return record != null;
     }
+    
     public static List<VodCollect> getAllVodCollect() {
         return AppDataManager.get().getVodCollectDao().getAll();
     }
