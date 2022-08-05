@@ -129,7 +129,7 @@ public class RoomDataManger {
     public static void deleteVodCollect(int id) {
         AppDataManager.get().getVodCollectDao().delete(id);
     }
-    
+
     public static void deleteVodCollect(String sourceKey, VodInfo vodInfo) {
         VodCollect record = AppDataManager.get().getVodCollectDao().getVodCollect(sourceKey, vodInfo.id);
         if (record != null) {
@@ -141,7 +141,7 @@ public class RoomDataManger {
         VodCollect record = AppDataManager.get().getVodCollectDao().getVodCollect(sourceKey, vodId);
         return record != null;
     }
-    
+
     public static List<VodCollect> getAllVodCollect() {
         return AppDataManager.get().getVodCollectDao().getAll();
     }
