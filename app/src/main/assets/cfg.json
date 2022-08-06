@@ -389,7 +389,7 @@
 {"group": "redirect","channels": [{"name": "redirect","urls": [
 "proxy://do=live&type=txt&ext=aHR0cDovLzEyNy4wLjAuMTo5OTc4L2xpdmUudHh0"
 ]}]}],
-"spider":"asset://sub/spider.jar",
+"spider":"http://127.0.0.1:9978/spider.jar;md5;1ea29039c33d76bd5ff3e8dc3aa7f8cc",
 "flags":["youku","qq","iqiyi","qiyi","letv","sohu","tudou","pptv","mgtv","wasu","bilibili","renrenmi"],
 "ijk":[
 {"group":"软解码","options":[
