@@ -313,6 +313,7 @@ public class VodController extends BaseController {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                 mPlayerBtn.requestFocus();
             }
         });
         mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
@@ -342,6 +343,7 @@ public class VodController extends BaseController {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                 mPlayerBtn.requestFocus();
             }
         });
      //增加播放页面片头片尾时间重置   
