@@ -170,6 +170,12 @@ public class SearchActivity extends BaseActivity {
                 etSearch.setText("");
             }
         });
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableKeyboard(SearchActivity.this);
+            }
+        });
         keyboard.setOnSearchKeyListener(new SearchKeyboard.OnSearchKeyListener() {
             @Override
             public void onSearchKey(int pos, String key) {
