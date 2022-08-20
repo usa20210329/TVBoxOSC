@@ -406,10 +406,10 @@ public class HomeActivity extends BaseActivity {
     private void exit() {
         if (System.currentTimeMillis() - mExitTime < 2000) {
             //这一段借鉴来自 q群老哥 IDCardWeb
-            EventBus.getDefault().unregister(this);
-            AppManager.getInstance().appExit(0);
-            ControlManager.get().stopServer();
-            finish();
+            //EventBus.getDefault().unregister(this);
+            //AppManager.getInstance().appExit(0);
+            //ControlManager.get().stopServer();
+            //finish();
             super.onBackPressed();
         } else {
             mExitTime = System.currentTimeMillis();
@@ -580,8 +580,8 @@ public class HomeActivity extends BaseActivity {
                         bundle.putBoolean("useCache", true);
                         intent.putExtras(bundle);
                         getApplicationContext().startActivity(intent);
-                        //android.os.Process.killProcess(android.os.Process.myPid());
-                        //System.exit(0);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(0);
                     }
                 }
             });
