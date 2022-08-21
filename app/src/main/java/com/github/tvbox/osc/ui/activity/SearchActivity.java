@@ -85,7 +85,6 @@ public class SearchActivity extends BaseActivity {
         initView();
         initViewModel();
         initData();
-        enableKeyboard(this);
     }
 
     /*
@@ -101,7 +100,7 @@ public class SearchActivity extends BaseActivity {
      * @param activity Activity
      */
     public static void enableKeyboard(Activity activity) {
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);      
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
 
     private List<Runnable> pauseRunnable = null;
