@@ -58,7 +58,7 @@ public class StrUtil {
         Set<String> set = new LinkedHashSet<>();
         set.add(searchTitle);
         boolean found = false;
-        String[] splits = new String[] { "/", "之", " ", "　", "第", "-", "\\(", "（", "\\[", "：" };
+        String[] splits = new String[] { "/", "之", " ", "　", "第", "-", "\\(", "（", "\\[", "：", "·"};
         String[] array = new String[] { "粤语版", "粤语", "国语版", "国语", "日本版", "韩国版", "台湾剧", "台剧", "加更版", "TV版",
                 "未删减版", "新传", "前传" };
         for (String str : splits) {
