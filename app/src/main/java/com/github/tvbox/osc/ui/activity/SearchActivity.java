@@ -1,9 +1,11 @@
 package com.github.tvbox.osc.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,7 +20,6 @@ import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.bean.AbsXml;
 import com.github.tvbox.osc.bean.Movie;
-import com.github.tvbox.osc.bean.SearchResultWrapper;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.event.ServerEvent;
@@ -80,9 +81,26 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        disableKeyboard(SearchActivity.this);
         initView();
         initViewModel();
         initData();
+    }
+
+    /*
+     * 禁止软键盘
+     * @param activity Activity
+     */
+    public static void disableKeyboard(Activity activity) {
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+    }
+
+    /*
+     * 启用软键盘
+     * @param activity Activity
+     */
+    public static void enableKeyboard(Activity activity) {
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
 
     private List<Runnable> pauseRunnable = null;
@@ -169,6 +187,12 @@ public class SearchActivity extends BaseActivity {
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
                 etSearch.setText("");
+            }
+        });
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableKeyboard(SearchActivity.this);
             }
         });
         keyboard.setOnSearchKeyListener(new SearchKeyboard.OnSearchKeyListener() {
@@ -292,7 +316,7 @@ public class SearchActivity extends BaseActivity {
     public void refresh(RefreshEvent event) {
         if (event.type == RefreshEvent.TYPE_SEARCH_RESULT) {
             try {
-                searchData(event.obj == null ? null : (SearchResultWrapper) event.obj);
+                searchData(event.obj == null ? null : (AbsXml) event.obj);
             } catch (Exception e) {
                 searchData(null);
             }
@@ -348,17 +372,12 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
-    private void searchData(SearchResultWrapper wrapper){
-        String wd = wrapper.getWd();
-        AbsXml absXml = wrapper.getData();
+    private void searchData(AbsXml absXml) {
         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
             List<Movie.Video> data = new ArrayList<>();
             for (Movie.Video video : absXml.movie.videoList) {
-                if (video.name.equals(wd)){
-                    data.add(0, video);
-                }else if(video.name.contains(wd)){
+                if (video.name.contains(searchTitle))
                     data.add(video);
-                }
             }
             if (searchAdapter.getData().size() > 0) {
                 searchAdapter.addData(data);
