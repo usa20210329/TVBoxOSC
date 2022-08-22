@@ -72,7 +72,7 @@ import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
 import java.util.Arrays;
-
+import com.github.tvbox.osc.bean.SearchResultWrapper;
 /**
  * @author pj567
  * @date :2020/12/22
@@ -557,7 +557,7 @@ public class DetailActivity extends BaseActivity {
             }
         } else if (event.type == RefreshEvent.TYPE_QUICK_SEARCH_RESULT) {
             try {
-                searchData(event.obj == null ? null : (AbsXml) event.obj);
+                searchData(event.obj == null ? null : (SearchResultWrapper) event.obj);
             } catch (Exception e) {
                 searchData(null);
             }
@@ -582,44 +582,29 @@ public class DetailActivity extends BaseActivity {
             return;
         hadQuickStart = true;
         OkGo.getInstance().cancelTag("quick_search");
-        quickSearchWord.clear();
         searchTitle = mVideo.name;
         quickSearchData.clear();
+        quickSearchWord.clear();
         quickSearchWord.add(searchTitle);
-        // 分词
-        OkGo.<String>get("http://api.pullword.com/get.php?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
-                .tag("fenci")
-                .execute(new AbsCallback<String>() {
-                    @Override
-                    public String convertResponse(okhttp3.Response response) throws Throwable {
-                        if (response.body() != null) {
-                            return response.body().string();
-                        } else {
-                            throw new IllegalStateException("网络请求错误");
-                        }
-                    }
 
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String json = response.body();
-                        quickSearchWord.clear();
-                        try {
-                            for (JsonElement je : new Gson().fromJson(json, JsonArray.class)) {
-                                quickSearchWord.add(je.getAsJsonObject().get("t").getAsString());
-                            }
-                        } catch (Throwable th) {
-                            th.printStackTrace();
-                        }
-                        quickSearchWord.add(searchTitle);
-                        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
-                    }
+        String[] splits = new String[]{"之", " ", "第", "-"};
+        for(String str: splits){
+            if(searchTitle.contains(str)){
+                String[] subStrs = searchTitle.split(str);
+                quickSearchWord.add(subStrs[0]);
+                break; // 包含一个, 就结束
+            }
+        }
 
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                    }
-                });
+        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版", "台湾剧", "台剧"};
 
+        for(String str: array){
+            if(searchTitle.contains(str)){
+                quickSearchWord.add(searchTitle.replace(str, ""));
+                break; // 包含一个 就结束
+            }
+        }
+        EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
         searchResult();
     }
 
@@ -656,14 +641,22 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    private void searchData(AbsXml absXml) {
+    private void searchData(SearchResultWrapper wrapper){
+        String wd = wrapper.getWd();
+        AbsXml absXml = wrapper.getData();
         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
             List<Movie.Video> data = new ArrayList<>();
             for (Movie.Video video : absXml.movie.videoList) {
                 // 去除当前相同的影片
                 if (video.sourceKey.equals(sourceKey) && video.id.equals(vodId))
                     continue;
-                data.add(video);
+
+                // 快捷搜索只展示标题一致, 或者以这标题开头的数据
+                if(video.name.equals(wd)){
+                    data.add(0, video);
+                }else if(video.name.startsWith(wd)){
+                    data.add(video);
+                }
             }
             quickSearchData.addAll(data);
             EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH, data));
