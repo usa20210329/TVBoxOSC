@@ -1,11 +1,9 @@
 package com.github.tvbox.osc.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -82,26 +80,9 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        disableKeyboard(SearchActivity.this);
         initView();
         initViewModel();
         initData();
-    }
-
-    /*
-     * 禁止软键盘
-     * @param activity Activity
-     */
-    public static void disableKeyboard(Activity activity) {
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-    }
-
-    /*
-     * 启用软键盘
-     * @param activity Activity
-     */
-    public static void enableKeyboard(Activity activity) {
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
 
     private List<Runnable> pauseRunnable = null;
@@ -377,7 +358,7 @@ public class SearchActivity extends BaseActivity {
                     data.add(0, video);
                 }else if(video.name.contains(wd)){
                     data.add(video);
-                }                    
+                }
             }
             if (searchAdapter.getData().size() > 0) {
                 searchAdapter.addData(data);
