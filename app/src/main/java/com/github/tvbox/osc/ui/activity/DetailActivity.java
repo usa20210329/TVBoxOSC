@@ -587,7 +587,7 @@ public class DetailActivity extends BaseActivity {
         quickSearchWord.clear();
         quickSearchWord.add(searchTitle);
 
-        String[] splits = new String[]{"之", " ", "第", "-"};
+        String[] splits = new String[] { "/", "之", " ", "第", "-", "(", "（", "[", "："};
         for(String str: splits){
             if(searchTitle.contains(str)){
                 String[] subStrs = searchTitle.split(str);
@@ -596,7 +596,7 @@ public class DetailActivity extends BaseActivity {
             }
         }
 
-        String[] array = new String[]{"粤语版", "(粤语)", "（粤语）", "[粤语]", "国语版", "国语", "粤语", "日本版", "韩国版", "台湾剧", "台剧"};
+        String[] array = new String[] { "粤语版", "粤语", "国语版", "国语", "日本版", "韩国版", "台湾剧", "台剧", "加更版", "TV版", "未删减版", "新传", "前传" };
 
         for(String str: array){
             if(searchTitle.contains(str)){
