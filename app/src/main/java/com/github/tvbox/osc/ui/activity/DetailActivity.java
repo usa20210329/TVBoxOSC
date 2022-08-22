@@ -41,6 +41,7 @@ import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.MD5;
+import com.github.tvbox.osc.util.StrUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -585,25 +586,8 @@ public class DetailActivity extends BaseActivity {
         searchTitle = mVideo.name;
         quickSearchData.clear();
         quickSearchWord.clear();
-        quickSearchWord.add(searchTitle);
-
-        String[] splits = new String[] { "/", "之", " ", "第", "-", "(", "（", "[", "："};
-        for(String str: splits){
-            if(searchTitle.contains(str)){
-                String[] subStrs = searchTitle.split(str);
-                quickSearchWord.add(subStrs[0]);
-                break; // 包含一个, 就结束
-            }
-        }
-
-        String[] array = new String[] { "粤语版", "粤语", "国语版", "国语", "日本版", "韩国版", "台湾剧", "台剧", "加更版", "TV版", "未删减版", "新传", "前传" };
-
-        for(String str: array){
-            if(searchTitle.contains(str)){
-                quickSearchWord.add(searchTitle.replace(str, ""));
-                break; // 包含一个 就结束
-            }
-        }
+        Set<String> words = StrUtil.getWords(searchTitle);
+        quickSearchWord.addAll(words);
         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_QUICK_SEARCH_WORD, quickSearchWord));
         searchResult();
     }
