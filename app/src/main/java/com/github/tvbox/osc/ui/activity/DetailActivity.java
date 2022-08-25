@@ -191,6 +191,9 @@ public class DetailActivity extends BaseActivity {
                 FastClickCheckUtil.check(v);
                 if (showPreview) {
                     toggleFullPreview();
+                    if(isReverse){
+                        jumpToPlay();
+                    }                    
                 } else {
                     jumpToPlay();
                 }
