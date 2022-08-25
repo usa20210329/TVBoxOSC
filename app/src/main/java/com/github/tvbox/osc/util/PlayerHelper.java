@@ -190,7 +190,6 @@ public class PlayerHelper {
         }
         return scaleText;
     }
-}
 
     public static String getDisplaySpeed(long speed) {
         if(speed > 1048576)
