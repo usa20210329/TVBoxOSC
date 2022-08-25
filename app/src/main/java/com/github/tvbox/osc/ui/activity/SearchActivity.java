@@ -196,7 +196,7 @@ public class SearchActivity extends BaseActivity {
             public void onClick(View v) {
                 //Toast.makeText(mContext,"点击",Toast.LENGTH_SHORT).show();         
                 enableKeyboard(SearchActivity.this);
-                SearchActivity.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);               
+                //SearchActivity.this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);               
             }
         });
         
