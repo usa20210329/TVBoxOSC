@@ -436,3 +436,4 @@ public class SearchActivity extends BaseActivity {
         }
         return super.dispatchKeyEvent(event);
     }
+}
