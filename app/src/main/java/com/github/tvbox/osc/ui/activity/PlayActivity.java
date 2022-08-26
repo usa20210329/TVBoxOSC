@@ -876,7 +876,7 @@ public class PlayActivity extends BaseActivity {
         }
     }
 
-    void loadUrl(String url) {
+void loadUrl(String url) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -900,13 +900,12 @@ public class PlayActivity extends BaseActivity {
                 }
             }
         });
-    }}
+    }
 
     void stopLoadWebView(boolean destroy) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 if (mXwalkWebView != null) {
                     mXwalkWebView.stopLoading();
                     mXwalkWebView.loadUrl("about:blank");
