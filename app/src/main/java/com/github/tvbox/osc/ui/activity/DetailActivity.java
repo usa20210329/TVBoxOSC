@@ -366,7 +366,7 @@ public class DetailActivity extends BaseActivity {
                     }
 
                     //选集全屏 想选集不全屏的注释下面一行
-                    if (showPreview && !fullWindows) toggleFullPreview();
+                    if (showPreview && !fullWindows)
                     if (reload || !showPreview) jumpToPlay();
                 }
             }
