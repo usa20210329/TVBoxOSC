@@ -1016,7 +1016,7 @@ void loadUrl(String url) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        //settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         /* 添加webView配置 */
         //设置编码
         settings.setDefaultTextEncodingName("utf-8");
@@ -1176,7 +1176,7 @@ void loadUrl(String url) {
         settings.setLoadWithOverviewMode(true);
         settings.setBuiltInZoomControls(true);
         settings.setSupportZoom(false);
-        //settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         // settings.setUserAgentString(ANDROID_UA);
 
         webView.setBackgroundColor(Color.BLACK);
