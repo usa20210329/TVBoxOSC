@@ -117,6 +117,7 @@ public class DetailActivity extends BaseActivity {
     private View seriesFlagFocus = null;
     private boolean isReverse;
     private String preFlag="";
+    private boolean firstReverse;
     private V7GridLayoutManager mGridViewLayoutMgr = null;
     
     @Override
@@ -169,6 +170,8 @@ public class DetailActivity extends BaseActivity {
         mGridViewFlag.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
         seriesFlagAdapter = new SeriesFlagAdapter();
         mGridViewFlag.setAdapter(seriesFlagAdapter);
+        isReverse = false;
+        firstReverse = false;
         if (showPreview) {
             playFragment = new PlayFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.previewPlayer, playFragment).commit();
@@ -196,7 +199,7 @@ public class DetailActivity extends BaseActivity {
                     if (vodInfo.seriesMap.get(vodInfo.playFlag).size() > vodInfo.playIndex) {
                         vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = true;
                     }
-                    insertVod(sourceKey, vodInfo);
+                    //insertVod(sourceKey, vodInfo);
                     seriesAdapter.notifyDataSetChanged();
                 }
             }
@@ -207,8 +210,9 @@ public class DetailActivity extends BaseActivity {
                 FastClickCheckUtil.check(v);
                 if (showPreview) {
                     toggleFullPreview();
-                    if(isReverse){
+                    if(firstReverse){
                         jumpToPlay();
+                        firstReverse=false;
                     }                    
                 } else {
                     jumpToPlay();
@@ -222,7 +226,7 @@ public class DetailActivity extends BaseActivity {
                 //获取剪切板管理器
                 ClipboardManager cm = (ClipboardManager)getSystemService(mContext.CLIPBOARD_SERVICE);
                 //设置内容到剪切板
-                cm.setPrimaryClip(ClipData.newPlainText(null, tvPlayUrl.getText().toString()));
+                cm.setPrimaryClip(ClipData.newPlainText(null, tvPlayUrl.getText().toString().replace("播放地址:","")));
                 Toast.makeText(DetailActivity.this, "已复制", Toast.LENGTH_SHORT).show();
             }
         });        
@@ -367,7 +371,10 @@ public class DetailActivity extends BaseActivity {
 
                     //选集全屏 想选集不全屏的注释下面一行
                     if (showPreview && !fullWindows)
-                    if (reload || !showPreview) jumpToPlay();
+                    if (!showPreview || reload) {
+                        jumpToPlay();
+                        firstReverse=false;
+                    }
                 }
             }
         });
