@@ -184,7 +184,9 @@ public class DetailActivity extends BaseActivity {
                 tvPlay.requestFocus();
             }
         },500);
-        tvPlay.requestFocus();
+        //禁用播放地址焦点
+        tvPlayUrl.setFocusable(false);
+        //tvPlay.requestFocus();
         tvSort.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -220,7 +222,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
 
-        tvPlayUrl.setOnClickListener(new View.OnClickListener() {
+        /**tvPlayUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //获取剪切板管理器
@@ -229,7 +231,7 @@ public class DetailActivity extends BaseActivity {
                 cm.setPrimaryClip(ClipData.newPlainText(null, tvPlayUrl.getText().toString().replace("播放地址:","")));
                 Toast.makeText(DetailActivity.this, "已复制", Toast.LENGTH_SHORT).show();
             }
-        });        
+        });**/        
         tvQuickSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,6 +276,16 @@ public class DetailActivity extends BaseActivity {
                     Toast.makeText(DetailActivity.this, "已取消收藏", Toast.LENGTH_SHORT).show();
                     tvCollect.setText("加入收藏");
                 }
+            }
+        });
+        tvPlayUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取剪切板管理器
+                ClipboardManager cm = (ClipboardManager)getSystemService(mContext.CLIPBOARD_SERVICE);
+                //设置内容到剪切板
+                cm.setPrimaryClip(ClipData.newPlainText(null, tvPlayUrl.getText().toString().replace("播放地址: ","")));
+                Toast.makeText(DetailActivity.this, "已复制", Toast.LENGTH_SHORT).show();
             }
         });
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
@@ -528,7 +540,7 @@ public class DetailActivity extends BaseActivity {
                         }
                         
                         //设置播放地址
-                        setTextShow(tvPlayUrl, "播放地址:", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);
+                        setTextShow(tvPlayUrl, "播放地址: ", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);
                         
                         seriesFlagAdapter.setNewData(vodInfo.seriesFlags);
                         mGridViewFlag.scrollToPosition(flagScrollTo);
@@ -551,6 +563,7 @@ public class DetailActivity extends BaseActivity {
                     llPlayerFragmentContainer.setVisibility(View.GONE);
                     llPlayerFragmentContainerBlock.setVisibility(View.GONE);
                 }
+                if(absXml != null && absXml.msg != null && !absXml.msg.isEmpty())Toast.makeText(DetailActivity.this, absXml.msg, Toast.LENGTH_SHORT).show();              
             }
         });
     }
