@@ -241,7 +241,7 @@ public class GridFragment extends BaseLazyFragment {
                         Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
                     }                   
                 }
-                if(absXml != null && absXml.msg != null && !absXml.msg.isEmpty())Toast.makeText(getContext(), absXml.msg, Toast.LENGTH_SHORT).show();
+                //if(absXml != null && absXml.msg != null && !absXml.msg.isEmpty())Toast.makeText(getContext(), absXml.msg, Toast.LENGTH_SHORT).show();
                 if (page > maxPage) {
                     gridAdapter.loadMoreEnd();
                 } else {
