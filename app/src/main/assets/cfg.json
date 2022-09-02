@@ -1,7 +1,7 @@
 {
 "wallpaper":"https://api.ixiaowai.cn/gqapi/gqapi.php",   
 "sites": [
-{"key":"csp_77"            ,"name":"🐞酷云七七","type":3,"api":"csp_Kunyu77","searchable":1,"quickSearch":1,"filterable":1,"jar":"http://9xi4o.tk/ts.jar"},
+{"key":"csp_77"            ,"name":"🐞酷云七七","type":3,"api":"csp_Kunyu77","searchable":1,"quickSearch":1,"filterable":1"},
 {"key":"csp_Lezhu"         ,"name":"🐞乐猪影视","type":3,"api":"csp_Lezhu","searchable":1,"quickSearch":1,"filterable":1},  
 {"key":"csp_Kuaikan"       ,"name":"🐞快看影视","type":3,"api":"csp_Kuaikan","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_ikan"          ,"name":"🐞爱看影视","type":3,"api":"csp_IKan","searchable":1,"quickSearch":1,"filterable":1},
@@ -52,7 +52,7 @@
 {"key":"csp_Zhaozy"        ,"name":"🐞找资源","type":3,"api":"csp_Zhaozy","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Yiso"          ,"name":"🐞Yiso搜","type":3,"api":"csp_Yiso","searchable":1,"quickSearch":1,"filterable":0},
 {"key":"csp_AliPanSou"     ,"name":"🐞云喵搜","type":3,"api":"csp_AliPanSou","searchable":1,"quickSearch":1,"filterable":0},
-{"key":"Alist"             ,"name":"🐞Alist","type":3,"api":"csp_Alist","searchable":1,"quickSearch":1,"filterable":1,"ext":"http://9xi4o.tk/sub/Alist.json","jar":"http://9xi4o.tk/ts.jar"},  
+{"key":"Alist"             ,"name":"🐞Alist","type":3,"api":"csp_Alist","searchable":1,"quickSearch":1,"filterable":1,"ext":"http://9xi4o.tk/sub/Alist.json"},  
 {"key":"push_agent"        ,"name":"🛴推送","type":3,"api":"csp_PushAgent","searchable":0,"quickSearch":0,"filterable":0},  
 {"key":"csp_xpath_bdys"        ,"name":"🦋哔嘀影视(XP)","type":3,"api":"csp_XPathFilter","searchable":1,"quickSearch":1,"filterable":1,"ext":"http://9xi4o.tk/sub/xpath/bdys.json"},
 {"key":"csp_xpath_libv"        ,"name":"🦋Libvio(XPF)","type":3,"api":"csp_XPathMacFilter","searchable":1,"quickSearch":1,"filterable":1,"ext":"http://9xi4o.tk/sub/xpath/libv.json"},
