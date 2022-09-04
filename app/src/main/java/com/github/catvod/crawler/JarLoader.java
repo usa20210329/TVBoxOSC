@@ -26,7 +26,12 @@ public class JarLoader {
     private ConcurrentHashMap<String, Method> proxyMethods = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Spider> spiders = new ConcurrentHashMap<>();
     private volatile String recentJarKey = "";
+    private String jarName = null;
 
+    public JarLoader(String jarName) {
+        this.jarName = jarName;
+    }
+    
     /**
      * 不要在主线程调用我
      *
@@ -43,7 +48,7 @@ public class JarLoader {
     private boolean loadClassLoader(String jar, String key) {
         boolean success = false;
         try {
-            File cacheDir = new File(App.getInstance().getCacheDir().getAbsolutePath() + "/catvod_csp");
+            File cacheDir = new File(App.getInstance().getCacheDir().getAbsolutePath() + "/catvod_csp_" + jarName);
             if (!cacheDir.exists())
                 cacheDir.mkdirs();
             DexClassLoader classLoader = new DexClassLoader(jar, cacheDir.getAbsolutePath(), null, App.getInstance().getClassLoader());
