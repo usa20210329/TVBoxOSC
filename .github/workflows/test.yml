@@ -1,9 +1,10 @@
 name: Test Build
 
 on:
-  push:
-    branches:
-      - haha
+#  push:
+#    branches:
+#      - main
+#  pull_request:
   workflow_dispatch:
 
 jobs:
