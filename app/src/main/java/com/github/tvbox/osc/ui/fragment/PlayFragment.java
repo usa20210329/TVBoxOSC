@@ -252,6 +252,10 @@ public class PlayFragment extends BaseLazyFragment {
                             setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
                             boolean callResult = false;
                             switch (playerType) {
+                                     case 6: {
+                                        callResult = KodiPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        break;
+                                    }                                     
                                     case 7: {
                                         callResult = DangbeiPlayer.run(requireActivity(), url, playTitle, playSubtitle, headers);
                                         break;
