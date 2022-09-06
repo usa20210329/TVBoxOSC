@@ -247,7 +247,7 @@ public class PlayFragment extends BaseLazyFragment {
                     if (url != null) {
                         try {
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 7) {   
+                            if (playerType >= 6) {   
                             VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                             String playTitle = mVodInfo.name + " " + vs.name;
                             setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
