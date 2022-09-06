@@ -45,6 +45,7 @@ import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.CacheManager;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.controller.VodController;
+import com.github.tvbox.osc.player.thirdparty.KodiPlayer;
 import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.player.thirdparty.ucplayer;
 import com.github.tvbox.osc.player.thirdparty.browser;
@@ -252,6 +253,10 @@ public class PlayActivity extends BaseActivity {
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
                                 boolean callResult = false;
                                 switch (playerType) {
+                                    case 6: {
+                                        callResult = KodiPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
+                                        break;
+                                    }                                           
                                     case 7: {
                                         callResult = DangbeiPlayer.run(PlayActivity.this, url, playTitle, playSubtitle, headers);
                                         break;
