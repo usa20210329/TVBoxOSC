@@ -18,7 +18,7 @@ import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
-import com.github.tvbox.osc.player.thirdparty.KodiPlayer;
+import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.player.thirdparty.ucplayer;
 import com.github.tvbox.osc.player.thirdparty.browser;
@@ -338,7 +338,7 @@ public class VodController extends BaseController {
                         if (playerType <= 2) {
                             playerVail = true;
                         } else if (playerType == 6) {
-                            playerVail = KodiPlayerExist;
+                            playerVail = KodiExist;
                         } else if (playerType == 7) {
                             playerVail = dangbeiPlayerExist;    
                         } else if (playerType == 8) {
@@ -506,7 +506,7 @@ public class VodController extends BaseController {
     }
 
     private JSONObject mPlayerConfig = null;
-    private boolean KodiPlayerExist = false;
+    private boolean KodiExist = false;
     private boolean dangbeiPlayerExist = false;
     private boolean browserExist = false;
     private boolean ucplayerExist = false;
@@ -516,7 +516,7 @@ public class VodController extends BaseController {
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
-        KodiPlayerExist = KodiPlayer.getPackageInfo() != null;
+        KodiPlayerExist = Kodi.getPackageInfo() != null;
         dangbeiPlayerExist = DangbeiPlayer.getPackageInfo() != null;
         ucplayerExist = ucplayer.getPackageInfo() != null;
         browserExist = browser.getPackageInfo() != null;
