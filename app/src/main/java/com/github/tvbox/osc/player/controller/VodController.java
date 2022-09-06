@@ -516,7 +516,7 @@ public class VodController extends BaseController {
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
-        KodiPlayerExist = Kodi.getPackageInfo() != null;
+        KodiExist = Kodi.getPackageInfo() != null;
         dangbeiPlayerExist = DangbeiPlayer.getPackageInfo() != null;
         ucplayerExist = ucplayer.getPackageInfo() != null;
         browserExist = browser.getPackageInfo() != null;
