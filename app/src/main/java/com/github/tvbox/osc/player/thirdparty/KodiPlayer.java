@@ -6,18 +6,14 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.github.tvbox.osc.base.App;
 
 import java.util.HashMap;
 
-/***
-*
-* @author https://github.com/takagen99
-*
- */
-public class KodiPlayer {
+public class Kodi {
     public static final String TAG = "ThirdParty.Kodi";
 
     private static final String PACKAGE_NAME = "org.xbmc.kodi";
