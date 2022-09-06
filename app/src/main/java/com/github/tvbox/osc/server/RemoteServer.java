@@ -91,9 +91,9 @@ public class RemoteServer extends NanoHTTPD {
                 "/storage/", //storage/xxxx-xxxx
                 "/mnt/" //mnt/xxxx-xxxx
             };
-            for (int i = 0; i < strArr.length; i++) {
-                File[] listFiles = new File(strArr[i]).listFiles();
+            for (int i = 0; i < strArr.length; i++) {               
                 if (datapath == null || datapath == "") {
+                    File[] listFiles = new File(strArr[i]).listFiles();
                     if (listFiles != null && listFiles.length > 0) {
                         for (File file: listFiles) {
                             if (file.isDirectory() && file.getName().length() == 9 && file.getName().indexOf("-") == 4) {
@@ -102,7 +102,9 @@ public class RemoteServer extends NanoHTTPD {
                             }
                         }
                     }
-                }
+                } else {
+                    break;                    
+                }    
             }
             if (datapath == null || datapath == "") {
                 //系统存储，需给予读写权限
