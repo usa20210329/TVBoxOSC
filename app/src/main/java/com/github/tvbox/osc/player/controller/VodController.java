@@ -338,7 +338,7 @@ public class VodController extends BaseController {
                         if (playerType <= 2) {
                             playerVail = true;
                         } else if (playerType == 6) {
-                            playerVail = KodiPlayerExist;                               
+                            playerVail = KodiPlayerExist;                                 
                         } else if (playerType == 7) {
                             playerVail = dangbeiPlayerExist;    
                         } else if (playerType == 8) {
