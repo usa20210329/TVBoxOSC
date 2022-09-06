@@ -341,11 +341,11 @@ public class PlayFragment extends BaseLazyFragment {
                         }
                     } catch (Throwable th) {
                         //errorWithRetry("获取播放信息错误", true);
-                        Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    //errorWithRetry("获取播放信息错误", true);
-                    Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+                    errorWithRetry("获取播放信息错误", true);
+                    //Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -536,7 +536,8 @@ public class PlayFragment extends BaseLazyFragment {
         String playTitleInfo = mVodInfo.name + " " + vs.name;
         mController.setTitle(playTitleInfo);
 
-        //playUrl(null, null);
+        stopParse();
+        if(mVideoView!=null) mVideoView.release();
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex;
         //存储播放进度
         Object bodyKey=CacheManager.getCache(MD5.string2MD5(progressKey));
