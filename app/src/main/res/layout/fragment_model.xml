@@ -630,13 +630,6 @@
                             android:layout_weight="1" />
 
                         <TextView
-                            android:id="@+id/tvScaleType"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/ts_24" />
-
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/vs_10"
@@ -671,13 +664,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/showPreviewText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/ts_24" />
 
                         <TextView
                             android:layout_width="wrap_content"
