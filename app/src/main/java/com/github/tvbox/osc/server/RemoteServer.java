@@ -93,12 +93,7 @@ public class RemoteServer extends NanoHTTPD {
                 if (listFiles != null && listFiles.length > 0) {
                     for (File file: listFiles) {
                         if (file.isDirectory() && file.getName().length() == 9 && file.getName().indexOf("-") == 4) {
-                            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                                if (file.getAbsolutePath() != Environment.getExternalStorageDirectory().getAbsolutePath()) {
-                                    datapath = file.getAbsolutePath();
-                                    break;
-                                }
-                            } else {
+                            if (!file.getName().equals(Environment.getExternalStorageDirectory().getName())) {
                                 datapath = file.getAbsolutePath();
                                 break;
                             }
