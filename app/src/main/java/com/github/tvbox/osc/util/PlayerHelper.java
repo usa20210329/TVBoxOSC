@@ -142,7 +142,9 @@ public class PlayerHelper {
         if (playType == 1) {
             return "IJK播放器";
         } else if (playType == 2) {
-            return "Exo播放器";           
+            return "Exo播放器"; 
+        } else if (playType == 6) {
+            return "kodi播放器";            
         } else if (playType == 7) {
             return "当贝播放器";  
         } else if (playType == 8) {
