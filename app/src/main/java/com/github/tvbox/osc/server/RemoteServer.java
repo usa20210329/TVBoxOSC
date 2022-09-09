@@ -80,39 +80,42 @@ public class RemoteServer extends NanoHTTPD {
 
     String getpath() {
         String datapath = "";
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            //内部存储
-            datapath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        } else {
-            //获取U盘路径
-            String[] strArr = new String[] {
-                "/mnt/usb/", //mnt/usb/xxxx-xxxx
-                "/storage/usb/", //storage/usb/xxxx-xxxx
-                "/storage/", //storage/xxxx-xxxx
-                "/mnt/" //mnt/xxxx-xxxx
-            };
-            for (int i = 0; i < strArr.length; i++) {               
-                if (datapath == null || datapath == "") {
-                    File[] listFiles = new File(strArr[i]).listFiles();
-                    if (listFiles != null && listFiles.length > 0) {
-                        for (File file: listFiles) {
-                            if (file.isDirectory() && file.getName().length() == 9 && file.getName().indexOf("-") == 4) {
+        //获取U盘路径
+        String[] strArr = new String[] {
+            "/mnt/usb/", //mnt/usb/xxxx-xxxx
+            "/storage/usb/", //storage/usb/xxxx-xxxx
+            "/storage/", //storage/xxxx-xxxx
+            "/mnt/" //mnt/xxxx-xxxx
+        };
+        for (int i = 0; i < strArr.length; i++) {
+            if (datapath == null || datapath == "") {
+                File[] listFiles = new File(strArr[i]).listFiles();
+                if (listFiles != null && listFiles.length > 0) {
+                    for (File file: listFiles) {
+                        if (file.isDirectory() && file.getName().length() == 9 && file.getName().indexOf("-") == 4) {
+                            if (!file.getName().equals(Environment.getExternalStorageDirectory().getName())) {
                                 datapath = file.getAbsolutePath();
                                 break;
                             }
                         }
                     }
-                } else {
-                    break;                    
-                }    
+                }
+            } else {
+                break;
             }
-            if (datapath == null || datapath == "") {
+        }
+        if (datapath == null || datapath == "") {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                //内部存储
+                datapath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            } else {
                 //系统存储，需给予读写权限
                 datapath = "/data/local/tmp";
-            }
+                }
         }
         return datapath;
     }
+    
     @Override
     public void start(int timeout, boolean daemon) throws IOException {
         isStarted = true;
