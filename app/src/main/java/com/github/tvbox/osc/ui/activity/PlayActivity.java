@@ -1087,9 +1087,9 @@ void loadUrl(String url) {
         }
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
-            if (url.endsWith("/favicon.ico")) {
+            /*if (url.endsWith("/favicon.ico")) {
                 return new WebResourceResponse("image/png", null, null);
-            }
+            }*/
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
@@ -1259,9 +1259,9 @@ void loadUrl(String url) {
         public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView view, XWalkWebResourceRequest request) {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
-            if (url.endsWith("/favicon.ico")) {
+            /*if (url.endsWith("/favicon.ico")) {
                 return createXWalkWebResourceResponse("image/png", null, null);
-            }
+            }*/
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
