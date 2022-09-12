@@ -76,7 +76,7 @@
                     android:shadowRadius="3"
                     android:text="更 多"
                     android:textColor="@color/color_66FFFFF"
-                    android:textStyle="bold" />
+                    //android:textStyle="bold" />
                 <ImageView
                     android:id="@+id/iv_arrow2"
                     android:layout_width="20dp"
@@ -100,7 +100,7 @@
                     android:shadowRadius="3"
                     android:text="节 目"
                     android:textColor="@color/color_66FFFFF"
-                    android:textStyle="bold" />
+                    //android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -186,7 +186,7 @@
                         android:shadowRadius="3"
                         android:text="节 目"
                         android:textColor="@color/color_66FFFFF"
-                        android:textStyle="bold" />
+                        //android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/iv_arrow"
@@ -212,7 +212,7 @@
                         android:shadowRadius="3"
                         android:text="信 息"
                         android:textColor="@color/color_66FFFFF"
-                        android:textStyle="bold" />
+                        //android:textStyle="bold" />
                 </LinearLayout>
 
             </FrameLayout>
@@ -263,7 +263,7 @@
             android:paddingBottom="10mm"
             android:visibility="visible"
             app:tv_selectedItemIsCentered="true"
-            app:tv_verticalSpacingWithMargins="10mm" />
+            //app:tv_verticalSpacingWithMargins="10mm" />
     </LinearLayout>
 
     <TextView
@@ -285,7 +285,7 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/ts_34"
         android:visibility="gone"
-        android:textStyle="bold"/>
+        //android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvTime"
@@ -305,7 +305,7 @@
         android:textColor="@android:color/white"
         android:textSize="22mm"
         android:textStyle="bold"
-        android:visibility="gone" />
+        //android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvNetSpeed"
