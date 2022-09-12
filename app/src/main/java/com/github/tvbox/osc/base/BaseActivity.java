@@ -189,7 +189,11 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     public boolean isBaseOnWidth() {
         return !(screenRatio >= 4.0f);
     }
-
+    
+    public boolean supportsPiPMode() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+    
     protected static BitmapDrawable globalWp = null;
 
     public void changeWallpaper(boolean force) {
