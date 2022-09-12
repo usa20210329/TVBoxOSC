@@ -84,5 +84,7 @@
     <dimen name="vs_610">610mm</dimen>
     <dimen name="vs_640">640mm</dimen>
     <dimen name="vs_720">720mm</dimen>
+    <dimen name="vs_850">850mm</dimen>
+    <dimen name="vs_900">900mm</dimen>
     <dimen name="vs_960">960mm</dimen>
 </resources>
