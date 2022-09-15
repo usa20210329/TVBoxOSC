@@ -17,6 +17,10 @@ public class Constants {
      * EXO播放器.
      */
     public static final int PLAYER_EXO = 2;
+    /**
+     * kodi播放器.
+     */
+    public static final int PLAYER_Kodi = 6;
       /**
      * 当贝播放器.
      */
