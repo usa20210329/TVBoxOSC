@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,6 +45,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.CacheManager;
 import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
@@ -87,10 +89,9 @@ import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.AutoSize;
 import xyz.doikki.videoplayer.player.ProgressManager;
-import xyz.doikki.videoplayer.player.VideoView;
 
 public class PlayActivity extends BaseActivity {
-    private VideoView mVideoView;
+    private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
     private ProgressBar mPlayLoading;
@@ -244,8 +245,14 @@ public class PlayActivity extends BaseActivity {
                 stopParse();
                 if (mVideoView != null) {
                     mVideoView.release();
+                    String zimuParamKey = "___zimu___"; //字幕url的header中key
+                    String zimuBase64Url = "";                  
                     if (url != null) {
                         try {
+                             if (headers != null && headers.containsKey(zimuParamKey)) {
+                                zimuBase64Url = headers.get(zimuParamKey);
+                                headers.remove(zimuParamKey);//remove传过来的字幕header的key
+                            }                           
                                 VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                                 String playTitle = mVodInfo.name + " " + vs.name;
                             int playerType = mVodPlayerCfg.getInt("pl");
@@ -288,12 +295,24 @@ public class PlayActivity extends BaseActivity {
                         hideTip();
                         PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
                         mVideoView.setProgressKey(progressKey);
+                        String zimuUrl = "";
+                        if (zimuBase64Url != null && zimuBase64Url.length() > 0) {
+                            zimuUrl = new String(Base64.decode(zimuBase64Url, Base64.DEFAULT));
+                            mController.mSubtitleView.setVisibility(View.GONE);
+                        }                       
                         if (headers != null) {
                             mVideoView.setUrl(url, headers);
                         } else {
                             mVideoView.setUrl(url);
                         }
                         mVideoView.start();
+                        if (zimuUrl != null && zimuUrl .length() > 0) {
+                            // 绑定MediaPlayer
+                            mController.mSubtitleView.bindToMediaPlayer(mVideoView.getMediaPlayer());
+                            // 设置字幕
+                            mController.mSubtitleView.setSubtitlePath(zimuUrl);
+                            mController.mSubtitleView.setVisibility(View.VISIBLE);
+                        }                      
                         mController.resetSpeed();
                     }
                 }
