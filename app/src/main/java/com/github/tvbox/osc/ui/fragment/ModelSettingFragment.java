@@ -382,6 +382,9 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 players.add(Constants.PLAYER_SYSTEM);
                 players.add(Constants.PLAYER_IJK);
                 players.add(Constants.PLAYER_EXO);
+                if(Kodi.isAvailable()) {
+                    players.add(Constants.PLAYER_Kodi);
+                }
                 if(DangbeiPlayer.isAvailable()) {
                     players.add(Constants.PLAYER_DANGBEI);
                 }
