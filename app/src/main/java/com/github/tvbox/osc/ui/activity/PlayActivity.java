@@ -246,15 +246,16 @@ public class PlayActivity extends BaseActivity {
                 if (mVideoView != null) {
                     mVideoView.release();
                     String zimuParamKey = "___zimu___"; //字幕url的header中key
-                    String zimuBase64Url = "";                  
+                    String zimuBase64Url = "";
+                    if (headers != null && headers.containsKey(zimuParamKey)) {
+                        zimuBase64Url = headers.get(zimuParamKey);
+                        headers.remove(zimuParamKey);//remove传过来的字幕header的key
+                    }
+                  
                     if (url != null) {
-                        try {
-                             if (headers != null && headers.containsKey(zimuParamKey)) {
-                                zimuBase64Url = headers.get(zimuParamKey);
-                                headers.remove(zimuParamKey);//remove传过来的字幕header的key
-                            }                           
-                                VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
-                                String playTitle = mVodInfo.name + " " + vs.name;
+                        try {                       
+                            VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
+                            String playTitle = mVodInfo.name + " " + vs.name;
                             int playerType = mVodPlayerCfg.getInt("pl");
                             if (playerType >= 6) {
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
@@ -294,18 +295,21 @@ public class PlayActivity extends BaseActivity {
                         }
                         hideTip();
                         PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
-                        mVideoView.setProgressKey(progressKey);
-                        String zimuUrl = "";
-                        if (zimuBase64Url != null && zimuBase64Url.length() > 0) {
-                            zimuUrl = new String(Base64.decode(zimuBase64Url, Base64.DEFAULT));
-                            mController.mSubtitleView.setVisibility(View.GONE);
-                        }                       
+                        mVideoView.setProgressKey(progressKey);                   
                         if (headers != null) {
                             mVideoView.setUrl(url, headers);
                         } else {
                             mVideoView.setUrl(url);
                         }
                         mVideoView.start();
+                        mController.resetSpeed();
+
+                        //加载字幕开始
+                        String zimuUrl = "";
+                        if (zimuBase64Url != null && zimuBase64Url.length() > 0) {
+                            zimuUrl = new String(Base64.decode(zimuBase64Url, Base64.DEFAULT));
+                            mController.mSubtitleView.setVisibility(View.GONE);
+                        }                      
                         if (zimuUrl != null && zimuUrl .length() > 0) {
                             // 绑定MediaPlayer
                             mController.mSubtitleView.bindToMediaPlayer(mVideoView.getMediaPlayer());
@@ -313,7 +317,7 @@ public class PlayActivity extends BaseActivity {
                             mController.mSubtitleView.setSubtitlePath(zimuUrl);
                             mController.mSubtitleView.setVisibility(View.VISIBLE);
                         }                      
-                        mController.resetSpeed();
+                        //加载字幕结束
                     }
                 }
             }
