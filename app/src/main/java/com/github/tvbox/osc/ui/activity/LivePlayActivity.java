@@ -394,6 +394,7 @@ public class LivePlayActivity extends BaseActivity {
         if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
             mHandler.removeCallbacks(mHideSettingLayoutRun);
             mHandler.post(mHideSettingLayoutRun);
+        } else {
             if (tvLeftChannelListLayout.getVisibility() == View.INVISIBLE) {
 
                 //  mRightEpgList.setVisibility(View.GONE);
@@ -458,7 +459,6 @@ public class LivePlayActivity extends BaseActivity {
         shiyi_time = 当前时间.format(new Date()) + "-" + 结束时间.format(new Date());
 
     }
-
 
     private Runnable mFocusCurrentChannelAndShowChannelList = new Runnable() {
         @Override
@@ -853,7 +853,6 @@ public class LivePlayActivity extends BaseActivity {
                 RecyclerView.ViewHolder holder = mSettingGroupView.findViewHolderForAdapterPosition(0);
                 if (holder != null)
                     holder.itemView.requestFocus();
-                //tvRightSettingLayout.setVisibility(View.VISIBLE);
                 tvChannelInfo.setVisibility(View.INVISIBLE);
                 tvRightSettingLayout.setVisibility(View.VISIBLE);
                 tvRightSettingLayout.setAlpha(0.0f);
@@ -873,7 +872,6 @@ public class LivePlayActivity extends BaseActivity {
     private Runnable mHideSettingLayoutRun = new Runnable() {
         @Override
         public void run() {
-            //ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tvRightSettingLayout.getLayoutParams();
             if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
 
                 tvRightSettingLayout.animate()
