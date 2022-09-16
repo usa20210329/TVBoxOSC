@@ -44,6 +44,7 @@ import java.util.List;
 
 import okhttp3.HttpUrl;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
 import com.github.tvbox.osc.player.thirdparty.ucplayer;
 import com.github.tvbox.osc.player.thirdparty.browser;
