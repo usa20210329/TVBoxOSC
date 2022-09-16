@@ -50,7 +50,11 @@ public class Kodi {
         }
         return null;
     }
-
+    
+    public static boolean isAvailable(){
+        return getPackageInfo() != null;
+    }
+    
     private static class Subtitle {
         final Uri uri;
         String name;
