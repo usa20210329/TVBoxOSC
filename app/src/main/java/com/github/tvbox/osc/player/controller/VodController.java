@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.player.controller;
 
+import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -37,14 +38,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import java.util.Date;
+import java.util.List;
 
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
-
-import static xyz.doikki.videoplayer.util.PlayerUtils.stringForTime;
 
 public class VodController extends BaseController {
     public VodController(@NonNull @NotNull Context context) {
@@ -123,6 +122,7 @@ public class VodController extends BaseController {
     TextView mPlayLoadNetSpeed;
     TextView mVideoSize;
     public SimpleSubtitleView mSubtitleView;
+    public TextView mZimuBtn;
     
     Handler myHandle;
     Runnable myRunnable;
@@ -180,6 +180,7 @@ public class VodController extends BaseController {
         mPlayLoadNetSpeed = findViewById(R.id.tv_play_load_net_speed);
         mVideoSize = findViewById(R.id.tv_videosize);
         mSubtitleView = findViewById(R.id.subtitle_view);
+        mZimuBtn = findViewById(R.id.zimu_select);
         
         myHandle=new Handler();
         myRunnable = new Runnable() {
@@ -498,6 +499,13 @@ public class VodController extends BaseController {
                 updatePlayerCfgView();
             }
         });
+        mZimuBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.selectSubtitle();
+                hideBottom();
+            }
+        });        
     }
 
     @Override
@@ -568,6 +576,8 @@ public class VodController extends BaseController {
         void replay(boolean replay);
 
         void errReplay();
+        
+        void selectSubtitle();        
     }
 
     public void setListener(VodControlListener listener) {
