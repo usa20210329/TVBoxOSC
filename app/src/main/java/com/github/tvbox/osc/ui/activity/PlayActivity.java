@@ -939,25 +939,23 @@ public class PlayActivity extends BaseActivity {
         }
     }
 
-void loadUrl(String url) {
+    void loadUrl(String url) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // webUserAgent = "Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36";
-                //String ua = webUserAgent;
                 if (mXwalkWebView != null) {
                     mXwalkWebView.stopLoading();
                     Map<String, String > map = new HashMap<String, String>() ;
 
                     if(webUserAgent != null) {
-                         mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
+                        mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
                     }
-                }
-                    //mSysWebView.clearCache(true);
+                    //mXwalkWebView.clearCache(true);
                     if(webHeaderMap != null){
-                       mSysWebView.loadUrl(url,webHeaderMap);
+                        mXwalkWebView.loadUrl(url,webHeaderMap);
                     }else {
-                       mSysWebView.loadUrl(url);
+                        mXwalkWebView.loadUrl(url);
                     }
                 }
                 if (mSysWebView != null) {
