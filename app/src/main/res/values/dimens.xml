@@ -44,6 +44,7 @@
     <dimen name="vs_45">45mm</dimen>
     <dimen name="vs_48">48mm</dimen>
     <dimen name="vs_50">50mm</dimen>
+    <dimen name="vs_55">55mm</dimen>
     <dimen name="vs_60">60mm</dimen>
     <dimen name="vs_70">70mm</dimen>
     <dimen name="vs_76">76mm</dimen>
@@ -68,12 +69,14 @@
     <dimen name="vs_230">230mm</dimen>
     <dimen name="vs_240">240mm</dimen>
     <dimen name="vs_250">250mm</dimen>
+    <dimen name="vs_260">220mm</dimen>
     <dimen name="vs_270">270mm</dimen>
     <dimen name="vs_280">280mm</dimen>
     <dimen name="vs_300">300mm</dimen>
     <dimen name="vs_320">320mm</dimen>
     <dimen name="vs_340">340mm</dimen>
     <dimen name="vs_360">360mm</dimen>
+    <dimen name="vs_380">380mm</dimen>
     <dimen name="vs_390">390mm</dimen>
     <dimen name="vs_400">400mm</dimen>
     <dimen name="vs_420">420mm</dimen>
