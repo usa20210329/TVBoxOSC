@@ -1,15 +1,25 @@
 package com.github.tvbox.osc.util;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.render.SurfaceRenderViewFactory;
+import com.github.tvbox.osc.player.thirdparty.Kodi;
+import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
+import com.github.tvbox.osc.player.thirdparty.ucplayer;
+import com.github.tvbox.osc.player.thirdparty.browser;
+import com.github.tvbox.osc.player.thirdparty.MXPlayer;
+import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import tv.danmaku.ijk.media.player.IjkLibLoader;
 import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
@@ -139,27 +149,101 @@ public class PlayerHelper {
     }
 
     public static String getPlayerName(int playType) {
-        if (playType == 1) {
-            return "IJK播放器";
-        } else if (playType == 2) {
-            return "Exo播放器"; 
-        } else if (playType == 6) {
-            return "kodi播放器";            
-        } else if (playType == 7) {
-            return "当贝播放器";  
-        } else if (playType == 8) {
-            return "UC播放器";
-        } else if (playType == 9) {
-            return "浏览器播放";     
-        } else if (playType == 10) {
-            return "MX播放器";
-        } else if (playType == 11) {
-            return "Reex播放器";
+        HashMap<Integer, String> playersInfo = getPlayersInfo();
+        if (playersInfo.containsKey(playType)) {
+            return playersInfo.get(playType);
         } else {
             return "系统播放器";
         }
     }
 
+    private static HashMap<Integer, String> mPlayersInfo = null;
+    public static HashMap<Integer, String> getPlayersInfo() {
+        if (mPlayersInfo == null) {
+            HashMap<Integer, String> playersInfo = new HashMap<>();
+            playersInfo.put(0, "系统播放器");
+            playersInfo.put(1, "IJK播放器");
+            playersInfo.put(2, "Exo播放器");
+            playersInfo.put(6, "kodi播放器");
+            playersInfo.put(7, "当贝播放器"");
+            playersInfo.put(8, "UC播放器");
+            playersInfo.put(9, "浏览器播放");
+            playersInfo.put(10, "MX播放器");
+            playersInfo.put(11, "Reex播放器");
+            mPlayersInfo = playersInfo;
+        }
+        return mPlayersInfo;
+    }
+
+    private static HashMap<Integer, Boolean> mPlayersExistInfo = null;
+    public static HashMap<Integer, Boolean> getPlayersExistInfo() {
+        if (mPlayersExistInfo == null) {
+            HashMap<Integer, Boolean> playersExist = new HashMap<>();
+            playersExist.put(0, true);
+            playersExist.put(1, true);
+            playersExist.put(2, true);
+            playersExist.put(6, Kodi.getPackageInfo() != null);
+            playersExist.put(7, dangbeiPlayer.getPackageInfo() != null);
+            playersExist.put(8, browser.getPackageInfo() != null);
+            playersExist.put(9, ucplayer.getPackageInfo() != null); 
+            playersExist.put(10, MXPlayer.getPackageInfo() != null);
+            playersExist.put(11, ReexPlayer.getPackageInfo() != null);            
+            mPlayersExistInfo = playersExist;
+        }
+        return mPlayersExistInfo;
+    }
+
+    public static Boolean getPlayerExist(int playType) {
+        HashMap<Integer, Boolean> playersExistInfo = getPlayersExistInfo();
+        if (playersExistInfo.containsKey(playType)) {
+            return playersExistInfo.get(playType);
+        } else {
+            return false;
+        }
+    }
+
+    public static ArrayList<Integer> getExistPlayerTypes() {
+        HashMap<Integer, Boolean> playersExistInfo = getPlayersExistInfo();
+        ArrayList<Integer> existPlayers = new ArrayList<>();
+        for(Integer playerType : playersExistInfo.keySet()) {
+            if (playersExistInfo.get(playerType)) {
+                existPlayers.add(playerType);
+            }
+        }
+        return existPlayers;
+    }
+
+    public static Boolean runExternalPlayer(int playerType, Activity activity, String url, String title, String subtitle, HashMap<String, String> headers) {
+        boolean callResult = false;
+        switch (playerType) {
+            case 6: {
+                callResult = Kodi.run(activity, url, title, subtitle, headers);
+                break;
+            }
+            case 7: {
+                callResult = DangbeiPlayer.run(activity, url, title, subtitle, headers);
+                break;
+            }
+            case 8: {
+                callResult = ucplayer.run(activity, url, title, subtitle, headers);
+                break;
+            }
+            case 9: {
+                callResult = browser.run(activity, url, title, subtitle, headers);
+                break;
+            }
+            case 10: {
+                callResult = ReexPlayer.run(activity, url, title, subtitle, headers);
+                break;
+            }
+            case 11: {
+                callResult = Kodi.run(activity, url, title, subtitle, headers);
+                break;
+            }                
+        }
+        return callResult;
+    }
+    
     public static String getRenderName(int renderType) {
         if (renderType == 1) {
             return "SurfaceView";
