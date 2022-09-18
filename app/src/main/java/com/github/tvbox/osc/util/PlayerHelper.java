@@ -165,7 +165,7 @@ public class PlayerHelper {
             playersInfo.put(1, "IJK播放器");
             playersInfo.put(2, "Exo播放器");
             playersInfo.put(6, "kodi播放器");
-            playersInfo.put(7, "当贝播放器"");
+            playersInfo.put(7, "当贝播放器");
             playersInfo.put(8, "UC播放器");
             playersInfo.put(9, "浏览器播放");
             playersInfo.put(10, "MX播放器");
