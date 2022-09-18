@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.util.Log;
 
 import com.github.tvbox.osc.base.App;
@@ -50,11 +49,7 @@ public class Kodi {
         }
         return null;
     }
-    
-    public static boolean isAvailable(){
-        return getPackageInfo() != null;
-    }
-    
+
     private static class Subtitle {
         final Uri uri;
         String name;
