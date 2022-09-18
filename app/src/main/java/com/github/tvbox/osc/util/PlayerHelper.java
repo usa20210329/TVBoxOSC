@@ -184,8 +184,8 @@ public class PlayerHelper {
             playersExist.put(2, true);
             playersExist.put(6, Kodi.getPackageInfo() != null);
             playersExist.put(7, DangbeiPlayer.getPackageInfo() != null);
-            playersExist.put(8, browser.getPackageInfo() != null);
-            playersExist.put(9, ucplayer.getPackageInfo() != null); 
+            playersExist.put(8, ucplayer.getPackageInfo() != null);
+            playersExist.put(9, browser.getPackageInfo() != null); 
             playersExist.put(10, MXPlayer.getPackageInfo() != null);
             playersExist.put(11, ReexPlayer.getPackageInfo() != null);            
             mPlayersExistInfo = playersExist;
@@ -233,7 +233,7 @@ public class PlayerHelper {
                 break;
             }
             case 10: {
-                callResult =  MXPlayer.run(activity, url, title, subtitle, headers);
+                callResult = MXPlayer.run(activity, url, title, subtitle, headers);
                 break;
             }
             case 11: {
