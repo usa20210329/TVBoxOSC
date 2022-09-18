@@ -401,7 +401,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
 
                     @Override
                     public String getDisplay(Integer val) {
-                        return PlayerHelper.getPlayerName(val);
+                        Integer playerType = players.get(val);
+                        return PlayerHelper.getPlayerName(playerType);
                     }
                 }, new DiffUtil.ItemCallback<Integer>() {
                     @Override
