@@ -387,7 +387,6 @@ public class VodController extends BaseController {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                 mPlayerBtn.requestFocus();
             }
         });
         mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
