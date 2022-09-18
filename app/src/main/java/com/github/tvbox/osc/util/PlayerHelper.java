@@ -175,24 +175,6 @@ public class PlayerHelper {
         return mPlayersInfo;
     }
 
-    private static HashMap<Integer, Boolean> mPlayersExistInfo = null;
-    public static HashMap<Integer, Boolean> getPlayersExistInfo() {
-        if (mPlayersExistInfo == null) {
-            HashMap<Integer, Boolean> playersExist = new HashMap<>();
-            playersExist.put(0, true);
-            playersExist.put(1, true);
-            playersExist.put(2, true);
-            playersExist.put(6, Kodi.getPackageInfo() != null);
-            playersExist.put(7, dangbeiPlayer.getPackageInfo() != null);
-            playersExist.put(8, browser.getPackageInfo() != null);
-            playersExist.put(9, ucplayer.getPackageInfo() != null); 
-            playersExist.put(10, MXPlayer.getPackageInfo() != null);
-            playersExist.put(11, ReexPlayer.getPackageInfo() != null);            
-            mPlayersExistInfo = playersExist;
-        }
-        return mPlayersExistInfo;
-    }
-
     public static Boolean getPlayerExist(int playType) {
         HashMap<Integer, Boolean> playersExistInfo = getPlayersExistInfo();
         if (playersExistInfo.containsKey(playType)) {
