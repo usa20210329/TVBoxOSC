@@ -378,40 +378,24 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                int defaultPos = Hawk.get(HawkConfig.PLAY_TYPE, 0);
-                ArrayList<Integer> players = new ArrayList<>();
-                players.add(Constants.PLAYER_SYSTEM);
-                players.add(Constants.PLAYER_IJK);
-                players.add(Constants.PLAYER_EXO);
-                if(Kodi.isAvailable()) {
-                    players.add(Constants.PLAYER_Kodi);
-                }
-                if(DangbeiPlayer.isAvailable()) {
-                    players.add(Constants.PLAYER_DANGBEI);
-                }
-
-                if(ucplayer.isAvailable()) {
-                    players.add(Constants.PLAYER_UC);
-                }
-
-                if(browser.isAvailable()) {
-                    players.add(Constants.PLAYER_BROWER);
-                }
-
-                if(ReexPlayer.isAvailable()) {
-                    players.add(Constants.PLAYER_REEX);
-                }
-
-                if(MXPlayer.isAvailable()) {
-                    players.add(Constants.PLAYER_MX);
+                int playerType = Hawk.get(HawkConfig.PLAY_TYPE, 0);
+                int defaultPos = 0;
+                ArrayList<Integer> players = PlayerHelper.getExistPlayerTypes();
+                ArrayList<Integer> renders = new ArrayList<>();
+                for(int p = 0; p<players.size(); p++) {
+                    renders.add(p);
+                    if (players.get(p) == playerType) {
+                        defaultPos = p;
+                    }
                 }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
                 dialog.setTip("请选择默认播放器");
                 dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
                     @Override
                     public void click(Integer value, int pos) {
-                        Hawk.put(HawkConfig.PLAY_TYPE, value);
-                        tvPlay.setText(PlayerHelper.getPlayerName(value));
+                        Integer thisPlayerType = players.get(pos);
+                        Hawk.put(HawkConfig.PLAY_TYPE, thisPlayerType);
+                        tvPlay.setText(PlayerHelper.getPlayerName(thisPlayerType));
                         PlayerHelper.init();
                     }
 
@@ -429,7 +413,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
                     public boolean areContentsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
                         return oldItem.intValue() == newItem.intValue();
                     }
-                }, players, defaultPos);
+                }, renders, defaultPos);
                 dialog.show();
             }
         });
