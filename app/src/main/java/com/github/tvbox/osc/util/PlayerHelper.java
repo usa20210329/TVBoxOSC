@@ -164,12 +164,12 @@ public class PlayerHelper {
             playersInfo.put(0, "系统播放器");
             playersInfo.put(1, "IJK播放器");
             playersInfo.put(2, "Exo播放器");
-            playersInfo.put(6, "kodi播放器");
-            playersInfo.put(7, "当贝播放器");
-            playersInfo.put(8, "UC播放器");
-            playersInfo.put(9, "浏览器播放");
-            playersInfo.put(10, "MX播放器");
-            playersInfo.put(11, "Reex播放器");
+            playersInfo.put(10, "kodi播放器");
+            playersInfo.put(11, "当贝播放器");
+            playersInfo.put(12, "UC播放器");
+            playersInfo.put(13, "浏览器播放");
+            playersInfo.put(14, "MX播放器");
+            playersInfo.put(15, "Reex播放器");
             mPlayersInfo = playersInfo;
         }
         return mPlayersInfo;
@@ -182,12 +182,12 @@ public class PlayerHelper {
             playersExist.put(0, true);
             playersExist.put(1, true);
             playersExist.put(2, true);
-            playersExist.put(6, Kodi.getPackageInfo() != null);
-            playersExist.put(7, DangbeiPlayer.getPackageInfo() != null);
-            playersExist.put(8, ucplayer.getPackageInfo() != null);
-            playersExist.put(9, browser.getPackageInfo() != null); 
-            playersExist.put(10, MXPlayer.getPackageInfo() != null);
-            playersExist.put(11, ReexPlayer.getPackageInfo() != null);            
+            playersExist.put(10, Kodi.getPackageInfo() != null);
+            playersExist.put(11, DangbeiPlayer.getPackageInfo() != null);
+            playersExist.put(12, ucplayer.getPackageInfo() != null);
+            playersExist.put(13, browser.getPackageInfo() != null); 
+            playersExist.put(14, MXPlayer.getPackageInfo() != null);
+            playersExist.put(15, ReexPlayer.getPackageInfo() != null);            
             mPlayersExistInfo = playersExist;
         }
         return mPlayersExistInfo;
