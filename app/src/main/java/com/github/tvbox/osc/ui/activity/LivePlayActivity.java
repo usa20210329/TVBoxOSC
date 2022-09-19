@@ -134,6 +134,7 @@ public class LivePlayActivity extends BaseActivity {
     private ImageView iv_back_bg;
     private TextView mResolution;
     private TextView mTime;
+    public String epgStringAddress ="";
 
     private boolean isSHIYI = false;
     private static String shiyi_time;//时移时间
@@ -148,6 +149,10 @@ public class LivePlayActivity extends BaseActivity {
 
         // takagen99 : Hide only when video playing
         vidHideSysBar();
+
+        epgStringAddress = Hawk.get(HawkConfig.EPG_URL,"");
+        if(epgStringAddress == null || epgStringAddress.length()<5)
+            epgStringAddress = "http://epg.51zmt.top:8000/api/diyp/?ch=";
 
         setLoadSir(findViewById(R.id.live_root));
         mVideoView = findViewById(R.id.mVideoView);
@@ -702,7 +707,7 @@ public class LivePlayActivity extends BaseActivity {
         Date date = new Date();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        UrlHttpUtil.get("http://epg.aishangtv.top/live_proxy_epg_bc.php?ch=" + URLEncoder.encode(channelName.replace("+", "[add]").toString()) + "&date=" + timeFormat.format(date), new CallBackUtil.CallBackString() {
+        UrlHttpUtil.get(epgStringAddress + URLEncoder.encode(channelName.replace("+", "[add]").toString()) + "&date=" + timeFormat.format(date), new CallBackUtil.CallBackString() {
             public void onFailure(int i, String str) {
             }
 
