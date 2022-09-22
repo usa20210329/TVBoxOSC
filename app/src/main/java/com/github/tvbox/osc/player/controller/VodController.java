@@ -54,15 +54,11 @@ public class VodController extends BaseController {
                     }
                     case 1002: { // 显示底部菜单
                         mBottomRoot.setVisibility(VISIBLE);
-                        mTopRoot1.setVisibility(GONE);
-                        mTopRoot2.setVisibility(GONE);
                         mBottomRoot.requestFocus();
                         break;
                     }
                     case 1003: { // 隐藏底部菜单
                         mBottomRoot.setVisibility(GONE);
-                        mTopRoot1.setVisibility(GONE);
-                        mTopRoot2.setVisibility(GONE);                      
                         break;
                     }
                     case 1004: { // 设置速度
@@ -90,12 +86,9 @@ public class VodController extends BaseController {
     TextView mProgressText;
     ImageView mProgressIcon;
     LinearLayout mBottomRoot;
-    LinearLayout mTopRoot1;
-    LinearLayout mTopRoot2;
     LinearLayout mParseRoot;
     TvRecyclerView mGridView;
     TextView mPlayTitle;
-    TextView mPlayTitle1;
     TextView mNextBtn;
     TextView mPreBtn;
     TextView mPlayerScaleBtn;
@@ -113,14 +106,11 @@ public class VodController extends BaseController {
         mCurrentTime = findViewById(R.id.curr_time);
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
-        mPlayTitle1 = findViewById(R.id.tv_info_name1);
         mSeekBar = findViewById(R.id.seekBar);
         mProgressRoot = findViewById(R.id.tv_progress_container);
         mProgressIcon = findViewById(R.id.tv_progress_icon);
         mProgressText = findViewById(R.id.tv_progress_text);
         mBottomRoot = findViewById(R.id.bottom_container);
-        mTopRoot1 = findViewById(R.id.tv_top_l_container);
-        mTopRoot2 = findViewById(R.id.tv_top_r_container);
         mParseRoot = findViewById(R.id.parse_root);
         mGridView = findViewById(R.id.mGridView);
         mPlayerRetry = findViewById(R.id.play_retry);
@@ -395,7 +385,6 @@ public class VodController extends BaseController {
 
     public void setTitle(String playTitleInfo) {
         mPlayTitle.setText(playTitleInfo);
-        mPlayTitle1.setText(playTitleInfo);
     }
 
     public void resetSpeed() {
@@ -517,9 +506,6 @@ public class VodController extends BaseController {
                 startProgress();
                 break;
             case VideoView.STATE_PAUSED:
-                mTopRoot1.setVisibility(GONE);
-                mTopRoot2.setVisibility(GONE);
-                mPlayTitle.setVisibility(VISIBLE);              
                 break;
             case VideoView.STATE_ERROR:
                 listener.errReplay();
