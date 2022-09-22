@@ -1,4 +1,4 @@
-ackage com.github.tvbox.osc.ui.fragment;
+package com.github.tvbox.osc.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
