@@ -29,6 +29,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.internal.Version;
 import xyz.doikki.videoplayer.exo.ExoMediaSourceHelper;
+import okhttp3.Interceptor;
+import okhttp3.Response;
+import java.io.IOException;
+import android.os.Environment;
 
 public class OkGoHelper {
     public static final long DEFAULT_MILLISECONDS = 10000;      //默认的超时时间
@@ -77,9 +81,6 @@ public class OkGoHelper {
             case 3: {
                 return "https://doh.360.cn/dns-query";
             }
-            case 4: {
-                return "https://1.1.1.1/dns-query";   // takagen99
-            }
         }
         return "";
     }
@@ -89,6 +90,7 @@ public class OkGoHelper {
         dnsHttpsList.add("腾讯");
         dnsHttpsList.add("阿里");
         dnsHttpsList.add("360");
+        //dnsHttpsList.add("CloudFlare");
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkExoPlayer");
         if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
@@ -112,7 +114,11 @@ public class OkGoHelper {
 
     public static void init() {
         initDnsOverHttps();
-
+        initExoOkHttpClient();
+        initPicasso();
+    }
+    
+    static void initPicasso() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
 
@@ -136,7 +142,11 @@ public class OkGoHelper {
         } catch (Throwable th) {
             th.printStackTrace();
         }
-
+        
+        File cacheDirectory = new File(App.getInstance().getCacheDir().getAbsolutePath(), "picasso_cache");
+        // 缓存目录大小 100M
+        builder.cache(new Cache(cacheDirectory, 100*1024*1024));
+        
         HttpHeaders.setUserAgent(Version.userAgent());
 
         OkHttpClient okHttpClient = builder.build();
@@ -149,6 +159,15 @@ public class OkGoHelper {
     static void initPicasso(OkHttpClient client) {
         OkHttp3Downloader downloader = new OkHttp3Downloader(client);
         Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).build();
+        if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
+            // 缓存指示器，查看图片来源于何处
+            // 蓝色：从内存中获取，性能最佳；
+            // 绿色：从本地获取，性能一般；
+            // 红色：从网络加载，性能最差。
+            picasso.setIndicatorsEnabled(true);
+            // 查看图片加载用时
+            picasso.setLoggingEnabled(true);
+        }        
         Picasso.setSingletonInstance(picasso);
     }
 
