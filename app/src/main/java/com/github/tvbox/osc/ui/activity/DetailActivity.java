@@ -179,6 +179,12 @@ public class DetailActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().show(playFragment).commitAllowingStateLoss();
             tvPlay.setText("全屏");
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tvPlay.requestFocus();
+            }
+        },500);        
         //禁用播放地址焦点
         tvPlayUrl.setFocusable(false);
         tvSort.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +196,7 @@ public class DetailActivity extends BaseActivity {
                     isReverse = !isReverse;
                     vodInfo.reverse();
                     vodInfo.playIndex=(vodInfo.seriesMap.get(vodInfo.playFlag).size()-1)-vodInfo.playIndex;
-//                    insertVod(sourceKey, vodInfo);
+                    //insertVod(sourceKey, vodInfo);
                     firstReverse = true;
                     seriesAdapter.notifyDataSetChanged();
                 }
@@ -302,27 +308,39 @@ public class DetailActivity extends BaseActivity {
                         vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = false;
                     }
                     vodInfo.playFlag = newFlag;
+                    //更新播放地址
+                    setTextShow(tvPlayUrl, "播放地址:", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);  
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
+                      }else if (isClick && vodInfo.playFlag.equals(newFlag)){
+                    // 如果是在当前分类上点击, 则调整排序
+                    if (!vodInfo.isSeriesEmpty()) {
+                        vodInfo.reverseSort = !vodInfo.reverseSort;
+                        vodInfo.reverse();
+                        // 调整排序时 同时更新播放位置坐标
+                        vodInfo.playIndex = vodInfo.getFlagSeries(vodInfo.playFlag).size() - vodInfo.playIndex - 1;
+                        insertVod(sourceKey, vodInfo);
+                        seriesAdapter.notifyDataSetChanged();
+                    }                      
                 }
                 seriesFlagFocus = itemView;
             }
 
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-//                seriesSelect = false;
+                //seriesSelect = false;
             }
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
                 refresh(itemView, position);
-//                if(isReverse)vodInfo.reverse();
+                //if(isReverse)vodInfo.reverse();
             }
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
                 refresh(itemView, position);
-//                if(isReverse)vodInfo.reverse();
+                //if(isReverse)vodInfo.reverse();
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
