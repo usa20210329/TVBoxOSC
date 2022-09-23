@@ -71,7 +71,7 @@ public class CacheManager {
         cache.key = key;
         cache.data = toByteArray(body);
         AppDataManager.get().getCacheDao().delete(cache);
-    }    
+    }
 
     public static <T> void save(String key, T body) {
         Cache cache = new Cache();
