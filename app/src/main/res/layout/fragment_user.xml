@@ -57,7 +57,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center|start"
-                android:text="@string/hm_hist"
+                android:text="历史"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -101,7 +101,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_live"
+                android:text="直播"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -143,7 +143,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_search"
+                android:text="搜索"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -186,7 +186,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_push"
+                android:text=推送"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -228,7 +228,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_file"
+                android:text="文件"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -270,7 +270,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_fav"
+                android:text="收藏"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
@@ -312,7 +312,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="@string/hm_setting"
+                android:text="设置"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_24" />
