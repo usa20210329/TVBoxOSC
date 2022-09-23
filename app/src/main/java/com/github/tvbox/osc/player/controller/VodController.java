@@ -347,8 +347,8 @@ public class VodController extends BaseController {
         mPlayerBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                myHandle.removeCallbacks(myRunnable);
-//                myHandle.postDelayed(myRunnable, myHandleSeconds);
+                  //myHandle.removeCallbacks(myRunnable);
+                  //myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int playerType = mPlayerConfig.getInt("pl");
                     boolean playerVail = false;
@@ -356,19 +356,19 @@ public class VodController extends BaseController {
                         playerType++;
                         if (playerType <= 2) {
                             playerVail = true;
-                        } else if (playerType == 10) {
+                        } else if (playerType == 7) {
                             playerVail = Kodi.getPackageInfo() != null;
-                        } else if (playerType == 11) {
+                        } else if (playerType == 8) {
                             playerVail = DangbeiPlayer.getPackageInfo() != null;
-                        } else if (playerType == 12) {                            
+                        } else if (playerType == 9) {                            
                             playerVail = ucplayer.getPackageInfo() != null;
-                        } else if (playerType == 13) {
+                        } else if (playerType == 10) {
                             playerVail = browser.getPackageInfo() != null;
-                        } else if (playerType == 14) {
+                        } else if (playerType == 11) {
                             playerVail = MXPlayer.getPackageInfo() != null;
-                        } else if (playerType == 15) {
+                        } else if (playerType == 12) {
                             playerVail = ReexPlayer.getPackageInfo() != null;                          
-                        } else if (playerType > 15) {
+                        } else if (playerType > 12) {
                             playerType = 0;
                             playerVail = true;
                         }
@@ -377,7 +377,7 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    //hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -388,8 +388,8 @@ public class VodController extends BaseController {
         mPlayerBtn.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-//                myHandle.removeCallbacks(myRunnable);
-//                myHandle.postDelayed(myRunnable, myHandleSeconds);
+                  //myHandle.removeCallbacks(myRunnable);
+                  //myHandle.postDelayed(myRunnable, myHandleSeconds);
                 FastClickCheckUtil.check(view);
                 try {
                     int playerType = mPlayerConfig.getInt("pl");
@@ -416,7 +416,7 @@ public class VodController extends BaseController {
                                     listener.updatePlayerCfg();
                                     listener.replay(false);
                                     mPlayerBtn.requestFocus();
-//                                  hideBottom();
+                                    //hideBottom();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -449,8 +449,8 @@ public class VodController extends BaseController {
         mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                myHandle.removeCallbacks(myRunnable);
-//                myHandle.postDelayed(myRunnable, myHandleSeconds);
+                  //myHandle.removeCallbacks(myRunnable);
+                  //myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     String ijk = mPlayerConfig.getString("ijk");
                     List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
@@ -468,14 +468,14 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    //hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 mPlayerIJKBtn.requestFocus();
             }
         });
-//        增加播放页面片头片尾时间重置
+        //增加播放页面片头片尾时间重置
         findViewById(R.id.play_time_reset).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
