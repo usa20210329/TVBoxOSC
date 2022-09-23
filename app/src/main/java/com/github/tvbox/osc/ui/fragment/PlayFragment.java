@@ -746,7 +746,7 @@ public class PlayFragment extends BaseLazyFragment {
         //重新播放清除现有进度
         if (reset) {
             CacheManager.delete(MD5.string2MD5(progressKey));
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey));
         }
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
