@@ -177,7 +177,7 @@
 
         <LinearLayout
             android:id="@+id/tvDrive"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/vs_145"
             android:layout_height="@dimen/vs_100"
             android:layout_gravity="center"
             android:layout_margin="@dimen/vs_5"
@@ -194,8 +194,8 @@
 
             <ImageView
                 android:id="@+id/hm_drive"
-                android:layout_width="@dimen/vs_50"
-                android:layout_height="@dimen/vs_50"
+                android:layout_width="@dimen/vs_40"
+                android:layout_height="@dimen/vs_40"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/vs_5"
                 android:alpha="0.75"
@@ -205,7 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/vs_10"
+                android:layout_margin="@dimen/vs_5"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
@@ -214,7 +214,7 @@
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_26" />
 
-        </LinearLayout>     
+        </LinearLayout>
         
         <LinearLayout
             android:id="@+id/tvFavorite"
