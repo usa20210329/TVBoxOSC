@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SelectDialog<T> extends BaseDialog {
-    
+
     private boolean muteCheck = false;
-    
+
     public SelectDialog(@NonNull @NotNull Context context) {
         super(context);
         setContentView(R.layout.dialog_select);
@@ -28,7 +28,7 @@ public class SelectDialog<T> extends BaseDialog {
         super(context);
         setContentView(resId);
     }
-    
+
     public void setItemCheckDisplay(boolean shouldShowCheck) {
         muteCheck = !shouldShowCheck;
     }
