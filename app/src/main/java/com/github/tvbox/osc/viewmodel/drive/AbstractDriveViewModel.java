@@ -1,4 +1,22 @@
-le getCurrentDrive() {
+package com.github.tvbox.osc.viewmodel.drive;
+
+import androidx.lifecycle.ViewModel;
+
+import com.github.tvbox.osc.bean.DriveFolderFile;
+
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+public abstract class AbstractDriveViewModel extends ViewModel {
+
+    protected DriveFolderFile currentDrive = null;
+    protected DriveFolderFile currentDriveNote = null;
+    protected int sortType = 0;
+
+    public DriveFolderFile getCurrentDrive() {
         return currentDrive;
     }
 
