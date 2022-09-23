@@ -12,7 +12,6 @@
     <dimen name="ts_34">34mm</dimen>
     <dimen name="ts_40">40mm</dimen>
     <dimen name="ts_50">50mm</dimen>
-    <dimen name="vs_80">80mm</dimen>
     <dimen name="ts_100">100mm</dimen>
 
     <dimen name="focus_border_1">1mm</dimen>
