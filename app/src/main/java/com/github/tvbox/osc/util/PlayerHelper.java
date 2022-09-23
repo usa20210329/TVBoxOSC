@@ -164,12 +164,12 @@ public class PlayerHelper {
             playersInfo.put(0, "系统播放");
             playersInfo.put(1, "IJK播放");
             playersInfo.put(2, "Exo播放");
-            playersInfo.put(10, "kodi播放");
-            playersInfo.put(11, "当贝播放");
-            playersInfo.put(12, "UC播放");
-            playersInfo.put(13, "浏览器");
-            playersInfo.put(14, "MX播放");
-            playersInfo.put(15, "Reex播放");
+            playersInfo.put(7, "kodi播放");
+            playersInfo.put(8, "当贝播放");
+            playersInfo.put(9, "UC播放");
+            playersInfo.put(10, "浏览器");
+            playersInfo.put(11, "MX播放");
+            playersInfo.put(12, "Reex播放");
             mPlayersInfo = playersInfo;
         }
         return mPlayersInfo;
@@ -182,12 +182,12 @@ public class PlayerHelper {
             playersExist.put(0, true);
             playersExist.put(1, true);
             playersExist.put(2, true);
-            playersExist.put(10, Kodi.getPackageInfo() != null);
-            playersExist.put(11, DangbeiPlayer.getPackageInfo() != null);
-            playersExist.put(12, ucplayer.getPackageInfo() != null);
-            playersExist.put(13, browser.getPackageInfo() != null); 
-            playersExist.put(14, MXPlayer.getPackageInfo() != null);
-            playersExist.put(15, ReexPlayer.getPackageInfo() != null);            
+            playersExist.put(7, Kodi.getPackageInfo() != null);
+            playersExist.put(8, DangbeiPlayer.getPackageInfo() != null);
+            playersExist.put(9 ucplayer.getPackageInfo() != null);
+            playersExist.put(10, browser.getPackageInfo() != null); 
+            playersExist.put(11, MXPlayer.getPackageInfo() != null);
+            playersExist.put(12, ReexPlayer.getPackageInfo() != null);            
             mPlayersExistInfo = playersExist;
         }
         return mPlayersExistInfo;
@@ -216,27 +216,27 @@ public class PlayerHelper {
     public static Boolean runExternalPlayer(int playerType, Activity activity, String url, String title, String subtitle, HashMap<String, String> headers) {
         boolean callResult = false;
         switch (playerType) {
-            case 6: {
+            case 7: {
                 callResult = Kodi.run(activity, url, title, subtitle, headers);
                 break;
             }
-            case 7: {
+            case 8: {
                 callResult = DangbeiPlayer.run(activity, url, title, subtitle, headers);
                 break;
             }
-            case 8: {
+            case 9 {
                 callResult = ucplayer.run(activity, url, title, subtitle, headers);
                 break;
             }
-            case 9: {
+            case 10: {
                 callResult = browser.run(activity, url, title, subtitle, headers);
                 break;
             }
-            case 10: {
+            case 11: {
                 callResult = MXPlayer.run(activity, url, title, subtitle, headers);
                 break;
             }
-            case 11: {
+            case 12: {
                 callResult = ReexPlayer.run(activity, url, title, subtitle, headers);
                 break;
             }                
