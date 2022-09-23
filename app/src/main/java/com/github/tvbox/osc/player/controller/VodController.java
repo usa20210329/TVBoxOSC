@@ -20,12 +20,6 @@ import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
-import com.github.tvbox.osc.player.thirdparty.Kodi;
-import com.github.tvbox.osc.player.thirdparty.DangbeiPlayer;
-import com.github.tvbox.osc.player.thirdparty.ucplayer;
-import com.github.tvbox.osc.player.thirdparty.browser;
-import com.github.tvbox.osc.player.thirdparty.MXPlayer;
-import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
 import com.github.tvbox.osc.subtitle.widget.SimpleSubtitleView;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
@@ -363,11 +357,11 @@ public class VodController extends BaseController {
                         } else if (playerType == 12) {                            
                             playerVail = ucplayer.getPackageInfo() != null;
                         } else if (playerType == 13) {
-                            playerVail = browser..getPackageInfo() != null;
+                            playerVail = browser.getPackageInfo() != null;
                         } else if (playerType == 14) {
                             playerVail = MXPlayer.getPackageInfo() != null;
                         } else if (playerType == 15) {
-                            playerVail = ReexPlayer..getPackageInfo() != null;                          
+                            playerVail = ReexPlayer.getPackageInfo() != null;                          
                         } else if (playerType > 15) {
                             playerType = 0;
                             playerVail = true;
