@@ -53,7 +53,7 @@
                 android:text="历史"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:text="直播"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
 
@@ -131,7 +131,7 @@
                 android:text="搜索"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
 
@@ -171,7 +171,7 @@
                 android:text="推送"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
 
@@ -192,14 +192,13 @@
             android:paddingBottom="@dimen/vs_15">
 
 
-            <ImageView
-                android:id="@+id/hm_drive"
+            <ImageView                
                 android:layout_width="@dimen/vs_50"
                 android:layout_height="@dimen/vs_50"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/vs_5"
                 android:alpha="0.75"
-                android:src="@drawable/hm_folder" />
+                android:src="@drawable/icon_drive" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -212,7 +211,7 @@
                 android:text="文件"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>     
         
@@ -250,7 +249,7 @@
                 android:text="收藏"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
 
@@ -286,10 +285,10 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text=""
+                android:text="直播"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
-                android:textSize="@dimen/ts_40" />
+                android:textSize="@dimen/ts_35" />
 
         </LinearLayout>
         
