@@ -351,28 +351,19 @@ public class VodController extends BaseController {
                   //myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
                     int playerType = mPlayerConfig.getInt("pl");
-                    boolean playerVail = false;
-                    do {
-                        playerType++;
-                        if (playerType <= 2) {
-                            playerVail = true;
-                        } else if (playerType == 7) {
-                            playerVail = Kodi.getPackageInfo() != null;
-                        } else if (playerType == 8) {
-                            playerVail = DangbeiPlayer.getPackageInfo() != null;
-                        } else if (playerType == 9) {                            
-                            playerVail = ucplayer.getPackageInfo() != null;
-                        } else if (playerType == 10) {
-                            playerVail = browser.getPackageInfo() != null;
-                        } else if (playerType == 11) {
-                            playerVail = MXPlayer.getPackageInfo() != null;
-                        } else if (playerType == 12) {
-                            playerVail = ReexPlayer.getPackageInfo() != null;                          
-                        } else if (playerType > 12) {
-                            playerType = 0;
-                            playerVail = true;
+                    ArrayList<Integer> exsitPlayerTypes = PlayerHelper.getExistPlayerTypes();
+                    int playerTypeIdx = 0;
+                    int playerTypeSize = exsitPlayerTypes.size();
+                    for(int i = 0; i<playerTypeSize; i++) {
+                        if (playerType == exsitPlayerTypes.get(i)) {
+                            if (i == playerTypeSize - 1) {
+                                playerTypeIdx = 0;
+                            } else {
+                                playerTypeIdx = i + 1;
+                            }
                         }
-                    } while (!playerVail);
+                    }
+                    playerType = exsitPlayerTypes.get(playerTypeIdx);
                     mPlayerConfig.put("pl", playerType);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
@@ -584,9 +575,11 @@ public class VodController extends BaseController {
             @Override
             public boolean onLongClick(View view) {
                 mSubtitleView.setVisibility(View.GONE);
+                mSubtitleView.destroy();
                 mSubtitleView.clearSubtitleCache();
+                mSubtitleView.isInternal = false;
                 hideBottom();
-                Toast.makeText(getContext(), "外挂字幕已关闭", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "字幕已关闭", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
