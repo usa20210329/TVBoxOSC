@@ -270,14 +270,14 @@ public class FastSearchActivity extends BaseActivity {
         }
         String key = spNames.get(spName);
         if(key.isEmpty()) return;
+        mGridView.setVisibility(View.GONE);
+        mGridViewFilter.setVisibility(View.VISIBLE);
 
         if(searchFilterKey == key) return;
         searchFilterKey = key;
 
         List<Movie.Video> list = resultVods.get(key);
         searchAdapterFilter.setNewData(list);
-        mGridView.setVisibility(View.GONE);
-        mGridViewFilter.setVisibility(View.VISIBLE);
     }
 
     private void fenci(){
@@ -333,7 +333,7 @@ public class FastSearchActivity extends BaseActivity {
             search(title);
         }
     }
-
+ 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(RefreshEvent event) {
         if(mSearchTitle != null){
@@ -512,4 +512,4 @@ public class FastSearchActivity extends BaseActivity {
         }
         EventBus.getDefault().unregister(this);
     }
-} 
+}
