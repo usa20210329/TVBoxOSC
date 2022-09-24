@@ -198,7 +198,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/vs_5"
                 android:alpha="0.75"
-                android:src="@drawable/icon_drive" />
+                android:src="@drawable/hm_folder" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -285,7 +285,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
-                android:text="直播"
+                android:text="设置"
                 android:textAlignment="gravity"
                 android:textColor="@color/color_CCFFFFFF"
                 android:textSize="@dimen/ts_33" />
