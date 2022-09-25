@@ -122,7 +122,7 @@ public class SimpleSubtitleView extends TextView
     public void clearSubtitleCache() {
         String subtitleCacheKey = getPlaySubtitleCacheKey();
         if (subtitleCacheKey != null && subtitleCacheKey.length() > 0) {
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey));
         }
     }
 
