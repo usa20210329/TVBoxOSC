@@ -92,7 +92,12 @@ public class SimpleSubtitleView extends TextView
             setText(EMPTY_TEXT);
             return;
         }
-        setText(Html.fromHtml(subtitle.content));
+        String text = subtitle.content;
+        text = text.replaceAll("(?:\\r\\n)", "<br />");
+        text = text.replaceAll("(?:\\r)", "<br />");
+        text = text.replaceAll("(?:\\n)", "<br />");
+        text = text.replaceAll("\\{[\\s\\S]*\\}", "");
+        setText(Html.fromHtml(text));
     }
 
     @Override
@@ -117,7 +122,7 @@ public class SimpleSubtitleView extends TextView
     public void clearSubtitleCache() {
         String subtitleCacheKey = getPlaySubtitleCacheKey();
         if (subtitleCacheKey != null && subtitleCacheKey.length() > 0) {
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey));
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
         }
     }
 
