@@ -520,8 +520,8 @@ public class PlayActivity extends BaseActivity {
     }
 
     private void initSubtitleView() {
+        TrackInfo trackInfo = null;
         if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
-            TrackInfo trackInfo = null;
             trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
             if (trackInfo != null && trackInfo.getSubtitle().size() > 0) {
                 mController.mSubtitleView.isInternal = true;
