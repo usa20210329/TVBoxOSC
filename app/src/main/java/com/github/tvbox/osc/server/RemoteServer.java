@@ -72,16 +72,16 @@ public class RemoteServer extends NanoHTTPD {
         getRequestList.add(new RawRequestProcess(this.mContext, "/favicon.ico", R.drawable.app_icon, "image/x-icon"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/live.txt", R.raw.live, "text/plain"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/spider.jar", R.raw.spider, "application/java-archive"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/1.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/2.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/3.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/4.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/5.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/6.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/7.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/8.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/9.json", R.raw.spider, "application/json"));
-        getRequestList.add(new RawRequestProcess(this.mContext, "/10.json", R.raw.spider, "application/json"));        
+        getRequestList.add(new RawRequestProcess(this.mContext, "/a.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/b.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/c.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/d.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/e.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/f.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/g.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/h.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/i.json", R.raw.spider, "application/json"));
+        getRequestList.add(new RawRequestProcess(this.mContext, "/j.json", R.raw.spider, "application/json"));        
     }
 
     private void addPostRequestProcess() {
