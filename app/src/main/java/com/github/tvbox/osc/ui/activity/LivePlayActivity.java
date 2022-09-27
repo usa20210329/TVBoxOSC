@@ -740,6 +740,7 @@ public class LivePlayActivity extends BaseActivity {
         } else {
             ((TextView) findViewById(R.id.tv_source)).setText("[线路 "+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+"]");
         }
+        showBottomChannelInfo();
         getEpg();
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         showChannelInfo();
