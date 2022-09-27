@@ -658,7 +658,7 @@ public class LivePlayActivity extends BaseActivity {
 
     public void getEpg() {
 
-        String channelName = channel_Name.getChannelName()     
+        String channelName = channel_Name.getChannelName();     
         Date date = new Date();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
