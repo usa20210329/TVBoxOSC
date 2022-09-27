@@ -36,6 +36,7 @@ import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ChannelListView;
 import com.github.tvbox.osc.ui.tv.widget.Epginfo;
+import com.github.tvbox.osc.util.EpgNameFuzzyMatch;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.urlhttp.CallBackUtil;
@@ -608,26 +609,69 @@ public class LivePlayActivity extends BaseActivity {
     };
 
     //显示底部EPG
-    private void showBottomEpg() {
+    private void showBottomChannelInfo(){
         if (channel_Name.getChannelName() != null) {
-//            findViewById(R.id.ll_epg).setVisibility(View.VISIBLE);
-            showChannelInfo();
-            ((TextView) findViewById(R.id.tv_current_program_time)).setText("暂无信息");
+            findViewById(R.id.ll_epg).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.tv_channel_bar_name)).setText(channel_Name.getChannelName());
+            ((TextView) findViewById(R.id.tv_channel_bottom_number)).setText("" + channel_Name.getChannelNum());
+            ((TextView) findViewById(R.id.tv_current_program_time)).setText("咦，暂无信息");
             ((TextView) findViewById(R.id.tv_current_program_name)).setText("");
-            ((TextView) findViewById(R.id.tv_next_program_time)).setText("开源测试软件,请勿商用及播放违法内容");
+            ((TextView) findViewById(R.id.tv_next_program_time)).setText("开源测试软件,请勿商用以及播放违法内容!!!!");
             ((TextView) findViewById(R.id.tv_next_program_name)).setText("");
 
-            if (hsEpg.containsKey(channel_Name.getChannelName())) {
-                ArrayList arrayList = (ArrayList) hsEpg.get(channel_Name.getChannelName());
-                if (arrayList != null && arrayList.size() > 0) {
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+            countDownTimer = new CountDownTimer(10000, 1000) {//底部epg隐藏时间设定
+                public void onTick(long j) {
+                }
+                public void onFinish() {
+                    findViewById(R.id.ll_epg).setVisibility(View.GONE);
+                }
+            };
+            countDownTimer.start();
+            if (channel_Name == null ||  channel_Name.getSourceNum() <= 0) {
+                ((TextView) findViewById(R.id.tv_source)).setText("1/1");
+            } else {
+                ((TextView) findViewById(R.id.tv_source)).setText("[线路 "+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+"]");
+            }
 
+            tv_right_top_channel_name.setText(channel_Name.getChannelName());
+            tv_right_top_epg_name.setText(channel_Name.getChannelName());
+            ll_right_top_loading.setVisibility(View.VISIBLE);
+
+            if (countDownTimerRightTop != null) {
+                countDownTimerRightTop.cancel();
+            }
+
+            countDownTimerRightTop = new CountDownTimer(10000, 1000) {
+                public void onTick(long j) {
+                }
+
+                public void onFinish() {
+                    ll_right_top_loading.setVisibility(View.GONE);
+                }
+            };
+            mHandler.post(mUpdateNetSpeedRun);
+            tv_right_top_tipnetspeed.setVisibility(View.VISIBLE);
+
+        }
+        countDownTimerRightTop.start();
+    }
+    
+    //显示底部EPG
+    private void showBottomEpg(String channel_bottom_name) {
+
+            if (hsEpg.containsKey(channel_bottom_name)) {
+                ArrayList arrayList = (ArrayList) hsEpg.get(channel_bottom_name);
+                if (arrayList != null && arrayList.size() > 0) {
                     int size = arrayList.size() - 1;
                     while (size >= 0) {
                         if (new Date().compareTo(((Epginfo) arrayList.get(size)).startdateTime) >= 0) {
-                            ((TextView) findViewById(R.id.tv_current_program_time)).setText(((Epginfo) arrayList.get(size)).start + " - " + ((Epginfo) arrayList.get(size)).end);
+                            ((TextView) findViewById(R.id.tv_current_program_time)).setText(((Epginfo) arrayList.get(size)).start + "--"+ ((Epginfo) arrayList.get(size)).end);
                             ((TextView) findViewById(R.id.tv_current_program_name)).setText(((Epginfo) arrayList.get(size)).title);
                             if (size != arrayList.size() - 1) {
-                                ((TextView) findViewById(R.id.tv_next_program_time)).setText(((Epginfo) arrayList.get(size + 1)).start + " - " + ((Epginfo) arrayList.get(size)).end);
+                                ((TextView) findViewById(R.id.tv_next_program_time)).setText(((Epginfo) arrayList.get(size + 1)).start + "--"+ ((Epginfo) arrayList.get(size)).end);
                                 ((TextView) findViewById(R.id.tv_next_program_name)).setText(((Epginfo) arrayList.get(size + 1)).title);
                             }
                             break;
@@ -639,10 +683,6 @@ public class LivePlayActivity extends BaseActivity {
             } else {
                 getEpg();
             }
-//            mHandler.removeCallbacks(mHideChannelInfoRun);
-//            mHandler.postDelayed(mHideChannelInfoRun, 6000);
-            mHandler.post(mUpdateNetSpeedRun);
-        }
     }
 
     //获取EPG并存储 // 百川epg
@@ -650,43 +690,59 @@ public class LivePlayActivity extends BaseActivity {
 
     public void getEpg() {
 
-        final String channelName = channel_Name.getChannelName();
-        // http://diyp.112114.xyz/?ch=    http://epg.aishangtv.top/live_proxy_epg_bc.php?ch=
-
+        String channelName = channel_Name.getChannelName();
         Date date = new Date();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        UrlHttpUtil.get("http://epg.51zmt.top:8000/api/diyp/?ch=" + URLEncoder.encode(channelName.replace("+", "[add]").toString()) + "&date=" + timeFormat.format(date), new CallBackUtil.CallBackString() {
-            public void onFailure(int i, String str) {
+        JsonObject epgNameInfo = EpgNameFuzzyMatch.getEpgNameInfo(channelName);
+        if(epgNameInfo != null)        {
+            channelName = epgNameInfo.get("epgid").getAsString().trim();
+            if(channelName.indexOf("51zmt")!=-1)
+                channelName = channelName.replace("51zmt-", "");
+        }else {
+            channelName.replace("+", "[add]").toString();
+        }
+        String finalChannelName = channelName;
+
+        if (hsEpg.containsKey(channelName)) {
+            ArrayList arrayList = (ArrayList) hsEpg.get(channelName);
+            if(!arrayList.isEmpty()){
+                showEpg(arrayList);
+                showBottomEpg(finalChannelName);
+                return;
             }
+        }
 
-            public void onResponse(String paramString) {
+            OkGo.<String>get(epgStringAddress + "?ch="+ channelName)
+                .params("date", timeFormat.format(date))
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public void onSuccess(Response<String> paramString) {
+                        ArrayList arrayList = new ArrayList();
 
-                ArrayList arrayList = new ArrayList();
-
-                Log.d("返回的EPG信息", paramString);
-                try {
-                    if (paramString.contains("epg_data")) {
-                        final JSONArray jSONArray = new JSONObject(paramString).optJSONArray("epg_data");
-                        if (jSONArray != null)
-                            for (int b = 0; b < jSONArray.length(); b++) {
-                                JSONObject jSONObject = jSONArray.getJSONObject(b);
-                                Epginfo epgbcinfo = new Epginfo(jSONObject.optString("title"), jSONObject.optString("start"), jSONObject.optString("end"));
+                        try {
+                            JsonArray itemList = JsonParser.parseString(paramString.body()).getAsJsonObject().get("epg_data").getAsJsonArray();
+                            for (JsonElement ele : itemList) {
+                                JsonObject obj = (JsonObject) ele;
+                                Epginfo epgbcinfo = new Epginfo(obj.get("title").getAsString().trim(), obj.get("start").getAsString().trim(), obj.get("end").getAsString().trim());
                                 arrayList.add(epgbcinfo);
-                                Log.d("测试2", jSONObject.optString("title") + jSONObject.optString("start") + jSONObject.optString("end"));
-                            }
+                           }
+                        } catch (Throwable th) {
+                            th.printStackTrace();
+                        }
+                        showEpg(arrayList);
+
+                        if (!hsEpg.contains(finalChannelName))
+                            hsEpg.put(finalChannelName, arrayList);
+                        showBottomEpg(finalChannelName);
                     }
 
-                } catch (JSONException jSONException) {
-                    jSONException.printStackTrace();
-                }
-                showEpg(arrayList);
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        return response.body().string();
+                    }
+                });
 
-                if (!hsEpg.contains(channelName))
-                    hsEpg.put(channelName, arrayList);
-                showBottomEpg();
-            }
-        });
     }
 
     //节目播放
