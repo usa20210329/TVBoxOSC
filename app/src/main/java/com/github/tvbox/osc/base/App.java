@@ -6,6 +6,7 @@ import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.data.AppDataManager;
 import com.github.tvbox.osc.server.ControlManager;
+import com.github.tvbox.osc.util.EpgNameFuzzyMatch;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
@@ -28,8 +29,9 @@ public class App extends MultiDexApplication {
         super.onCreate();
         instance = this;
         initParams();
-        // OKGo
+        // OKGo        
         OkGoHelper.init();
+        EpgNameFuzzyMatch.init();
         // 初始化Web服务器
         ControlManager.init(this);
         //初始化数据库
