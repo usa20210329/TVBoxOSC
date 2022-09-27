@@ -618,26 +618,29 @@ public class LivePlayActivity extends BaseActivity {
     };
     
     //显示底部EPG
-    private void showBottomEpg() {
+    private void showBottomChannelInfo(){
         if (channel_Name.getChannelName() != null) {
-//            findViewById(R.id.ll_epg).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_epg).setVisibility(View.VISIBLE);
             showChannelInfo();
             ((TextView) findViewById(R.id.tv_current_program_time)).setText("暂无信息");
             ((TextView) findViewById(R.id.tv_current_program_name)).setText("");
             ((TextView) findViewById(R.id.tv_next_program_time)).setText("开源测试软件,请勿商用及播放违法内容");
             ((TextView) findViewById(R.id.tv_next_program_name)).setText("");
+        }
+    }   
+    //显示底部EPG
+    private void showBottomEpg(String channel_bottom_name) {
 
-            if (hsEpg.containsKey(channel_Name.getChannelName())) {
-                ArrayList arrayList = (ArrayList) hsEpg.get(channel_Name.getChannelName());
+            if (hsEpg.containsKey(channel_bottom_name)) {
+                ArrayList arrayList = (ArrayList) hsEpg.get(channel_bottom_name);
                 if (arrayList != null && arrayList.size() > 0) {
-
                     int size = arrayList.size() - 1;
                     while (size >= 0) {
                         if (new Date().compareTo(((Epginfo) arrayList.get(size)).startdateTime) >= 0) {
-                            ((TextView) findViewById(R.id.tv_current_program_time)).setText(((Epginfo) arrayList.get(size)).start + " - " + ((Epginfo) arrayList.get(size)).end);
+                            ((TextView) findViewById(R.id.tv_current_program_time)).setText(((Epginfo) arrayList.get(size)).start + "--"+ ((Epginfo) arrayList.get(size)).end);
                             ((TextView) findViewById(R.id.tv_current_program_name)).setText(((Epginfo) arrayList.get(size)).title);
                             if (size != arrayList.size() - 1) {
-                                ((TextView) findViewById(R.id.tv_next_program_time)).setText(((Epginfo) arrayList.get(size + 1)).start + " - " + ((Epginfo) arrayList.get(size)).end);
+                                ((TextView) findViewById(R.id.tv_next_program_time)).setText(((Epginfo) arrayList.get(size + 1)).start + "--"+ ((Epginfo) arrayList.get(size)).end);
                                 ((TextView) findViewById(R.id.tv_next_program_name)).setText(((Epginfo) arrayList.get(size + 1)).title);
                             }
                             break;
@@ -649,11 +652,9 @@ public class LivePlayActivity extends BaseActivity {
             } else {
                 getEpg();
             }
-//            mHandler.removeCallbacks(mHideChannelInfoRun);
-//            mHandler.postDelayed(mHideChannelInfoRun, 6000);
-            mHandler.post(mUpdateNetSpeedRun);
-        }
+         mHandler.post(mUpdateNetSpeedRun);
     }
+
     //获取EPG并存储 // 百川epg
     private List<Epginfo> epgdata = new ArrayList<>();
 
