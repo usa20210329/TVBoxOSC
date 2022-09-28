@@ -740,7 +740,6 @@ public class PlayActivity extends BaseActivity {
         }else {
             mVodInfo.playIndex++;            
         }
-        mVodInfo.playIndex++;
         play(false);
     }
 
