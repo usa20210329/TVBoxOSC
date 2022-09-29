@@ -48,7 +48,6 @@ public class App extends MultiDexApplication {
         PlayerHelper.init();
         JSEngine.getInstance().create();
     }
-    }
 
     private void initParams() {
         // Hawk
