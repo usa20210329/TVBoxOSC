@@ -1250,7 +1250,6 @@ public class PlayFragment extends BaseLazyFragment {
             return DefaultConfig.isVideoFormat(url);
         }catch (Exception e){
             return false;
-            }
         }
     }
 
