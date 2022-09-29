@@ -456,7 +456,7 @@
 {"group": "redirect","channels": [{"name": "redirect","urls": [
 "proxy://do=live&type=txt&ext=aHR0cDovLzEyNy4wLjAuMTo5OTc4L2xpdmUudHh0"
 ]}]}],
-"spider":"http://127.0.0.1:9978/spider.jar;md5;e4124355c26168f1fdf85d90dc646872",
+"spider":"http://127.0.0.1:9978/spider.jar",
 "flags":["youku","qq","iqiyi","qiyi","letv","sohu","tudou","pptv","mgtv","wasu","bilibili","renrenmi"],
 "ijk":[
 {"group":"软解码","options":[
