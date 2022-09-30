@@ -31,12 +31,12 @@ public interface CacheDao {
      */
 
     //如果是一对多,这里可以写List<Cache>
-    @Query("select *from cache where `key`=:key")
-    Cache getCache(String key);
+    @Delete
+    int delete(Cache cache);
 
     //只能传递对象昂,删除时根据Cache中的主键 来比对的
-    @Query("delete from storageDrive where `id`=:key")
-    int delete(String key);
+    @Delete
+    int delete(Cache cache);
 
     //只能传递对象昂,删除时根据Cache中的主键 来比对的
     @Update(onConflict = OnConflictStrategy.REPLACE)
