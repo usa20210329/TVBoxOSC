@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
-import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
@@ -490,7 +489,7 @@ public class PlayFragment extends BaseLazyFragment {
                     if (url != null) {
                         try {
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 10) {
+                            if (playerType >= 7) {
                                 VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                                 String playTitle = mVodInfo.name + " " + vs.name;
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
@@ -618,8 +617,8 @@ public class PlayFragment extends BaseLazyFragment {
     }
 
     public void setData(Bundle bundle) {
-//        mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
-        mVodInfo = App.getInstance().getVodInfo();
+        mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
+        //mVodInfo = App.getInstance().getVodInfo();
         sourceKey = bundle.getString("sourceKey");
         sourceBean = ApiConfig.get().getSource(sourceKey);
         initPlayerCfg();
@@ -1366,7 +1365,7 @@ public class PlayFragment extends BaseLazyFragment {
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
             if (url.endsWith("/favicon.ico")) {
-                return null;
+                return new WebResourceResponse("image/png", null, null);
             }
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
@@ -1400,7 +1399,10 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             WebResourceResponse response = checkIsVideo(url, null);
-            return response;
+            if (response == null)
+                return super.shouldInterceptRequest(view, url);
+            else
+                return response;
         }
 
         @Nullable
@@ -1425,7 +1427,10 @@ public class PlayFragment extends BaseLazyFragment {
                 th.printStackTrace();
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-            return response;
+            if (response == null)
+                return super.shouldInterceptRequest(view, request);
+            else
+                return response;
         }
 
         @Override
@@ -1532,7 +1537,7 @@ public class PlayFragment extends BaseLazyFragment {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
             if (url.endsWith("/favicon.ico")) {
-                return null;
+                return createXWalkWebResourceResponse("image/png", null, null);
             }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
