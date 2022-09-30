@@ -64,9 +64,6 @@ import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.XWalkUtils;
 import com.github.tvbox.osc.util.thunder.Thunder;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.HttpHeaders;
@@ -175,7 +172,7 @@ public class PlayActivity extends BaseActivity {
                 String preProgressKey = progressKey;
                 PlayActivity.this.playNext(rmProgress);
                 if (rmProgress && preProgressKey != null)
-                    CacheManager.delete(MD5.string2MD5(preProgressKey));
+                    CacheManager.delete(MD5.string2MD5(preProgressKey), 0);
             }
 
             @Override
@@ -244,7 +241,7 @@ public class PlayActivity extends BaseActivity {
         if (mController.mSubtitleView.hasInternal && playerType == 1) {
             subtitleDialog.selectInternal.setVisibility(View.VISIBLE);
         } else {
-            subtitleDialog.selectInternal.setVisibility(View.GONE);            
+            subtitleDialog.selectInternal.setVisibility(View.GONE);
         }
         subtitleDialog.setSubtitleViewListener(new SubtitleDialog.SubtitleViewListener() {
             @Override
@@ -262,8 +259,8 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void setTextStyle(int style) {
                 setSubtitleViewTextStyle(style);
-            }            
-        });      
+            }
+        });
         subtitleDialog.setSearchSubtitleListener(new SubtitleDialog.SearchSubtitleListener() {
             @Override
             public void openSearchSubtitleDialog() {
@@ -311,7 +308,7 @@ public class PlayActivity extends BaseActivity {
         });
         subtitleDialog.show();
     }
-    
+
     void setSubtitleViewTextStyle(int style) {
         if (style == 0) {
             mController.mSubtitleView.setTextColor(getBaseContext().getResources().getColorStateList(R.color.color_FFFFFF));
@@ -321,7 +318,7 @@ public class PlayActivity extends BaseActivity {
             mController.mSubtitleView.setShadowLayer(3, 2, 2, R.color.color_FFFFFF);
         }
     }
-    
+
     void selectMyAudioTrack() {
         AbstractPlayer mediaPlayer = mVideoView.getMediaPlayer();
         if (!(mediaPlayer instanceof IjkMediaPlayer)) {
@@ -450,13 +447,15 @@ public class PlayActivity extends BaseActivity {
     }
 
     void setTip(String msg, boolean loading, boolean err) {
-        try {
-            mPlayLoadTip.setText(msg);
-            mPlayLoadTip.setVisibility(View.VISIBLE);
-            mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
-            mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
-        } catch (Exception ignore) {
-        }
+        runOnUiThread(new Runnable() {//影魔 解决解析偶发闪退
+            @Override
+            public void run() {
+                mPlayLoadTip.setText(msg);
+                mPlayLoadTip.setVisibility(View.VISIBLE);
+                mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
+                mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     void hideTip() {
@@ -492,7 +491,7 @@ public class PlayActivity extends BaseActivity {
                     if (url != null) {
                         try {
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 7) {
+                            if (playerType >= 10) {
                                 VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                                 String playTitle = mVodInfo.name + " " + vs.name;
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
@@ -525,9 +524,7 @@ public class PlayActivity extends BaseActivity {
         if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
             trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
             if (trackInfo != null && trackInfo.getSubtitle().size() > 0) {
-                mController.mSubtitleView.isInternal = true;
                 mController.mSubtitleView.hasInternal = true;
-
             }
             ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setOnTimedTextListener(new IMediaPlayer.OnTimedTextListener() {
                 @Override
@@ -540,7 +537,6 @@ public class PlayActivity extends BaseActivity {
                 }
             });
         }
-
         mController.mSubtitleView.bindToMediaPlayer(mVideoView.getMediaPlayer());
         mController.mSubtitleView.setPlaySubtitleCacheKey(subtitleCacheKey);
         String subtitlePathCache = (String)CacheManager.getCache(MD5.string2MD5(subtitleCacheKey));
@@ -548,7 +544,6 @@ public class PlayActivity extends BaseActivity {
             mController.mSubtitleView.setSubtitlePath(subtitlePathCache);
         } else {
             if (playSubtitle != null && playSubtitle .length() > 0) {
-
                 mController.mSubtitleView.setSubtitlePath(playSubtitle);
             } else {
                 if (mController.mSubtitleView.hasInternal) {
@@ -565,7 +560,7 @@ public class PlayActivity extends BaseActivity {
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -648,7 +643,7 @@ public class PlayActivity extends BaseActivity {
         }
         try {
             if (!mVodPlayerCfg.has("pl")) {
-                mVodPlayerCfg.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 1));
+                mVodPlayerCfg.put("pl", (sourceBean.getPlayerType() == -1) ? (int)Hawk.get(HawkConfig.PLAY_TYPE, 1) : sourceBean.getPlayerType() );
             }
             if (!mVodPlayerCfg.has("pr")) {
                 mVodPlayerCfg.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
@@ -736,11 +731,11 @@ public class PlayActivity extends BaseActivity {
             if(mVodInfo!=null && isProgress){
                 mVodInfo.playIndex=0;
                 Toast.makeText(this, "已经是最后一集了!,即将跳到第一集继续播放", Toast.LENGTH_SHORT).show();
-            }            
+            }
             Toast.makeText(this, "已经是最后一集了!", Toast.LENGTH_SHORT).show();
             return;
         }else {
-            mVodInfo.playIndex++;            
+            mVodInfo.playIndex++;
         }
         play(false);
     }
@@ -756,6 +751,7 @@ public class PlayActivity extends BaseActivity {
             Toast.makeText(this, "已经是第一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
+        mVodInfo.playIndex--;
         play(false);
     }
 
@@ -785,25 +781,9 @@ public class PlayActivity extends BaseActivity {
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex + vs.name;
         //重新播放清除现有进度
         if (reset) {
-            CacheManager.delete(MD5.string2MD5(progressKey));
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey));
+            CacheManager.delete(MD5.string2MD5(progressKey), 0);
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
         }
-        if(vs.url.startsWith("tvbox-drive://")) {
-            mController.showParse(false);
-            HashMap<String, String> headers = null;
-            if(mVodInfo.playerCfg != null && mVodInfo.playerCfg.length() > 0) {
-                JsonObject playerConfig = JsonParser.parseString(mVodInfo.playerCfg).getAsJsonObject();
-                if(playerConfig.has("headers")) {
-                    headers = new HashMap<>();
-                    for (JsonElement headerEl: playerConfig.getAsJsonArray("headers")) {
-                        JsonObject headerJson = headerEl.getAsJsonObject();
-                        headers.put(headerJson.get("name").getAsString(), headerJson.get("value").getAsString());
-                    }
-                }
-            }
-            playUrl(vs.url.replace("tvbox-drive://", ""), headers);
-            return;
-        }        
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
             public void status(int code, String info) {
@@ -1245,7 +1225,7 @@ public class PlayActivity extends BaseActivity {
         if (sourceBean.getType() == 3) {
             if (url.contains("=http") || url.contains(".html")) {
                 return false;
-            }            
+            }
             Spider sp = ApiConfig.get().getCSP(sourceBean);
             if (sp != null && sp.manualVideoCheck())
                 return sp.isVideoFormat(url);
