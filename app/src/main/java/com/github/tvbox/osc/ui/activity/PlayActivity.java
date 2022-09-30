@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
+import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
@@ -94,6 +95,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import me.jessyan.autosize.AutoSize;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -243,7 +245,7 @@ public class PlayActivity extends BaseActivity {
         if (mController.mSubtitleView.hasInternal && playerType == 1) {
             subtitleDialog.selectInternal.setVisibility(View.VISIBLE);
         } else {
-            subtitleDialog.selectInternal.setVisibility(View.GONE);            
+            subtitleDialog.selectInternal.setVisibility(View.GONE);
         }
         subtitleDialog.setSubtitleViewListener(new SubtitleDialog.SubtitleViewListener() {
             @Override
@@ -261,8 +263,8 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void setTextStyle(int style) {
                 setSubtitleViewTextStyle(style);
-            }            
-        });      
+            }
+        });
         subtitleDialog.setSearchSubtitleListener(new SubtitleDialog.SearchSubtitleListener() {
             @Override
             public void openSearchSubtitleDialog() {
@@ -310,7 +312,7 @@ public class PlayActivity extends BaseActivity {
         });
         subtitleDialog.show();
     }
-    
+
     void setSubtitleViewTextStyle(int style) {
         if (style == 0) {
             mController.mSubtitleView.setTextColor(getBaseContext().getResources().getColorStateList(R.color.color_FFFFFF));
@@ -320,7 +322,7 @@ public class PlayActivity extends BaseActivity {
             mController.mSubtitleView.setShadowLayer(3, 2, 2, R.color.color_FFFFFF);
         }
     }
-    
+
     void selectMyAudioTrack() {
         AbstractPlayer mediaPlayer = mVideoView.getMediaPlayer();
         if (!(mediaPlayer instanceof IjkMediaPlayer)) {
@@ -449,13 +451,15 @@ public class PlayActivity extends BaseActivity {
     }
 
     void setTip(String msg, boolean loading, boolean err) {
-        try {
-            mPlayLoadTip.setText(msg);
-            mPlayLoadTip.setVisibility(View.VISIBLE);
-            mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
-            mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
-        } catch (Exception ignore) {
-        }
+        runOnUiThread(new Runnable() {//影魔 解决解析偶发闪退
+            @Override
+            public void run() {
+                mPlayLoadTip.setText(msg);
+                mPlayLoadTip.setVisibility(View.VISIBLE);
+                mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
+                mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     void hideTip() {
@@ -481,6 +485,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     void playUrl(String url, HashMap<String, String> headers) {
+        LOG.i("playUrl:" + url);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -524,9 +529,7 @@ public class PlayActivity extends BaseActivity {
         if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
             trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
             if (trackInfo != null && trackInfo.getSubtitle().size() > 0) {
-                mController.mSubtitleView.isInternal = true;
                 mController.mSubtitleView.hasInternal = true;
-
             }
             ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setOnTimedTextListener(new IMediaPlayer.OnTimedTextListener() {
                 @Override
@@ -539,7 +542,6 @@ public class PlayActivity extends BaseActivity {
                 }
             });
         }
-
         mController.mSubtitleView.bindToMediaPlayer(mVideoView.getMediaPlayer());
         mController.mSubtitleView.setPlaySubtitleCacheKey(subtitleCacheKey);
         String subtitlePathCache = (String)CacheManager.getCache(MD5.string2MD5(subtitleCacheKey));
@@ -547,7 +549,6 @@ public class PlayActivity extends BaseActivity {
             mController.mSubtitleView.setSubtitlePath(subtitlePathCache);
         } else {
             if (playSubtitle != null && playSubtitle .length() > 0) {
-
                 mController.mSubtitleView.setSubtitlePath(playSubtitle);
             } else {
                 if (mController.mSubtitleView.hasInternal) {
@@ -564,7 +565,7 @@ public class PlayActivity extends BaseActivity {
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -586,7 +587,6 @@ public class PlayActivity extends BaseActivity {
                         String flag = info.optString("flag");
                         String url = info.getString("url");
                         HashMap<String, String> headers = null;
-                        webUserAgent = null;
                         webHeaderMap = null;
                         if (info.has("header")) {
                             try {
@@ -598,9 +598,6 @@ public class PlayActivity extends BaseActivity {
                                         headers = new HashMap<>();
                                     }
                                     headers.put(key, hds.getString(key));
-                                    if (key.equalsIgnoreCase("user-agent")) {
-                                        webUserAgent = hds.getString(key).trim();
-                                    }
                                 }
                                 webHeaderMap = headers;
                             } catch (Throwable th) {
@@ -630,8 +627,8 @@ public class PlayActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
-            mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
-            //mVodInfo = App.getInstance().getVodInfo();
+//            mVodInfo = (VodInfo) bundle.getSerializable("VodInfo");
+            mVodInfo = App.getInstance().getVodInfo();
             sourceKey = bundle.getString("sourceKey");
             sourceBean = ApiConfig.get().getSource(sourceKey);
             initPlayerCfg();
@@ -735,11 +732,11 @@ public class PlayActivity extends BaseActivity {
             if(mVodInfo!=null && isProgress){
                 mVodInfo.playIndex=0;
                 Toast.makeText(this, "已经是最后一集了!,即将跳到第一集继续播放", Toast.LENGTH_SHORT).show();
-            }            
+            }
             Toast.makeText(this, "已经是最后一集了!", Toast.LENGTH_SHORT).show();
             return;
         }else {
-            mVodInfo.playIndex++;            
+            mVodInfo.playIndex++;
         }
         play(false);
     }
@@ -755,6 +752,7 @@ public class PlayActivity extends BaseActivity {
             Toast.makeText(this, "已经是第一集了!", Toast.LENGTH_SHORT).show();
             return;
         }
+        mVodInfo.playIndex--;
         play(false);
     }
 
@@ -779,6 +777,7 @@ public class PlayActivity extends BaseActivity {
         mController.setTitle(playTitleInfo);
 
         stopParse();
+        loadFoundCount.set(0);
         if(mVideoView!=null) mVideoView.release();
         String subtitleCacheKey = mVodInfo.sourceKey + "-" + mVodInfo.id + "-" + mVodInfo.playFlag + "-" + mVodInfo.playIndex+ "-" + vs.name + "-subt";
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex + vs.name;
@@ -802,7 +801,7 @@ public class PlayActivity extends BaseActivity {
             }
             playUrl(vs.url.replace("tvbox-drive://", ""), headers);
             return;
-        }        
+        }         
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
             public void status(int code, String info) {
@@ -833,7 +832,6 @@ public class PlayActivity extends BaseActivity {
     private String progressKey;
     private String parseFlag;
     private String webUrl;
-    private String webUserAgent;
     private Map<String, String > webHeaderMap;
 
     private void initParse(String flag, boolean useParse, String playUrl, final String url) {
@@ -863,7 +861,6 @@ public class PlayActivity extends BaseActivity {
                 parseBean.setUrl(playUrl);
             }
         }
-        loadFound = false;
         doParse(parseBean);
     }
 
@@ -900,7 +897,6 @@ public class PlayActivity extends BaseActivity {
     void stopParse() {
         mHandler.removeMessages(100);
         stopLoadWebView(false);
-        loadFound = false;
         OkGo.getInstance().cancelTag("json_jx");
         if (parseThreadPool != null) {
             try {
@@ -916,6 +912,7 @@ public class PlayActivity extends BaseActivity {
 
     private void doParse(ParseBean pb) {
         stopParse();
+        loadFoundCount.set(0);
         if (pb.getType() == 0) {
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
@@ -1113,7 +1110,7 @@ public class PlayActivity extends BaseActivity {
     private WebView mSysWebView;
     private SysWebClient mSysWebClient;
     private Map<String, Boolean> loadedUrls = new HashMap<>();
-    private boolean loadFound = false;
+    private AtomicInteger loadFoundCount = new AtomicInteger(0);
 
     void loadWebView(String url) {
         if (mSysWebView == null && mXwalkWebView == null) {
@@ -1180,14 +1177,9 @@ public class PlayActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // webUserAgent = "Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36";
                 if (mXwalkWebView != null) {
                     mXwalkWebView.stopLoading();
                     Map<String, String > map = new HashMap<String, String>() ;
-
-                    if(webUserAgent != null) {
-                        mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
-                    }
                     //mXwalkWebView.clearCache(true);
                     if(webHeaderMap != null){
                         mXwalkWebView.loadUrl(url,webHeaderMap);
@@ -1197,9 +1189,6 @@ public class PlayActivity extends BaseActivity {
                 }
                 if (mSysWebView != null) {
                     mSysWebView.stopLoading();
-                    if(webUserAgent != null) {
-                        mSysWebView.getSettings().setUserAgentString(webUserAgent);
-                    }
                     //mSysWebView.clearCache(true);
                     if(webHeaderMap != null){
                         mSysWebView.loadUrl(url,webHeaderMap);
@@ -1244,7 +1233,7 @@ public class PlayActivity extends BaseActivity {
         if (sourceBean.getType() == 3) {
             if (url.contains("=http") || url.contains(".html")) {
                 return false;
-            }            
+            }
             Spider sp = ApiConfig.get().getCSP(sourceBean);
             if (sp != null && sp.manualVideoCheck())
                 return sp.isVideoFormat(url);
@@ -1388,20 +1377,21 @@ public class PlayActivity extends BaseActivity {
                 ad = loadedUrls.get(url);
             }
 
-            if (!ad && !loadFound) {
+            if (!ad) {
                 if (checkVideoFormat(url)) {
-                    mHandler.removeMessages(100);
-                    loadFound = true;
-                    if (headers != null && !headers.isEmpty()) {
-                        playUrl(url, headers);
-                    } else {
-                        playUrl(url, null);
+                    if (loadFoundCount.incrementAndGet() == 1) {
+                        mHandler.removeMessages(100);
+                        if (headers != null && !headers.isEmpty()) {
+                            playUrl(url, headers);
+                        } else {
+                            playUrl(url, null);
+                        }
+                        stopLoadWebView(false);
                     }
-                    stopLoadWebView(false);
                 }
             }
 
-            return ad || loadFound ?
+            return ad || loadFoundCount.get() > 0 ?
                     AdBlocker.createEmptyResource() :
                     null;
         }
@@ -1410,9 +1400,9 @@ public class PlayActivity extends BaseActivity {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             WebResourceResponse response = checkIsVideo(url, null);
-//            if (response == null)
-//                return super.shouldInterceptRequest(view, url);
-//            else
+            if (response == null)
+                return super.shouldInterceptRequest(view, url);
+            else
                 return response;
         }
 
@@ -1429,20 +1419,18 @@ public class PlayActivity extends BaseActivity {
             HashMap<String, String> webHeaders = new HashMap<>();
             try {
                 Map<String, String> hds = request.getRequestHeaders();
-                for (String k : hds.keySet()) {
-                    if (k.equalsIgnoreCase("user-agent")
-                            || k.equalsIgnoreCase("referer")
-                            || k.equalsIgnoreCase("origin")) {
-                        webHeaders.put(k, " " + hds.get(k));
+                if (!hds.isEmpty() && hds.size() > 0) {
+                    for (String k : hds.keySet()) {
+                        webHeaders.put(k, hds.get(k));
                     }
                 }
             } catch (Throwable th) {
-
+                th.printStackTrace();
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-//            if (response == null)
-//                return super.shouldInterceptRequest(view, request);
-//            else
+            if (response == null)
+                return super.shouldInterceptRequest(view, request);
+            else
                 return response;
         }
 
@@ -1560,32 +1548,31 @@ public class PlayActivity extends BaseActivity {
             } else {
                 ad = loadedUrls.get(url);
             }
-            if (!ad && !loadFound) {
+            if (!ad ) {
                 if (checkVideoFormat(url)) {
-                    mHandler.removeMessages(100);
-                    loadFound = true;
-                    HashMap<String, String> webHeaders = new HashMap<>();
-                    try {
-                        Map<String, String> hds = request.getRequestHeaders();
-                        for (String k : hds.keySet()) {
-                            if (k.equalsIgnoreCase("user-agent")
-                                    || k.equalsIgnoreCase("referer")
-                                    || k.equalsIgnoreCase("origin")) {
-                                webHeaders.put(k, " " + hds.get(k));
+                    if (loadFoundCount.incrementAndGet() == 1) {
+                        mHandler.removeMessages(100);
+                        HashMap<String, String> webHeaders = new HashMap<>();
+                        try {
+                            Map<String, String> hds = request.getRequestHeaders();
+                            if (!hds.isEmpty() && hds.size() > 0) {
+                                for (String k : hds.keySet()) {
+                                    webHeaders.put(k, hds.get(k));
+                                }
                             }
+                        } catch (Throwable th) {
+                            th.printStackTrace();
                         }
-                    } catch (Throwable th) {
-
+                        if (webHeaders != null && !webHeaders.isEmpty()) {
+                            playUrl(url, webHeaders);
+                        } else {
+                            playUrl(url, null);
+                        }
+                        stopLoadWebView(false);
                     }
-                    if (webHeaders != null && !webHeaders.isEmpty()) {
-                        playUrl(url, webHeaders);
-                    } else {
-                        playUrl(url, null);
-                    }
-                    stopLoadWebView(false);
                 }
             }
-            return ad || loadFound ?
+            return ad || loadFoundCount.get() > 0 ?
                     createXWalkWebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream("".getBytes())) :
                     super.shouldInterceptLoadRequest(view, request);
         }
