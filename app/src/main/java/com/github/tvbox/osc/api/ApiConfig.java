@@ -63,8 +63,6 @@ public class ApiConfig {
     private SourceBean emptyHome = new SourceBean();
 
     private JarLoader jarLoader = new JarLoader();
-
-    private String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36";
     
     private ApiConfig() {
         sourceBeanList = new LinkedHashMap<>();
@@ -114,7 +112,6 @@ public class ApiConfig {
             return;
         }   
         OkGo.<String>get(apiFix)
-                .headers("User-Agent", userAgent)
                 .execute(new AbsCallback<String>() {
                     @Override
                     public void onSuccess(Response<String> response) {
