@@ -171,7 +171,7 @@ public class PlayFragment extends BaseLazyFragment {
                 String preProgressKey = progressKey;
                 PlayFragment.this.playNext(rmProgress);
                 if (rmProgress && preProgressKey != null)
-                    CacheManager.delete(MD5.string2MD5(preProgressKey));
+                    CacheManager.delete(MD5.string2MD5(preProgressKey), 0);
             }
 
             @Override
@@ -239,8 +239,8 @@ public class PlayFragment extends BaseLazyFragment {
         int playerType = mVodPlayerCfg.getInt("pl");
         if (mController.mSubtitleView.hasInternal && playerType == 1) {
             subtitleDialog.selectInternal.setVisibility(View.VISIBLE);
-          } else {
-            subtitleDialog.selectInternal.setVisibility(View.GONE);          
+        } else {
+            subtitleDialog.selectInternal.setVisibility(View.GONE);
         }
         subtitleDialog.setSubtitleViewListener(new SubtitleDialog.SubtitleViewListener() {
             @Override
@@ -251,15 +251,14 @@ public class PlayFragment extends BaseLazyFragment {
             public void setSubtitleDelay(int milliseconds) {
                 mController.mSubtitleView.setSubtitleDelay(milliseconds);
             }
-
             @Override
             public void selectInternalSubtitle() {
                 selectMyInternalSubtitle();
             }
-             @Override
+            @Override
             public void setTextStyle(int style) {
                 setSubtitleViewTextStyle(style);
-            }           
+            }
         });
         subtitleDialog.setSearchSubtitleListener(new SubtitleDialog.SearchSubtitleListener() {
             @Override
@@ -308,7 +307,7 @@ public class PlayFragment extends BaseLazyFragment {
         });
         subtitleDialog.show();
     }
-    
+
     void setSubtitleViewTextStyle(int style) {
         if (style == 0) {
             mController.mSubtitleView.setTextColor(getContext().getResources().getColorStateList(R.color.color_FFFFFF));
@@ -489,7 +488,7 @@ public class PlayFragment extends BaseLazyFragment {
                     if (url != null) {
                         try {
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 7) {
+                            if (playerType >= 10) {
                                 VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                                 String playTitle = mVodInfo.name + " " + vs.name;
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
@@ -522,7 +521,6 @@ public class PlayFragment extends BaseLazyFragment {
         if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
             trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
             if (trackInfo != null && trackInfo.getSubtitle().size() > 0) {
-                mController.mSubtitleView.isInternal = true;
                 mController.mSubtitleView.hasInternal = true;
             }
             ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setOnTimedTextListener(new IMediaPlayer.OnTimedTextListener() {
@@ -536,7 +534,6 @@ public class PlayFragment extends BaseLazyFragment {
                 }
             });
         }
-        
         mController.mSubtitleView.bindToMediaPlayer(mVideoView.getMediaPlayer());
         mController.mSubtitleView.setPlaySubtitleCacheKey(subtitleCacheKey);
         String subtitlePathCache = (String)CacheManager.getCache(MD5.string2MD5(subtitleCacheKey));
@@ -544,7 +541,6 @@ public class PlayFragment extends BaseLazyFragment {
             mController.mSubtitleView.setSubtitlePath(subtitlePathCache);
         } else {
             if (playSubtitle != null && playSubtitle .length() > 0) {
-
                 mController.mSubtitleView.setSubtitlePath(playSubtitle);
             } else {
                 if (mController.mSubtitleView.hasInternal) {
@@ -561,7 +557,7 @@ public class PlayFragment extends BaseLazyFragment {
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -647,7 +643,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
         try {
             if (!mVodPlayerCfg.has("pl")) {
-                mVodPlayerCfg.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 1));
+                mVodPlayerCfg.put("pl", (sourceBean.getPlayerType() == -1) ? (int)Hawk.get(HawkConfig.PLAY_TYPE, 1) : sourceBean.getPlayerType());
             }
             if (!mVodPlayerCfg.has("pr")) {
                 mVodPlayerCfg.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
@@ -751,8 +747,8 @@ public class PlayFragment extends BaseLazyFragment {
                 return;
             }
         }else {
-           mVodInfo.playIndex++;
-        }      
+            mVodInfo.playIndex++;
+        }
         play(false);
     }
 
@@ -798,8 +794,8 @@ public class PlayFragment extends BaseLazyFragment {
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex + vs.name;
         //重新播放清除现有进度
         if (reset) {
-            CacheManager.delete(MD5.string2MD5(progressKey));
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey));
+            CacheManager.delete(MD5.string2MD5(progressKey), 0);
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
         }
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
@@ -1444,7 +1440,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
 //            if (response == null)
-//                return super.shouldInterceptRequest(view, url);
+//                return super.shouldInterceptRequest(view, request);
 //            else
                 return response;
         }
