@@ -134,7 +134,7 @@ public class VodController extends BaseController {
     public SimpleSubtitleView mSubtitleView;
     TextView mZimuBtn;
     TextView mAudioTrackBtn;
-    TextView mLandscapePortraitBtn;
+    public TextView mLandscapePortraitBtn;
 
     Handler myHandle;
     Runnable myRunnable;
