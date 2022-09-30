@@ -490,7 +490,7 @@ public class PlayFragment extends BaseLazyFragment {
                     if (url != null) {
                         try {
                             int playerType = mVodPlayerCfg.getInt("pl");
-                            if (playerType >= 7) {
+                            if (playerType >= 10) {
                                 VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
                                 String playTitle = mVodInfo.name + " " + vs.name;
                                 setTip("调用外部播放器" + PlayerHelper.getPlayerName(playerType) + "进行播放", true, false);
@@ -1366,7 +1366,7 @@ public class PlayFragment extends BaseLazyFragment {
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
             if (url.endsWith("/favicon.ico")) {
-                return new WebResourceResponse("image/png", null, null);
+                return null;
             }
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
@@ -1400,10 +1400,7 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             WebResourceResponse response = checkIsVideo(url, null);
-            if (response == null)
-                return super.shouldInterceptRequest(view, url);
-            else
-                return response;
+            return response;
         }
 
         @Nullable
@@ -1428,10 +1425,7 @@ public class PlayFragment extends BaseLazyFragment {
                 th.printStackTrace();
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-            if (response == null)
-                return super.shouldInterceptRequest(view, request);
-            else
-                return response;
+            return response;
         }
 
         @Override
@@ -1538,7 +1532,7 @@ public class PlayFragment extends BaseLazyFragment {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
             if (url.endsWith("/favicon.ico")) {
-                return createXWalkWebResourceResponse("image/png", null, null);
+                return null;
             }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
