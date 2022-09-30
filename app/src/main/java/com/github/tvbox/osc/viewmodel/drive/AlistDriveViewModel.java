@@ -45,6 +45,7 @@ public class AlistDriveViewModel extends AbstractDriveViewModel {
         if (currentDriveNote.getChildren() == null) {
             new Thread() {
                 public void run() {
+                 try {   
                     if(!version.has(name) || version.getString(name).isEmpty()){
                         String ver = "2";
                         String url = config.get("url").getAsString();
