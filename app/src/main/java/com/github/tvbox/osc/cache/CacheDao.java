@@ -31,8 +31,8 @@ public interface CacheDao {
      */
 
     //如果是一对多,这里可以写List<Cache>
-    @Delete
-    int delete(Cache cache);
+    @Query("select *from cache where `key`=:key")
+    Cache getCache(String key);
 
     //只能传递对象昂,删除时根据Cache中的主键 来比对的
     @Delete
