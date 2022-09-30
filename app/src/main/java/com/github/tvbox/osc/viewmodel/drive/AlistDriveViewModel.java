@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlistDriveViewModel extends AbstractDriveViewModel {
-
+    private final static JSONObject version = new JSONObject();
     private void setRequestHeader(PostRequest request, String origin) {
         request.headers("User-Agent", UA.random());
         if (origin != null && !origin.isEmpty()) {
@@ -45,8 +45,25 @@ public class AlistDriveViewModel extends AbstractDriveViewModel {
         if (currentDriveNote.getChildren() == null) {
             new Thread() {
                 public void run() {
-                    String webLink = config.get("url").getAsString();
-                    PostRequest request = OkGo.post(webLink + "api/public/path").tag("drive");
+                    if(!version.has(name) || version.getString(name).isEmpty()){
+                        String ver = "2";
+                        String url = config.get("url").getAsString();
+                        String versionUrl = url + "/api/public/settings";
+                        String json = OkHttpUtil.string(versionUrl, null);
+                        String data = new JSONObject(json).optString("data");
+                        if (data.startsWith("{") && new JSONObject(data).getString("version").startsWith("v3.0")) ver = "3";
+                        version.put(name, ver);
+                    }
+                }catch (JSONException v){
+                    v.printStackTrace();
+                    version.put(name, "2");
+                }
+             String webLink = config.get("url").getAsString();
+            if(version.getString(name).equals("3")){
+                PostRequest request = OkGo.post(webLink + "/api/fs/list").tag("drive");
+            }else {
+                PostRequest request = OkGo.post(webLink + "api/public/path").tag("drive");
+            }              
                     try {
                         JSONObject requestBody = new JSONObject();
                         requestBody.put("path", targetPath.isEmpty() ? "/" : targetPath);
@@ -237,7 +254,7 @@ public class AlistDriveViewModel extends AbstractDriveViewModel {
             }.start();
         }
     }
-
+    
     public interface LoadFileCallback {
         void callback(String fileUrl);
 
