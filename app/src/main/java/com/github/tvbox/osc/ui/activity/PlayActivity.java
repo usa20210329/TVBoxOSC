@@ -1550,7 +1550,7 @@ public class PlayActivity extends BaseActivity {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
             if (url.endsWith("/favicon.ico")) {
-                return null;
+                return super.shouldInterceptLoadRequest(view, request);
             }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
