@@ -44,6 +44,7 @@ import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.MD5;
+import com.github.tvbox.osc.util.SearchHelper;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -68,6 +69,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -123,6 +125,7 @@ public class DetailActivity extends BaseActivity {
     private String preFlag="";
     private boolean firstReverse;
     private V7GridLayoutManager mGridViewLayoutMgr = null;
+    private HashMap<String, SourceBean> mCheckSources = null;
 
     @Override
     protected int getLayoutResID() {
@@ -378,6 +381,10 @@ public class DetailActivity extends BaseActivity {
             }
         });
         setLoadSir(llLayout);
+    }
+    
+    private void initCheckedSourcesForSearch() {
+        mCheckSources = SearchHelper.getSourcesForSearch();
     }
 
     private List<Runnable> pauseRunnable = null;
@@ -664,6 +671,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void startQuickSearch() {
+        initCheckedSourcesForSearch();
         if (hadQuickStart)
             return;
         hadQuickStart = true;
@@ -730,6 +738,9 @@ public class DetailActivity extends BaseActivity {
             if (!bean.isSearchable() || !bean.isQuickSearch()) {
                 continue;
             }
+            if (mCheckSources != null && !mCheckSources.containsKey(bean.getKey())) {
+                continue;
+            }            
             siteKey.add(bean.getKey());
         }
         for (String key : siteKey) {
