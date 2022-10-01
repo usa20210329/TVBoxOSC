@@ -2,7 +2,6 @@ package com.github.tvbox.osc.base;
 
 import androidx.multidex.MultiDexApplication;
 
-import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.data.AppDataManager;
@@ -77,13 +76,5 @@ public class App extends MultiDexApplication {
     public void onTerminate() {
         super.onTerminate();
         JSEngine.getInstance().destroy();
-    }
-
-    private VodInfo vodInfo;
-    public void setVodInfo(VodInfo vodinfo){
-        this.vodInfo = vodinfo;
-    }
-    public VodInfo getVodInfo(){
-        return this.vodInfo;
-    }    
+    } 
 }
