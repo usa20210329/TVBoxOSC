@@ -1435,8 +1435,7 @@ public class PlayFragment extends BaseLazyFragment {
                 th.printStackTrace();
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-            if (response == null)
-                return response;
+            return response;
         }
 
         @Override
