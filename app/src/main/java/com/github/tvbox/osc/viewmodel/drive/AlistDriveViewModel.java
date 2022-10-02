@@ -46,7 +46,7 @@ public class AlistDriveViewModel extends AbstractDriveViewModel {
             new Thread() {
                 public void run() {
                     String webLink = config.get("url").getAsString();
-                    PostRequest request = OkGo.post(webLink + "api/fs/get").tag("drive");
+                    PostRequest request = OkGo.post(webLink + "api//public/path").tag("drive");
                     try {
                         JSONObject requestBody = new JSONObject();
                         requestBody.put("path", targetPath.isEmpty() ? "/" : targetPath);
@@ -195,7 +195,7 @@ public class AlistDriveViewModel extends AbstractDriveViewModel {
                     JsonObject config = currentDrive.getConfig();
                     String targetPath = targetFile.getAccessingPathStr() + targetFile.name;
                     String webLink = config.get("url").getAsString();
-                    PostRequest request = OkGo.post(webLink + "api/fs/get").tag("drive");
+                    PostRequest request = OkGo.post(webLink + "api//public/path").tag("drive");
                     try {
                         JSONObject requestBody = new JSONObject();
                         requestBody.put("path", targetPath);
