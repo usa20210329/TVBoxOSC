@@ -87,6 +87,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -778,6 +779,10 @@ public class PlayFragment extends BaseLazyFragment {
     private int autoRetryCount = 0;
 
     boolean autoRetry() {
+        if (loadFoundVideoUrls != null && loadFoundVideoUrls.size() > 0) {
+            autoRetryFromLoadFoundVideoUrls();
+            return true;
+        }
         if (autoRetryCount < 2) {
             play(false);
             autoRetryCount++;
@@ -788,6 +793,18 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
+    void autoRetryFromLoadFoundVideoUrls() {
+        String videoUrl = loadFoundVideoUrls.poll();
+        HashMap<String,String> header = loadFoundVideoUrlsHeader.get(videoUrl);
+        playUrl(videoUrl, header);
+    }
+
+    void initParseLoadFound() {
+        loadFoundCount.set(0);
+        loadFoundVideoUrls = new LinkedList<String>();
+        loadFoundVideoUrlsHeader = new HashMap<String, HashMap<String, String>>();
+    }
+    
     public void play(boolean reset) {
         if(mVodInfo==null)return;
         VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
@@ -797,7 +814,7 @@ public class PlayFragment extends BaseLazyFragment {
         mController.setTitle(playTitleInfo);
 
         stopParse();
-        loadFoundCount.set(0);
+        initParseLoadFound();
         if(mVideoView!=null) mVideoView.release();
         String subtitleCacheKey = mVodInfo.sourceKey + "-" + mVodInfo.id + "-" + mVodInfo.playFlag + "-" + mVodInfo.playIndex+ "-" + vs.name + "-subt";
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex + vs.name;
@@ -918,7 +935,7 @@ public class PlayFragment extends BaseLazyFragment {
 
     private void doParse(ParseBean pb) {
         stopParse();
-        loadFoundCount.set(0);
+        initParseLoadFound();
         if (pb.getType() == 0) {
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
@@ -1116,6 +1133,8 @@ public class PlayFragment extends BaseLazyFragment {
     private WebView mSysWebView;
     private SysWebClient mSysWebClient;
     private Map<String, Boolean> loadedUrls = new HashMap<>();
+    private LinkedList<String> loadFoundVideoUrls = new LinkedList<>();
+    private HashMap<String, HashMap<String, String>> loadFoundVideoUrlsHeader = new HashMap<>();
     private AtomicInteger loadFoundCount = new AtomicInteger(0);
 
     void loadWebView(String url) {
@@ -1381,8 +1400,11 @@ public class PlayFragment extends BaseLazyFragment {
 
             if (!ad) {
                 if (checkVideoFormat(url)) {
-                    LOG.i("checkVideoFormat:" + url );
+                    loadFoundVideoUrls.add(url);
+                    loadFoundVideoUrlsHeader.put(url, headers);
+                    LOG.i("loadFoundVideoUrl:" + url );
                     if (loadFoundCount.incrementAndGet() == 1) {
+                        url = loadFoundVideoUrls.poll();
                         mHandler.removeMessages(100);
                         if (headers != null && !headers.isEmpty()) {
                             playUrl(url, headers);
@@ -1419,13 +1441,14 @@ public class PlayFragment extends BaseLazyFragment {
             HashMap<String, String> webHeaders = new HashMap<>();
             try {
                 Map<String, String> hds = request.getRequestHeaders();
-                if (!hds.isEmpty() && hds.size() > 0) {
-                    for (String k : hds.keySet()) {
+                for (String k : hds.keySet()) {
+                    if (k.equalsIgnoreCase("user-agent")
+                            || k.equalsIgnoreCase("referer")
+                            || k.equalsIgnoreCase("origin")) {
                         webHeaders.put(k, hds.get(k));
                     }
                 }
             } catch (Throwable th) {
-                th.printStackTrace();
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
             return response;
@@ -1550,19 +1573,25 @@ public class PlayFragment extends BaseLazyFragment {
             }
             if (!ad ) {
                 if (checkVideoFormat(url)) {
+                    HashMap<String, String> webHeaders = new HashMap<>();
+                    try {
+                        Map<String, String> hds = request.getRequestHeaders();
+                        for (String k : hds.keySet()) {
+                            if (k.equalsIgnoreCase("user-agent")
+                                    || k.equalsIgnoreCase("referer")
+                                    || k.equalsIgnoreCase("origin")) {
+                                webHeaders.put(k, hds.get(k));
+                            }
+                        }
+                     } catch (Throwable th) {
+
+                    }
+                    loadFoundVideoUrls.add(url);
+                    loadFoundVideoUrlsHeader.put(url, webHeaders);
+                    LOG.i("loadFoundVideoUrl:" + url );
                     if (loadFoundCount.incrementAndGet() == 1) {
                         mHandler.removeMessages(100);
-                        HashMap<String, String> webHeaders = new HashMap<>();
-                        try {
-                            Map<String, String> hds = request.getRequestHeaders();
-                            if (!hds.isEmpty() && hds.size() > 0) {
-                                for (String k : hds.keySet()) {
-                                    webHeaders.put(k, hds.get(k));
-                                }
-                            }
-                        } catch (Throwable th) {
-                            th.printStackTrace();
-                        }
+                        url = loadFoundVideoUrls.poll();                       
                         if (webHeaders != null && !webHeaders.isEmpty()) {
                             playUrl(url, webHeaders);
                         } else {
