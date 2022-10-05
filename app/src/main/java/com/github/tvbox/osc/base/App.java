@@ -60,10 +60,10 @@ public class App extends MultiDexApplication {
         if (!Hawk.contains(HawkConfig.IJK_CODEC)) {
             Hawk.put(HawkConfig.IJK_CODEC, "硬解码");
         }
-        if (!Hawk.contains(HawkConfig.DOH_URL)) {
+        /*if (!Hawk.contains(HawkConfig.DOH_URL)) {
             Hawk.put(HawkConfig.DOH_URL, 2);
         }
-        /*if (!Hawk.contains(HawkConfig.SEARCH_VIEW)) {
+        if (!Hawk.contains(HawkConfig.SEARCH_VIEW)) {
             Hawk.put(HawkConfig.SEARCH_VIEW, 2);
         }*/
     }
