@@ -153,7 +153,7 @@ public class PlayerHelper {
         if (playersInfo.containsKey(playType)) {
             return playersInfo.get(playType);
         } else {
-            return "系统播放";
+            return "系统播放器";
         }
     }
 
@@ -161,15 +161,15 @@ public class PlayerHelper {
     public static HashMap<Integer, String> getPlayersInfo() {
         if (mPlayersInfo == null) {
             HashMap<Integer, String> playersInfo = new HashMap<>();
-            playersInfo.put(0, "系统播放");
-            playersInfo.put(1, "IJK播放");
-            playersInfo.put(2, "Exo播放");
-            playersInfo.put(7, "kodi播放");
-            playersInfo.put(8, "当贝播放");
-            playersInfo.put(9, "UC播放");
-            playersInfo.put(10, "浏览器");
-            playersInfo.put(11, "MX播放");
-            playersInfo.put(12, "Reex播放");
+            playersInfo.put(0, "系统播放器");
+            playersInfo.put(1, "IJK播放器");
+            playersInfo.put(2, "Exo播放器");
+            playersInfo.put(7, "kodi播放器");
+            playersInfo.put(8, "当贝播放器");
+            playersInfo.put(9, "UC播放器");
+            playersInfo.put(10, "浏览器播放");
+            playersInfo.put(11, "MX播放器");
+            playersInfo.put(12, "Reex播放器");
             mPlayersInfo = playersInfo;
         }
         return mPlayersInfo;
