@@ -164,11 +164,11 @@ public class PlayerHelper {
             playersInfo.put(0, "系统播放器");
             playersInfo.put(1, "IJK播放器");
             playersInfo.put(2, "Exo播放器");
-            playersInfo.put(7, "kodi播放器");
+            playersInfo.put(7, "Kodi播放器");
             playersInfo.put(8, "当贝播放器");
-            playersInfo.put(9, "UC播放器");
+            playersInfo.put(9, "U C播放器");
             playersInfo.put(10, "浏览器播放");
-            playersInfo.put(11, "MX播放器");
+            playersInfo.put(11, "M X播放器");
             playersInfo.put(12, "Reex播放器");
             mPlayersInfo = playersInfo;
         }
