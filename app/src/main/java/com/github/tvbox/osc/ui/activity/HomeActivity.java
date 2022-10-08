@@ -623,16 +623,16 @@ public class HomeActivity extends BaseActivity {
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    if (homeSourceKey != null && !homeSourceKey.equals(Hawk.get(HawkConfig.HOME_API, ""))) {
-                        Intent intent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplication().getPackageName());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("useCache", true);
-                        intent.putExtras(bundle);
-                        getApplicationContext().startActivity(intent);
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                        System.exit(0);
+                    //if (homeSourceKey != null && !homeSourceKey.equals(Hawk.get(HawkConfig.HOME_API, ""))) {
+                        //Intent intent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplication().getPackageName());
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        //        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        //Bundle bundle = new Bundle();
+                        //bundle.putBoolean("useCache", true);
+                        //intent.putExtras(bundle);
+                        //getApplicationContext().startActivity(intent);
+                        //android.os.Process.killProcess(android.os.Process.myPid());
+                        //System.exit(0);
                         
                          //Intent intent =new Intent(getApplicationContext(), HomeActivity.class);
                          //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -640,7 +640,7 @@ public class HomeActivity extends BaseActivity {
                          //bundle.putBoolean("useCache", true);
                          //intent.putExtras(bundle);
                          //HomeActivity.this.startActivity(intent);                      
-                    }
+                    //}
                 }
             });
             dialog.show();
