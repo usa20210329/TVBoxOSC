@@ -124,8 +124,8 @@ public class DetailActivity extends BaseActivity {
     private String preFlag="";
     private boolean firstReverse;
     private V7GridLayoutManager mGridViewLayoutMgr = null;
-    private HashMap<String, SourceBean> mCheckSources = null;
-
+    private HashMap<String, String> mCheckSources = null;
+    
     @Override
     protected int getLayoutResID() {
         return R.layout.activity_detail;
