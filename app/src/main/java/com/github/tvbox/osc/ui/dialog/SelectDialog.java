@@ -26,6 +26,10 @@ public class SelectDialog<T> extends BaseDialog {
         setContentView(resId);
     }
 
+    public void setItemCheckDisplay(boolean shouldShowCheck) {
+        muteCheck = !shouldShowCheck;
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
