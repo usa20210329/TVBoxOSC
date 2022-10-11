@@ -132,22 +132,16 @@ public class ApiConfig {
                 th.printStackTrace();
             }
         }
-        String TempKey = null, configUrl = "", pk = ";pk;";
+        String TempKey = null, configUrl = "", pk = ";pk;";    
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
             if (apiUrl.startsWith("clan")) configUrl = clanToAddress(a[0]);
             if (apiUrl.startsWith("http")) configUrl = a[0];
-            if (apiUrl.startsWith("asset")) configUrl = a[0];
-        } else if (!apiUrl.contains(pk)){
-           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);
-           if (!apiUrl.startsWith("http")) {
-               configUrl = "http://" + configUrl;
-            } 
-           if (!apiUrl.startsWith("asset://")) {
+            if (apiUrl.startsWith("asset")) {
+                configUrl = a[0]; 
             try {
-                String config = readAssetsText(configUrl.replace("asset://",""));
-                config = FindResult(json, config);
+                String config = readAssetsText(configUrl.replace("asset://",""));            
                 parseJson(apiUrl, config);
                 callback.success();
             } catch (Throwable th) {
@@ -155,10 +149,27 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
+           }      
+        } else if (!apiUrl.contains(pk)){
+           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);
+           if (!apiUrl.startsWith("http")) {
+               configUrl = "http://" + configUrl;
            } else {
                configUrl = apiUrl;
+           }       
+           if (!apiUrl.startsWith("asset")) {
+            try {
+                String config = readAssetsText(apiUrl.replace("asset://",""));
+                config = FindResult(config, TempKey);
+                parseJson(apiUrl, config);
+                callback.success();
+            } catch (Throwable th) {
+                th.printStackTrace();
+                callback.error("解析配置失败");
+            }
+            return;
            }               
-        }   
+        }        
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
                 .headers("User-Agent", userAgent)
