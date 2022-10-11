@@ -150,7 +150,6 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
         } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
             configUrl = clanToAddress(apiUrl);
         } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
@@ -166,10 +165,8 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
         } else {
             configUrl = apiUrl;    
-            }
         }        
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
