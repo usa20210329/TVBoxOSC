@@ -154,6 +154,8 @@ public class ApiConfig {
             configUrl = clanToAddress(apiUrl);
         } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
             configUrl = "http://" + configUrl;    
+        } else {
+            configUrl = apiUrl;        
         } else if (apiUrl.startsWith("asset") && !apiUrl.contains(pk)) {
             try {
                 String config = readAssetsText(apiUrl.replace("asset://",""));
@@ -165,8 +167,6 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-        } else {
-            configUrl = apiUrl;
             }
         }        
         String configKey = TempKey;
