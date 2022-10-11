@@ -132,7 +132,7 @@ public class ApiConfig {
                 th.printStackTrace();
             }
         }
-        String TempKey = null, configUrl = "", pk = ";pk;";
+        String TempKey = null, configUrl = "", pk = ";pk;";    
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
@@ -150,13 +150,15 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-        } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
-            configUrl = clanToAddress(apiUrl);
-        } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
-            configUrl = "http://" + configUrl;    
-        } else {
-            configUrl = apiUrl;        
-        } else if (apiUrl.startsWith("asset") && !apiUrl.contains(pk)) {
+            }
+        } else if (!apiUrl.contains(pk)){
+           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);
+           if (!apiUrl.startsWith("http")) {
+               configUrl = "http://" + configUrl;
+           } else {
+               configUrl = apiUrl;
+           }       
+           if (apiUrl.startsWith("asset")) {
             try {
                 String config = readAssetsText(apiUrl.replace("asset://",""));
                 config = FindResult(config, TempKey);
@@ -168,7 +170,7 @@ public class ApiConfig {
             }
             return;
             }
-        }        
+        }  
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
                 .headers("User-Agent", userAgent)
