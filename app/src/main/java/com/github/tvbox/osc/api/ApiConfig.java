@@ -168,8 +168,7 @@ public class ApiConfig {
             return;
             }
         } else {
-            configUrl = apiUrl;
-           }   
+            configUrl = apiUrl;  
         }        
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
