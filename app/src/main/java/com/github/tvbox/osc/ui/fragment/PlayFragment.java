@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
