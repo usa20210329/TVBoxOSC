@@ -141,7 +141,8 @@ public class ApiConfig {
             if (apiUrl.startsWith("asset")) {
                 configUrl = a[0]; 
             try {
-                String config = readAssetsText(configUrl.replace("asset://",""));            
+                String config = readAssetsText(configUrl.replace("asset://",""));  
+                config = FindResult(config, TempKey);
                 parseJson(apiUrl, config);
                 callback.success();
             } catch (Throwable th) {
