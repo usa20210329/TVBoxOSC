@@ -1068,22 +1068,6 @@ public class PlayActivity extends BaseActivity {
 //                        errorWithRetry("解析错误", false);//没有url重试也没有重新获取
                         setTip("解析错误", false, true);
                     } else {
-                        if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
-                            if (rs.has("ua")) {
-                                webUserAgent = rs.optString("ua").trim();
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String mixParseUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
-                                    stopParse();
-                                    setTip("正在嗅探播放地址", true, false);
-                                    mHandler.removeMessages(100);
-                                    mHandler.sendEmptyMessageDelayed(100, 20 * 1000);
-                                    loadWebView(mixParseUrl);
-                                }
-                            });                        
-                    } else {
                         HashMap<String, String> headers = null;
                         if (rs.has("header")) {
                             try {
