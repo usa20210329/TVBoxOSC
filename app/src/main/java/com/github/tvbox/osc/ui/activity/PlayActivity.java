@@ -919,7 +919,7 @@ public class PlayActivity extends BaseActivity {
         } else {
             url = jsonPlayData.getString("url");
         }
-        String msg = jsonPlayData.optString("msg", "");
+        
         if (url.startsWith("//")) {
             url = "http:" + url;
         }
@@ -964,6 +964,26 @@ public class PlayActivity extends BaseActivity {
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
             mHandler.sendEmptyMessageDelayed(100, 20 * 1000);
+             // 解析ext
+            try {
+                HashMap<String, String> reqHeaders = new HashMap<>();
+                JSONObject jsonObject = new JSONObject(pb.getExt());
+                if (jsonObject.has("header")) {
+                    JSONObject headerJson = jsonObject.optJSONObject("header");
+                    Iterator<String> keys = headerJson.keys();
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        if (key.equalsIgnoreCase("user-agent")) {
+                            webUserAgent = headerJson.getString(key).trim();
+                        }else {
+                            reqHeaders.put(key, headerJson.optString(key, ""));
+                        }
+                    }
+                    if(reqHeaders.size()>0)webHeaderMap = reqHeaders;
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }           
             loadWebView(pb.getUrl() + webUrl);
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
@@ -1048,6 +1068,22 @@ public class PlayActivity extends BaseActivity {
 //                        errorWithRetry("解析错误", false);//没有url重试也没有重新获取
                         setTip("解析错误", false, true);
                     } else {
+                        if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
+                            if (rs.has("ua")) {
+                                webUserAgent = rs.optString("ua").trim();
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String mixParseUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
+                                    stopParse();
+                                    setTip("正在嗅探播放地址", true, false);
+                                    mHandler.removeMessages(100);
+                                    mHandler.sendEmptyMessageDelayed(100, 20 * 1000);
+                                    loadWebView(mixParseUrl);
+                                }
+                            });                        
+                    } else {
                         HashMap<String, String> headers = null;
                         if (rs.has("header")) {
                             try {
@@ -1104,9 +1140,12 @@ public class PlayActivity extends BaseActivity {
                     JSONObject rs = ApiConfig.get().jsonExtMix(parseFlag + "111", pb.getUrl(), finalExtendName, jxs, webUrl);
                     if (rs == null || !rs.has("url") || rs.optString("url").isEmpty()) {
 //                        errorWithRetry("解析错误", false);
-                        setTip("解析错误", false, true);
+                        setTip("解析错误", false, true);                      
                     } else {
                         if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
+                            if (rs.has("ua")) {
+                                webUserAgent = rs.optString("ua").trim();
+                            }
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
