@@ -115,22 +115,22 @@ public class ApiConfig {
             if (myConfigLinkToArr.length == 3) {
                 mySecretKey = myConfigLinkToArr[2];
                 apiFix = myConfigLinkToArr[0];
-            }    
-        apiFix = clanToAddress(apiFix);
-        String finalMySecretKey = mySecretKey;
-        String finalApiUrl = apiFix;
+            }  
         if (apiUrl.startsWith("asset")) {
             try {
-                String json = readAssetsText(apiUrl.replace("asset://",""));            
-                json = AES.decodeConfig(finalMySecretKey, json);
-                parseJson(finalApiUrl, json);
+                String json = readAssetsText(apiFix.replace("asset://",""));            
+                json = AES.decodeConfig(mySecretKey, json);
+                parseJson(apiFix, json);
                 callback.success();
             } catch (Throwable th) {
                 th.printStackTrace();
                 callback.error("解析配置失败");
             }
             return;
-        }    
+        }               
+        apiFix = clanToAddress(apiFix);
+        String finalMySecretKey = mySecretKey;
+        String finalApiUrl = apiFix; 
         OkGo.<String>get(apiFix)
                 .headers("User-Agent", userAgent)
                 .headers("Accept", requestAccept)
