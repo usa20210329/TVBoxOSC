@@ -92,19 +92,22 @@ public class ApiConfig {
 
     public static String FindResult(String json, String configKey) {
         String content = json;
-        try {
-            if (AES.isJson(content)) return content;
+        try {          
+            if (AES.isJson(json)) {
+                return json;
+            } else if (!json.startsWith("2423")) {
+                String[] data = json.split("\\*\\*");
+                content = new String(Base64.decode(data[1], Base64.DEFAULT));
+            }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
                 content = new String(AES.toBytes(content)).toLowerCase();
                 String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
-            }else if (content.startsWith("9864") && configKey !=null) {
+            } else if (configKey !=null) {
                 json = AES.ECB(content, configKey);
-            }
-            else{
-                String[] data = json.split("\\*\\*");
+            } else {
                 json = new String(Base64.decode(data[1], Base64.DEFAULT));
             }
         } catch (Exception e) {
