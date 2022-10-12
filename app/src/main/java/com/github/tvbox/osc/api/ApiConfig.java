@@ -157,8 +157,6 @@ public class ApiConfig {
            if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);
            if (!apiUrl.startsWith("http")) {
                configUrl = "http://" + configUrl;
-           } else {
-               configUrl = apiUrl;
            }       
            if (apiUrl.startsWith("asset")) {
             try {
