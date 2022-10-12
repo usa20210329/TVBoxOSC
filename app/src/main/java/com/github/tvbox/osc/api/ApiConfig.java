@@ -95,22 +95,22 @@ public class ApiConfig {
             String content = "";
             if (AES.isJson(json)) {
                 return json;
-            } else if (configKey !=null) {
-                json = AES.ECB(json, configKey);              
             } else if (!json.startsWith("2423")) {
                 String[] data = json.split("\\*\\*");
                 content = new String(Base64.decode(data[1], Base64.DEFAULT));
             } else {
                 content = json;
-            }          
+            }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
                 content = new String(AES.toBytes(content)).toLowerCase();
                 String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
-            }else if (!json.startsWith("2423")){
-                json = content;
+            } else if (configKey !=null) {
+                json = AES.ECB(content, configKey);
+            } else {
+                json = new String(Base64.decode(json, Base64.DEFAULT));
             }
         } catch (Exception e) {
             e.printStackTrace();
