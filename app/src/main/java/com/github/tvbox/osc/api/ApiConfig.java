@@ -134,6 +134,7 @@ public class ApiConfig {
                 th.printStackTrace();
             }
         }
+        String TempKey = null, configUrl = "", pk = ";pk;";
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
@@ -151,7 +152,6 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
         } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
             configUrl = clanToAddress(apiUrl);
         } else if(apiUrl.startsWith("asset")) && !apiUrl.contains(pk)) {
@@ -165,7 +165,6 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
         } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
             configUrl = "http://" + configUrl;
         } else {
