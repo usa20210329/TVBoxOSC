@@ -108,6 +108,7 @@ public class ApiConfig {
             } else if (configKey !=null) {
                 json = AES.ECB(content, configKey);
             } else {
+                String[] data = content.split("\\*\\*");
                 json = new String(Base64.decode(data[1], Base64.DEFAULT));
             }
         } catch (Exception e) {
