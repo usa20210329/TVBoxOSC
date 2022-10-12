@@ -89,34 +89,6 @@ public class ApiConfig {
         }
         return instance;
     }
-
-    public static String FindResult(String json, String configKey) {
-        try {
-            String content = "";
-            if (AES.isJson(json)) {
-                return json;
-            } else if (json.contains("**")) {
-                String[] data = json.split("\\*\\*");
-                content = new String(Base64.decode(data[1], Base64.DEFAULT));
-            } else {
-                content = json;
-            }
-            if (content.startsWith("2423")) {
-                String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
-                content = new String(AES.toBytes(content)).toLowerCase();
-                String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
-                String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
-                json = AES.CBC(data, key, iv);
-            } else if (configKey !=null) {
-                json = AES.ECB(content, configKey);
-            } else {
-                json = content;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return json;
-    }
    
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         String apiUrl = Hawk.get(HawkConfig.API_URL, "asset://cfg.json");
@@ -134,49 +106,32 @@ public class ApiConfig {
                 th.printStackTrace();
             }
         }
-        String TempKey = null, configUrl = "", pk = ";pk;";
-        if (apiUrl.contains(pk)) {
-            String[] a = apiUrl.split(pk);
-            TempKey = a[1];
-            if(apiUrl.startsWith("asset")) {
-                configUrl = a[0]; 
+        String apiFix = apiUrl;
+        String mySecretKey = "";
+
+        if (apiFix.contains(";")) {
+            //get link and password
+            String[] myConfigLinkToArr = apiUrl.split(";");
+            if (myConfigLinkToArr.length == 3) {
+                mySecretKey = myConfigLinkToArr[2];
+                apiFix = myConfigLinkToArr[0];
+            }    
+        apiFix = clanToAddress(apiFix);
+        String finalMySecretKey = mySecretKey;
+        String finalApiUrl = apiFix;
+        if (apiUrl.startsWith("asset")) {
             try {
-                String config = readAssetsText(configUrl.replace("asset://",""));  
-                config = FindResult(config, TempKey);
-                parseJson(apiUrl, config);
+                String json = readAssetsText(apiUrl.replace("asset://",""));            
+                json = AES.decodeConfig(finalMySecretKey, json);
+                parseJson(finalApiUrl, json);
                 callback.success();
             } catch (Throwable th) {
                 th.printStackTrace();
                 callback.error("解析配置失败");
             }
-            return; 
-            }else if  (apiUrl.startsWith("clan")){
-                configUrl = clanToAddress(a[0]);
-            }else if (apiUrl.startsWith("http")){
-                configUrl = a[0];
-            }else {
-                configUrl = "http://" + a[0];
-            }
-         } else if(apiUrl.startsWith("asset")) {
-            try {
-                String config = readAssetsText(apiUrl.replace("asset://",""));  
-                config = FindResult(config, TempKey);
-                parseJson(apiUrl, config);
-                callback.success();
-            } catch (Throwable th) {
-                th.printStackTrace();
-                callback.error("解析配置失败");
-            }
-            return;            
-        } else if (apiUrl.startsWith("clan")) {
-            configUrl = clanToAddress(apiUrl);
-        } else if (!apiUrl.startsWith("http")) {
-            configUrl = "http://" + configUrl;
-        } else {
-            configUrl = apiUrl;
-        }
-        String configKey = TempKey;
-        OkGo.<String>get(configUrl)
+            return;
+        }    
+        OkGo.<String>get(apiFix)
                 .headers("User-Agent", userAgent)
                 .headers("Accept", requestAccept)
                 .execute(new AbsCallback<String>() {
@@ -184,8 +139,8 @@ public class ApiConfig {
                     public void onSuccess(Response<String> response) {
                         try {
                             String json = response.body();
-                            json = FindResult(json, configKey);
-                            parseJson(apiUrl, json);
+                            json = AES.decodeConfig(finalMySecretKey, json);
+                            parseJson(finalApiUrl, json);
                             try {
                                 File cacheDir = cache.getParentFile();
                                 if (!cacheDir.exists())
@@ -211,7 +166,7 @@ public class ApiConfig {
                         super.onError(response);
                         if (cache.exists()) {
                             try {
-                                parseJson(apiUrl, cache);
+                                parseJson(finalApiUrl, cache);
                                 callback.success();
                                 return;
                             } catch (Throwable th) {
@@ -228,11 +183,9 @@ public class ApiConfig {
                         } else {
                             result = response.body().string();
                         }
-                        if (apiUrl.startsWith("clan")) {
-                            result = clanContentFix(clanToAddress(apiUrl), result);
-                        }
-                        //假相對路徑
-                        result = fixContentPath(apiUrl,result);                        
+                        if (finalApiUrl.startsWith("clan")) {
+                            result = clanContentFix(clanToAddress(finalApiUrl), result);
+                        }                     
                         return result;
                     }
                 });
@@ -302,10 +255,9 @@ public class ApiConfig {
             }
         }
 
-        OkGo.<File>get(jarUrl)
-                .headers("User-Agent", userAgent)
-                .headers("Accept", requestAccept)
-                .execute(new AbsCallback<File>() {
+        boolean isJarInImg = jarUrl.startsWith("img+");
+        jarUrl = jarUrl.replace("img+", "");
+        OkGo.<File>get(jarUrl).execute(new AbsCallback<File>() {
 
             @Override
             public File convertResponse(okhttp3.Response response) throws Throwable {
@@ -315,7 +267,13 @@ public class ApiConfig {
                 if (cache.exists())
                     cache.delete();
                 FileOutputStream fos = new FileOutputStream(cache);
-                fos.write(response.body().bytes());
+                if (isJarInImg) {
+                    String respData = response.body().string();
+                    byte[] decodedSpider = AES.decodeSpider(respData);
+                    fos.write(decodedSpider);
+                } else {
+                    fos.write(response.body().bytes());
+                }
                 fos.flush();
                 fos.close();
                 return cache;
@@ -327,8 +285,8 @@ public class ApiConfig {
                     if (jarLoader.load(response.body().getAbsolutePath())) {
                         callback.success();
                     } else {
-                        callback.error("");
-                    }
+                callback.error("");
+            }
                 } else {
                     callback.error("");
                 }
@@ -653,13 +611,16 @@ public class ApiConfig {
     }
 
     String clanToAddress(String lanLink) {
-        if (lanLink.startsWith("clan://localhost/")) {
-            return lanLink.replace("clan://localhost/", ControlManager.get().getAddress(true) + "file/");
-        } else {
-            String link = lanLink.substring(7);
-            int end = link.indexOf('/');
-            return "http://" + link.substring(0, end) + "/file/" + link.substring(end + 1);
+        if (lanLink.startsWith("clan")) {
+            if (lanLink.startsWith("clan://localhost/")) {
+                return lanLink.replace("clan://localhost/", ControlManager.get().getAddress(true) + "file/");
+            } else {
+                String link = lanLink.substring(7);
+                int end = link.indexOf('/');
+                return "http://" + link.substring(0, end) + "/file/" + link.substring(end + 1);
+            }
         }
+        return lanLink;        
     }
 
     String clanContentFix(String lanLink, String content) {
