@@ -117,8 +117,7 @@ public class ApiConfig {
         }
         return json;
     }
-    }
-    
+   
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         String apiUrl = Hawk.get(HawkConfig.API_URL, "asset://cfg.json");
         if (apiUrl.isEmpty()) {
