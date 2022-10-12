@@ -110,7 +110,7 @@ public class ApiConfig {
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
             } else { 
-                json = content
+                json = new String(Base64.decode(json, Base64.DEFAULT));
             }
         } catch (Exception e) {
             e.printStackTrace();
