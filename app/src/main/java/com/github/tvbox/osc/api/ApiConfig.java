@@ -133,9 +133,7 @@ public class ApiConfig {
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
-            if (apiUrl.startsWith("clan")) configUrl = clanToAddress(a[0]);
-            if (apiUrl.startsWith("http")) configUrl = a[0];
-            if (apiUrl.startsWith("asset")) {
+            if(apiUrl.startsWith("asset")) {
                 configUrl = a[0]; 
             try {
                 String config = readAssetsText(configUrl.replace("asset://",""));  
@@ -146,13 +144,17 @@ public class ApiConfig {
                 th.printStackTrace();
                 callback.error("解析配置失败");
             }
-            return;
-            }    
-        } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
-            configUrl = clanToAddress(apiUrl);         
-        } else if (apiUrl.startsWith("asset") && !apiUrl.contains(pk)) {
+            return; 
+            }else if  (apiUrl.startsWith("clan")){
+                configUrl = clanToAddress(a[0]);
+            }else if (apiUrl.startsWith("http")){
+                configUrl = a[0];
+            }else {
+                configUrl = "http://" + a[0];
+            }
+         } else if(apiUrl.startsWith("asset")) {
             try {
-                String config = readAssetsText(apiUrl.replace("asset://",""));
+                String config = readAssetsText(apiUrl.replace("asset://",""));  
                 config = FindResult(config, TempKey);
                 parseJson(apiUrl, config);
                 callback.success();
@@ -160,12 +162,14 @@ public class ApiConfig {
                 th.printStackTrace();
                 callback.error("解析配置失败");
             }
-            return;
-        } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
+            return;            
+        } else if (apiUrl.startsWith("clan")) {
+            configUrl = clanToAddress(apiUrl);
+        } else if (!apiUrl.startsWith("http")) {
             configUrl = "http://" + configUrl;
         } else {
-            configUrl = apiUrl;   
-        } 
+            configUrl = apiUrl;
+        }
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
                 .headers("User-Agent", userAgent)
