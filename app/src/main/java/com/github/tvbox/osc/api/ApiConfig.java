@@ -154,10 +154,7 @@ public class ApiConfig {
             return;
             }
         } else if (!apiUrl.contains(pk)){
-           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);
-           if (!apiUrl.startsWith("http")) {
-               configUrl = "http://" + configUrl;
-           }       
+           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);   
            if (apiUrl.startsWith("asset")) {
             try {
                 String config = readAssetsText(apiUrl.replace("asset://",""));
