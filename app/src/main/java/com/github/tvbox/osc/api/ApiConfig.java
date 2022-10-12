@@ -166,11 +166,10 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
         } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
             configUrl = "http://" + configUrl;
         } else {
-            configUrl = apiUrl;        
+            configUrl = apiUrl;   
         } 
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
