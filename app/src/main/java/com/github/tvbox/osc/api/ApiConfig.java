@@ -108,7 +108,7 @@ public class ApiConfig {
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
             } else if (configKey !=null) {
-                json = AES.ECB(content, configKey);
+                json = AES.ECB(json, configKey);
             } else { 
                 json = new String(Base64.decode(json, Base64.DEFAULT));
             }
