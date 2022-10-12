@@ -138,6 +138,7 @@ public class ApiConfig {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
             if (apiUrl.startsWith("clan")) configUrl = clanToAddress(a[0]);
+            if (apiUrl.startsWith("http")) configUrl = a[0];
             if (apiUrl.startsWith("asset")) {
                 configUrl = a[0]; 
             try {
@@ -151,7 +152,6 @@ public class ApiConfig {
             }
             return;
             }
-            if (apiUrl.startsWith("http")) configUrl = a[0];
         } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
             configUrl = clanToAddress(apiUrl);
         } else if(apiUrl.startsWith("asset")) && !apiUrl.contains(pk)) {
@@ -165,6 +165,7 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
+            }
         } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
             configUrl = "http://" + configUrl;
         } else {
