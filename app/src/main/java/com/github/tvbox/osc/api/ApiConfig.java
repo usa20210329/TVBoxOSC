@@ -91,13 +91,15 @@ public class ApiConfig {
     }
 
     public static String FindResult(String json, String configKey) {
-        String content = json;
-        try {          
+        try {
+            String content = "";
             if (AES.isJson(json)) {
                 return json;
             } else if (!json.startsWith("2423")) {
                 String[] data = json.split("\\*\\*");
                 content = new String(Base64.decode(data[1], Base64.DEFAULT));
+            } else {
+                content = json;
             }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
@@ -108,13 +110,13 @@ public class ApiConfig {
             } else if (configKey !=null) {
                 json = AES.ECB(content, configKey);
             } else {
-                String[] data = content.split("\\*\\*");
-                json = new String(Base64.decode(data[1], Base64.DEFAULT));
+                json = content;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return json;
+    }
     }
     
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
