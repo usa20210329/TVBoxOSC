@@ -103,7 +103,7 @@ public class ApiConfig {
             }
            
             if (configKey !=null) {
-                json = AES.ECB(content, configKey);
+                json = AES.ECB(json, configKey);
             }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
