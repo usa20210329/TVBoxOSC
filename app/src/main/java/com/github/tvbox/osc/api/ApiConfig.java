@@ -138,13 +138,36 @@ public class ApiConfig {
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
-            if (apiUrl.startsWith("clan")){
+            if(apiUrl.startsWith("asset")) {
+                configUrl = a[0]; 
+            try {
+                String config = readAssetsText(configUrl.replace("asset://",""));  
+                config = FindResult(config, TempKey);
+                parseJson(apiUrl, config);
+                callback.success();
+            } catch (Throwable th) {
+                th.printStackTrace();
+                callback.error("解析配置失败");
+            }
+            return; 
+            }else if  (apiUrl.startsWith("clan")){
                 configUrl = clanToAddress(a[0]);
             }else if (apiUrl.startsWith("http")){
                 configUrl = a[0];
             }else {
                 configUrl = "http://" + a[0];
             }
+         } else if(apiUrl.startsWith("asset")) {
+            try {
+                String config = readAssetsText(apiUrl.replace("asset://",""));  
+                config = FindResult(config, TempKey);
+                parseJson(apiUrl, config);
+                callback.success();
+            } catch (Throwable th) {
+                th.printStackTrace();
+                callback.error("解析配置失败");
+            }
+            return;            
         } else if (apiUrl.startsWith("clan")) {
             configUrl = clanToAddress(apiUrl);
         } else if (!apiUrl.startsWith("http")) {
