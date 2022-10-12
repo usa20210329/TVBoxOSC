@@ -95,7 +95,7 @@ public class ApiConfig {
             String content = "";
             if (AES.isJson(json)) {
                 return json;
-            } else if (!json.startsWith("2423")) {
+            } else if (!json.contains("\\*\\*") {
                 String[] data = json.split("\\*\\*");
                 content = new String(Base64.decode(data[1], Base64.DEFAULT));
             } else {
@@ -109,8 +109,8 @@ public class ApiConfig {
                 json = AES.CBC(data, key, iv);
             } else if (configKey !=null) {
                 json = AES.ECB(content, configKey);
-            } else {
-                json = content;                
+            } else { 
+                json = new String(Base64.decode(json, Base64.DEFAULT));
             }
         } catch (Exception e) {
             e.printStackTrace();
