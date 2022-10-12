@@ -154,10 +154,8 @@ public class ApiConfig {
             return;
             }    
         } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
-            configUrl = clanToAddress(apiUrl);
-        } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
-            configUrl = "http://" + configUrl;            
-        } else (apiUrl.startsWith("asset")) && !apiUrl.contains(pk)) {
+            configUrl = clanToAddress(apiUrl);         
+        } else if (apiUrl.startsWith("asset") && !apiUrl.contains(pk)) {
             try {
                 String config = readAssetsText(apiUrl.replace("asset://",""));
                 config = FindResult(config, TempKey);
@@ -169,6 +167,10 @@ public class ApiConfig {
             }
             return;
             }
+        } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
+            configUrl = "http://" + configUrl;
+        } else {
+            configUrl = apiUrl;        
         } 
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
