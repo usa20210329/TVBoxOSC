@@ -166,7 +166,6 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-            }
          } else {
             configUrl = apiUrl;    
             }
