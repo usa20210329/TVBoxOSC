@@ -134,12 +134,10 @@ public class ApiConfig {
                 th.printStackTrace();
             }
         }
-        String TempKey = null, configUrl = "", pk = ";pk;";    
         if (apiUrl.contains(pk)) {
             String[] a = apiUrl.split(pk);
             TempKey = a[1];
             if (apiUrl.startsWith("clan")) configUrl = clanToAddress(a[0]);
-            if (apiUrl.startsWith("http")) configUrl = a[0];
             if (apiUrl.startsWith("asset")) {
                 configUrl = a[0]; 
             try {
@@ -153,9 +151,10 @@ public class ApiConfig {
             }
             return;
             }
-        } else if (!apiUrl.contains(pk)){
-           if (apiUrl.startsWith("clan")) configUrl = clanToAddress(apiUrl);   
-           if (apiUrl.startsWith("asset")) {
+            if (apiUrl.startsWith("http")) configUrl = a[0];
+        } else if (apiUrl.startsWith("clan") && !apiUrl.contains(pk)) {
+            configUrl = clanToAddress(apiUrl);
+        } else if(apiUrl.startsWith("asset")) && !apiUrl.contains(pk)) {
             try {
                 String config = readAssetsText(apiUrl.replace("asset://",""));
                 config = FindResult(config, TempKey);
@@ -166,10 +165,11 @@ public class ApiConfig {
                 callback.error("解析配置失败");
             }
             return;
-         } else {
-            configUrl = apiUrl;    
-            }
-        }  
+        } else if (!apiUrl.startsWith("http") && !apiUrl.contains(pk)) {
+            configUrl = "http://" + configUrl;
+        } else {
+            configUrl = apiUrl;
+        }
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
                 .headers("User-Agent", userAgent)
