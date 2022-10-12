@@ -110,7 +110,7 @@ public class ApiConfig {
             } else if (configKey !=null) {
                 json = AES.ECB(content, configKey);
             } else {
-                json = new String(Base64.decode(json, Base64.DEFAULT));
+                json = content;
             }
         } catch (Exception e) {
             e.printStackTrace();
