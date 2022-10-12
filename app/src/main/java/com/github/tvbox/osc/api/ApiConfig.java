@@ -103,15 +103,16 @@ public class ApiConfig {
             }
             if (configKey !=null) {
                 json = AES.ECB(content, configKey); 
-               }              
+               } 
+            } else { 
+                json = content;
+               } 
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
                 content = new String(AES.toBytes(content)).toLowerCase();
                 String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);                  
-            } else { 
-                json = new String(Base64.decode(json, Base64.DEFAULT));
             }
         } catch (Exception e) {
             e.printStackTrace();
