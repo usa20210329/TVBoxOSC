@@ -95,7 +95,7 @@ public class ApiConfig {
             String content = "";
             if (AES.isJson(json)) {
                 return json;
-            } else if (!json.contains("\\*\\*") {
+            } else if (!json.contains("\\*\\*")) {
                 String[] data = json.split("\\*\\*");
                 content = new String(Base64.decode(data[1], Base64.DEFAULT));
             } else {
