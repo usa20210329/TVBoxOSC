@@ -93,7 +93,6 @@ public class ApiConfig {
     public static String FindResult(String json, String configKey) {
         try {
             String content = "";
-            String config = json;
             if (AES.isJson(json)) {
                 return json;
             } else if (!json.startsWith("2423")) {
@@ -102,15 +101,17 @@ public class ApiConfig {
             } else {
                 content = json;
             }
+           
+            if (configKey !=null) {
+                json = AES.ECB(content, configKey);
+            }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
                 content = new String(AES.toBytes(content)).toLowerCase();
                 String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
-            } else if (configKey !=null) {
-                json = AES.ECB(config, configKey);
-            } else {
+            }else if (!json.startsWith("2423")){
                 json = content;
             }
         } catch (Exception e) {
