@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.util;
 
+import android.annotation.TargetApi;
 import org.json.JSONObject;
 
 import java.security.spec.AlgorithmParameterSpec;
@@ -72,4 +73,37 @@ public class AES {
         return ret;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static byte[] decodeSpider(String data) {
+
+        try {
+            int startedPoint = data.indexOf("**");
+            if (startedPoint > 0) {
+                return Base64.decode(data.substring(startedPoint + 2), 0);
+            }
+            return data.getBytes(StandardCharsets.UTF_8);
+        }catch (Exception ex) {
+            SpiderDebug.log("Failed to decrypt jar: " + ex.getMessage());
+        }
+        return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static String getMD5(String data) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(data.getBytes(StandardCharsets.UTF_8));
+        byte[] digest = md.digest();
+        return String.format("%032x", new BigInteger(1, digest)).toLowerCase();
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len/2];
+
+        for(int i = 0; i < len; i+=2){
+            data[i/2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
+        }
+
+        return data;
+    }
 }
