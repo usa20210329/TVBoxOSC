@@ -1,11 +1,27 @@
 package com.github.tvbox.osc.util;
 
 import android.annotation.TargetApi;
+import android.os.Build;
+import android.util.Base64;
+
+import com.github.catvod.crawler.SpiderDebug;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.spec.AlgorithmParameterSpec;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
