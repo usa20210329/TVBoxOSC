@@ -301,7 +301,8 @@ public class ApiConfig {
                 return;
             }
         }
-
+        boolean isJarInImg = jarUrl.startsWith("img+");
+        jarUrl = jarUrl.replace("img+", "");
         OkGo.<File>get(jarUrl)
                 .headers("User-Agent", userAgent)
                 .headers("Accept", requestAccept)
@@ -315,7 +316,13 @@ public class ApiConfig {
                 if (cache.exists())
                     cache.delete();
                 FileOutputStream fos = new FileOutputStream(cache);
-                fos.write(response.body().bytes());
+                if (isJarInImg) {
+                    String respData = response.body().string();
+                    byte[] decodedSpider = AES.decodeSpider(respData);
+                    fos.write(decodedSpider);
+                } else {
+                    fos.write(response.body().bytes());
+                }
                 fos.flush();
                 fos.close();
                 return cache;
