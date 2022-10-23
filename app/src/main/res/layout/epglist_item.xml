@@ -4,7 +4,10 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="horizontal"
 android:gravity="bottom"
 android:id="@+id/cl_epg"
-android:background="@drawable/shape_live_select"
+android:background="@drawable/shape_live_focus"
+android:focusable="true"
+android:padding="@dimen/vs_5"
+android:focusableInTouchMode="false"
 android:layout_width="match_parent"
 android:layout_height="wrap_content">
 
@@ -23,15 +26,17 @@ android:layout_height="wrap_content">
         android:textSize="@dimen/vs_15"
         android:id="@+id/tv_epg_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"/>
 		
     <com.github.tvbox.osc.ui.tv.widget.MarqueeTextView
-        android:textSize="@dimen/ts_18"
+        android:textSize="@dimen/ts_16"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:gravity="center|left"
         android:id="@+id/tv_epg_name"
+        android:textColor="@android:color/white"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -61,7 +66,7 @@ android:layout_height="wrap_content">
             android:layout_width="@dimen/vs_80"
             android:layout_height="@dimen/ts_26"
             android:layout_marginTop="3dp"
-            android:layout_marginRight="6px" />
+            android:layout_marginRight="0px" />
     </LinearLayout>
 
 </LinearLayout>
