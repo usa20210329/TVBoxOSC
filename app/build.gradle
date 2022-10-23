@@ -56,6 +56,9 @@ android {
         additionalParameters += '--set-max-idx-number=48000'
         additionalParameters += '--minimal-main-dex'
     }
+        buildFeatures {
+        dataBinding = true
+    }    
 }
 
 dependencies {
