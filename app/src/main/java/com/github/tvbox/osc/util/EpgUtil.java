@@ -6,7 +6,6 @@ import com.github.tvbox.osc.base.App;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,8 +20,6 @@ public class EpgUtil {
     public static void init() {
         if(epgDoc != null)
             return;
-
-        //credit by 龍
         try {
             AssetManager assetManager = App.getInstance().getAssets(); //获得assets资源管理器（assets中的文件无法直接访问，可以使用AssetManager访问）
             InputStreamReader inputStreamReader = new InputStreamReader(assetManager.open("epg_data.json"),"UTF-8"); //使用IO流读取json文件内容
