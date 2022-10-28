@@ -212,7 +212,7 @@
                     android:text="文件"
                     android:textAlignment="gravity"
                     android:textColor="@color/color_CCFFFFFF"
-                    android:textSize="@dimen/ts_33" />
+                    android:textSize="@dimen/" />
 
             </LinearLayout>  
 
