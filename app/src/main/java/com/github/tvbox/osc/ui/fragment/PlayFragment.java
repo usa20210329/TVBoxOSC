@@ -12,12 +12,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
@@ -89,7 +89,6 @@ import org.xwalk.core.XWalkWebResourceResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -107,7 +106,6 @@ import xyz.doikki.videoplayer.player.AbstractPlayer;
 import xyz.doikki.videoplayer.player.ProgressManager;
 
 public class PlayFragment extends BaseLazyFragment {
-    private static String webCookieStr;
     private MyVideoView mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
@@ -613,7 +611,6 @@ public class PlayFragment extends BaseLazyFragment {
                          //web给个默认的UA
                         webUserAgent = null;                       
                         webHeaderMap = null;
-                        webCookieStr = null;
                         if (info.has("header")) {
                             try {
                                 JSONObject hds = new JSONObject(info.getString("header"));
@@ -1173,21 +1170,7 @@ public class PlayFragment extends BaseLazyFragment {
             });
         }
     }
-    
-    /**
-     * 同步cookie
-     */
-    public static void synCookies(Context context, String url) {
-        if(webCookieStr!=null){
-            CookieSyncManager.createInstance(context);
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.setAcceptCookie(true);
-            cookieManager.removeSessionCookie();//移除
-            cookieManager.setCookie(url, webCookieStr);//cookies是在HttpClient中获得的cookie
-            CookieSyncManager.getInstance().sync();
-        }
-    }
-    
+      
     // webview
     private XWalkView mXwalkWebView;
     private XWalkWebClient mX5WebClient;
@@ -1446,8 +1429,7 @@ public class PlayFragment extends BaseLazyFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            mSysWebView.loadUrl(url);
-            return true;
+            return false;
         }
         
         @Override
@@ -1505,12 +1487,9 @@ public class PlayFragment extends BaseLazyFragment {
                     if (loadFoundCount.incrementAndGet() == 1) {
                         url = loadFoundVideoUrls.poll();
                         mHandler.removeMessages(100);
-                        if (headers != null && !headers.isEmpty()) {
-                            if(webCookieStr!=null)headers.put("Cookie"," " + webCookieStr);//携带cookie
-                            playUrl(url, headers);
-                        } else {
-                            playUrl(url, null);
-                        }
+                        String cookie = CookieManager.getInstance().getCookie(url);
+                        if(!TextUtils.isEmpty(cookie))headers.put("Cookie", cookie);//携带cookie
+                        playUrl(url, headers);
                         stopLoadWebView(false);
                     }
                 }
@@ -1524,7 +1503,7 @@ public class PlayFragment extends BaseLazyFragment {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {         
-            WebResourceResponse response = checkIsVideo(url, null);
+            WebResourceResponse response = checkIsVideo(url, new HashMap<>());
             return response;
         }
 
@@ -1532,10 +1511,7 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            String url = request.getUrl().toString();
-            CookieManager cookieManager = CookieManager.getInstance();
-            String CookieStr = cookieManager.getCookie(url);
-            if(CookieStr!=null)webCookieStr=CookieStr;           
+            String url = request.getUrl().toString();         
             LOG.i("shouldInterceptRequest url:" + url);
             HashMap<String, String> webHeaders = new HashMap<>();
             Map<String, String> hds = request.getRequestHeaders();
@@ -1642,11 +1618,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
 
         @Override
-        public void onLoadFinished(XWalkView view, String url) {
-            CookieManager cookieManager = CookieManager.getInstance();
-            String CookieStr = cookieManager.getCookie(url);
-            LOG.e("Cookie-------------: " + CookieStr);
-            if(CookieStr!=null)webCookieStr=CookieStr;            
+        public void onLoadFinished(XWalkView view, String url) {          
             super.onLoadFinished(view, url);    
         }
 
@@ -1699,12 +1671,9 @@ public class PlayFragment extends BaseLazyFragment {
                     if (loadFoundCount.incrementAndGet() == 1) {
                         mHandler.removeMessages(100);
                         url = loadFoundVideoUrls.poll();                       
-                        if (!webHeaders.isEmpty()) {
-                            if(webCookieStr!=null)webHeaders.put("Cookie"," " + webCookieStr);//携带cookie
-                            playUrl(url, webHeaders);
-                        } else {
-                            playUrl(url, null);
-                        }
+                        String cookie = CookieManager.getInstance().getCookie(url);
+                        if(!TextUtils.isEmpty(cookie))webHeaders.put("Cookie", cookie);//携带cookie
+                        playUrl(url, webHeaders);
                         stopLoadWebView(false);
                     }
                 }
@@ -1716,8 +1685,7 @@ public class PlayFragment extends BaseLazyFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(XWalkView view, String s) {
-            mXwalkWebView.loadUrl(s);
-            return true;
+            return false;
         }
 
         @Override
