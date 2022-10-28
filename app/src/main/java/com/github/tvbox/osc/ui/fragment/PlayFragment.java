@@ -982,8 +982,7 @@ public class PlayFragment extends BaseLazyFragment {
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
-            }         
-         synCookies(getContext(),pb.getUrl() + webUrl);//同步cookie            
+            }            
             loadWebView(pb.getUrl() + webUrl);
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
