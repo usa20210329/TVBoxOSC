@@ -13,6 +13,7 @@ import com.github.tvbox.osc.player.thirdparty.ucplayer;
 import com.github.tvbox.osc.player.thirdparty.browser;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
+import com.github.tvbox.osc.player.thirdparty.RemoteTVBox;
 import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONException;
@@ -170,6 +171,7 @@ public class PlayerHelper {
             playersInfo.put(10, "浏览器播放");
             playersInfo.put(11, "M X播放器");
             playersInfo.put(12, "Reex播放器");
+            playersInfo.put(13, "附近TVBox");
             mPlayersInfo = playersInfo;
         }
         return mPlayersInfo;
@@ -187,7 +189,8 @@ public class PlayerHelper {
             playersExist.put(9, ucplayer.getPackageInfo() != null);
             playersExist.put(10, browser.getPackageInfo() != null); 
             playersExist.put(11, MXPlayer.getPackageInfo() != null);
-            playersExist.put(12, ReexPlayer.getPackageInfo() != null);            
+            playersExist.put(12, ReexPlayer.getPackageInfo() != null);  
+            playersExist.put(13, RemoteTVBox.getAvalible() != null);
             mPlayersExistInfo = playersExist;
         }
         return mPlayersExistInfo;
@@ -238,6 +241,10 @@ public class PlayerHelper {
             }
             case 12: {
                 callResult = ReexPlayer.run(activity, url, title, subtitle, headers);
+                break;
+            }       
+            case 13: {
+                callResult = RemoteTVBox.run(activity, url, title, subtitle, headers);
                 break;
             }                
         }
