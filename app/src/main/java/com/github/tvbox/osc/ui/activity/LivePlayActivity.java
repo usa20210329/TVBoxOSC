@@ -19,8 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.net.Uri;
-import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -50,13 +48,13 @@ import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ChannelListView;
 import com.github.tvbox.osc.ui.tv.widget.ViewObj;
+import com.github.tvbox.osc.util.EpgNameFuzzyMatch;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.urlhttp.CallBackUtil;
 import com.github.tvbox.osc.util.urlhttp.UrlHttpUtil;
-import com.github.tvbox.osc.util.LOG;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import org.apache.commons.lang3.StringUtils;
@@ -82,11 +80,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.lang.Boolean;
 
 import xyz.doikki.videoplayer.player.VideoView;
 
@@ -507,10 +503,9 @@ public class LivePlayActivity extends BaseActivity {
             if (countDownTimer != null) {
                 countDownTimer.cancel();
             }
-            countDownTimer = new CountDownTimer(10000, 1000) {//底部epg隐藏时间设定
+            countDownTimer = new CountDownTimer(5000, 1000) {//底部epg隐藏时间设定
                 public void onTick(long j) {
                 }
-
                 public void onFinish() {
                     findViewById(R.id.ll_epg).setVisibility(View.GONE);
                 }
@@ -917,7 +912,7 @@ public class LivePlayActivity extends BaseActivity {
         mRightEpgList.setOnItemListener(new TvRecyclerView.OnItemListener() {
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-                epgListAdapter.setFocusedEpgIndex(-1);;
+                epgListAdapter.setFocusedEpgIndex(-1);
             }
 
             @Override
@@ -1543,18 +1538,7 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     public void loadProxyLives(String url) {
-        Uri parsedUrl = Uri.parse(url);
-        String extUrl = url;
-        try {
-            extUrl = new String(Base64.decode(parsedUrl.getQueryParameter("ext"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
-        } catch (Throwable th) {
-            th.printStackTrace();
-        }
-        String type = parsedUrl.getQueryParameter("type");
-        boolean useProxy = extUrl.startsWith("http");
-        LOG.i("url: " + url + " extUrl: " + extUrl + " proxy: " + Boolean.toString(useProxy));
-
-        OkGo.<String>get(useProxy ? extUrl : url).execute(new AbsCallback<String>() {
+        OkGo.<String>get(url).execute(new AbsCallback<String>() {
 
             @Override
             public String convertResponse(okhttp3.Response response) throws Throwable {
@@ -1563,14 +1547,7 @@ public class LivePlayActivity extends BaseActivity {
 
             @Override
             public void onSuccess(Response<String> response) {
-                JsonArray livesArray = null;
-                if (type.equals("txt") && useProxy) {
-                    LinkedHashMap map = new LinkedHashMap();
-                    ApiConfig.get().parseLiveTxt(map, response.body());
-                    livesArray = ApiConfig.get().jsonifyLiveMap(map);
-                } else {
-                    livesArray = new Gson().fromJson(response.body(), JsonArray.class);
-                }
+                JsonArray livesArray = new Gson().fromJson(response.body(), JsonArray.class);
                 ApiConfig.get().loadLives(livesArray);
                 List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
                 if (list.isEmpty()) {
