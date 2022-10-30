@@ -491,6 +491,7 @@ public class VodController extends BaseController {
             public void onClick(View view) {
                 myHandle.removeCallbacks(myRunnable);
                 myHandle.postDelayed(myRunnable, myHandleSeconds);
+                try {
 //                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
 //                    int st = mPlayerConfig.getInt("st");
 //                    st += step;
