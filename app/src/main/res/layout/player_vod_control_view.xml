@@ -362,7 +362,7 @@
                 android:layout_marginRight="@dimen/vs_5"
                 android:paddingRight="@dimen/vs_10"
                 android:text="解析"
-                android:textColor="@color/color_CC000000""
+                android:textColor="@color/color_CC000000"
                 android:textSize="@dimen/ts_22" />
 
             <com.owen.tvrecyclerview.widget.TvRecyclerView
