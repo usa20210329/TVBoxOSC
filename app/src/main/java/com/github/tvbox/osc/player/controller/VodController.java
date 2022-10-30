@@ -128,7 +128,6 @@ public class VodController extends BaseController {
     public TextView mPlayerTimeStartEndText;
     public TextView mPlayerTimeStartBtn;
     public TextView mPlayerTimeSkipBtn;
-    public TextView mPlayerTimeStepBtn;
     public TextView mPlayerTimeResetBtn;
     TextView mPlayPauseTime;
     TextView mPlayLoadNetSpeed;
@@ -190,8 +189,7 @@ public class VodController extends BaseController {
         mPlayerIJKBtn = findViewById(R.id.play_ijk);
         mPlayerTimeStartEndText = findViewById(R.id.play_time_start_end_text);
         mPlayerTimeStartBtn = findViewById(R.id.play_time_start);
-        mPlayerTimeSkipBtn = findViewById(R.id.play_time_end);
-        mPlayerTimeStepBtn = findViewById(R.id.play_time_step);
+        mPlayerTimeSkipBtn = findViewById(R.id.play_time_end);     
         mPlayerTimeResetBtn = findViewById(R.id.play_time_reset);
         mPlayPauseTime = findViewById(R.id.tv_sys_time);
         mPlayLoadNetSpeed = findViewById(R.id.tv_play_load_net_speed);
@@ -200,7 +198,6 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
-
         initSubtitleInfo();
 
         myHandle = new Handler();
@@ -494,14 +491,17 @@ public class VodController extends BaseController {
             public void onClick(View view) {
                 myHandle.removeCallbacks(myRunnable);
                 myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                    int st = mPlayerConfig.getInt("st");
-                    st += step;
-                    //片头最大跳过时间10分钟
-                    if (st > 60 * 10)
-                        st = 0;
-                    mPlayerConfig.put("st", st);
+//                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+//                    int st = mPlayerConfig.getInt("st");
+//                    st += step;
+//                    //片头最大跳过时间10分钟
+//                    if (st > 60 * 10)
+//                        st = 0;
+//                    mPlayerConfig.put("st", st);
+                    int current = (int) mControlWrapper.getCurrentPosition();
+                    int duration = (int) mControlWrapper.getDuration();
+                    if (current > duration / 2) return;
+                    mPlayerConfig.put("st",current/1000);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                 } catch (JSONException e) {
@@ -529,13 +529,17 @@ public class VodController extends BaseController {
                 myHandle.removeCallbacks(myRunnable);
                 myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                    int et = mPlayerConfig.getInt("et");
-                    et += step;
-                    //片尾最大跳过时间10分钟
-                    if (et > 60 * 10)
-                        et = 0;
-                    mPlayerConfig.put("et", et);
+//                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+//                    int et = mPlayerConfig.getInt("et");
+//                    et += step;
+//                    //片尾最大跳过时间10分钟
+//                    if (et > 60 * 10)
+//                        et = 0;
+//                    mPlayerConfig.put("et", et);
+                    int current = (int) mControlWrapper.getCurrentPosition();
+                    int duration = (int) mControlWrapper.getDuration();
+                    if (current < duration / 2) return;
+                    mPlayerConfig.put("et", (duration - current)/1000);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                 } catch (JSONException e) {
@@ -556,20 +560,20 @@ public class VodController extends BaseController {
                 return true;
             }
         });
-        mPlayerTimeStepBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                step += 5;
-                if (step > 30) {
-                    step = 5;
-                }
-                Hawk.put(HawkConfig.PLAY_TIME_STEP, step);
-                updatePlayerCfgView();
-            }
-        });
+//        mPlayerTimeStepBtn.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                myHandle.removeCallbacks(myRunnable);
+//                myHandle.postDelayed(myRunnable, myHandleSeconds);
+//                int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+//                step += 5;
+//                if (step > 30) {
+//                    step = 5;
+//                }
+//                Hawk.put(HawkConfig.PLAY_TIME_STEP, step);
+//                updatePlayerCfgView();
+//            }
+//        });
         mZimuBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -660,7 +664,6 @@ public class VodController extends BaseController {
             mPlayerSpeedBtn.setText("x" + mPlayerConfig.getDouble("sp"));
             mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("st") * 1000));
             mPlayerTimeSkipBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("et") * 1000));
-            mPlayerTimeStepBtn.setText(Hawk.get(HawkConfig.PLAY_TIME_STEP, 5) + "s");
             //mSubtitleBtn.setVisibility(playerType == 1 ? VISIBLE : GONE);
             mAudioTrackBtn.setVisibility((playerType == 1) ? VISIBLE : GONE);
         } catch (JSONException e) {
