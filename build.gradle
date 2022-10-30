@@ -6,8 +6,8 @@ buildscript {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2' }
-        maven { url 'https://o0halflife0o.github.io/crosswalk/releases/crosswalk/android/maven2' }
-        maven { url 'http://home.jundie.top:81/xwalk/maven2' }
+        //maven { url 'https://o0halflife0o.github.io/crosswalk/releases/crosswalk/android/maven2' }
+        //maven { url 'http://home.jundie.top:81/xwalk/maven2' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.1"
@@ -24,14 +24,14 @@ allprojects {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2' }
-        maven { url 'https://o0halflife0o.github.io/crosswalk/releases/crosswalk/android/maven2' }
-        maven { url 'http://home.jundie.top:81/xwalk/maven2' }
+        //maven { url 'https://o0halflife0o.github.io/crosswalk/releases/crosswalk/android/maven2' }
+        //maven { url 'http://home.jundie.top:81/xwalk/maven2' }
     }
     configurations.all {
         resolutionStrategy {
             force 'com.squareup.okhttp3:okhttp:3.12.1'
             force 'com.squareup.okio:okio:2.6.0'
-            // force 'org.conscrypt:conscrypt-android:2.5.2'
+            force 'org.conscrypt:conscrypt-android:2.5.2'
         }
     }    
 }
