@@ -60,7 +60,12 @@ android {
 
 dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
-
+    
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
+    // for WebDAV
+    implementation ('com.github.thegrizzlylabs:sardine-android:0.5') {
+        exclude group: 'com.squareup.okhttp3'
+    }
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'com.google.zxing:core:3.4.1'
