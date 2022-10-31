@@ -46,7 +46,6 @@ public class PushActivity extends BaseActivity {
                         if (manager.hasPrimaryClip() && manager.getPrimaryClip() != null && manager.getPrimaryClip().getItemCount() > 0) {
                             ClipData.Item addedText = manager.getPrimaryClip().getItemAt(0);
                             String clipText = addedText.getText().toString().trim();
-                            }
                             Intent newIntent = new Intent(mContext, DetailActivity.class);
                             newIntent.putExtra("id", clipText);
                             newIntent.putExtra("sourceKey", "push_agent");
