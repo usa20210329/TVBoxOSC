@@ -108,13 +108,11 @@ public class VodController extends BaseController {
     boolean mIsDragging;
     LinearLayout mProgressRoot;
     TextView mProgressText;
-    TextView seekTime;
     ImageView mProgressIcon;
     LinearLayout mBottomRoot;
     LinearLayout mTopRoot1;
     LinearLayout mTopRoot2;
     LinearLayout mParseRoot;
-    LinearLayout bottomCenterContainer;
     TvRecyclerView mGridView;
     TextView mPlayTitle;
     TextView mPlayTitle1;
@@ -157,9 +155,6 @@ public class VodController extends BaseController {
             String width = Integer.toString(mControlWrapper.getVideoSize()[0]);
             String height = Integer.toString(mControlWrapper.getVideoSize()[1]);
             mVideoSize.setText("[ " + width + " X " + height +" ]");
-            int getCurrentPosition = (int) (mControlWrapper.getCurrentPosition() / 1000.0);
-            int getDuration = (int) (mControlWrapper.getDuration() / 1000.0);
-            seekTime.setText(String.format("%02d", getCurrentPosition / 60) + ":" + String.format("%02d", getCurrentPosition % 60) + " | " + String.format("%02d", getDuration / 60) + ":" + String.format("%02d", getDuration % 60));
             
             mHandler.postDelayed(this, 1000);
         }
@@ -201,8 +196,6 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
-        bottomCenterContainer = findViewById(R.id.tv_bottom_center_container);
-        seekTime = findViewById(R.id.tv_seek_time);
 
         initSubtitleInfo();
 
@@ -619,14 +612,17 @@ public class VodController extends BaseController {
                 hideBottom();
             }
         });
-        initLandscapePortraitBtnInfo();
     }
 
      public void initLandscapePortraitBtnInfo() {
-        double screenSqrt = ScreenUtils.getSqrt(mActivity);
-        if (screenSqrt < 20.0) {
-            mLandscapePortraitBtn.setVisibility(View.VISIBLE);
-            mLandscapePortraitBtn.setText("竖屏");
+        if(mControlWrapper!=null){
+            int width = mControlWrapper.getVideoSize()[0];
+            int height = mControlWrapper.getVideoSize()[1];
+            double screenSqrt = ScreenUtils.getSqrt(mActivity);
+            if (screenSqrt < 20.0 && width < height) {
+                mLandscapePortraitBtn.setVisibility(View.VISIBLE);
+                mLandscapePortraitBtn.setText("竖屏");
+            }
         }
     }
 
@@ -813,11 +809,9 @@ public class VodController extends BaseController {
             case VideoView.STATE_IDLE:
                 break;
             case VideoView.STATE_PLAYING:
-                bottomCenterContainer.setVisibility(VISIBLE);
                 startProgress();
                 break;
             case VideoView.STATE_PAUSED:
-                bottomCenterContainer.setVisibility(GONE);
                 mTopRoot1.setVisibility(GONE);
                 mTopRoot2.setVisibility(GONE);
                 mPlayTitle.setVisibility(VISIBLE);
@@ -846,14 +840,12 @@ public class VodController extends BaseController {
         return mBottomRoot.getVisibility() == VISIBLE;
     }
 
-    void showBottom() {
-        bottomCenterContainer.setVisibility(GONE);
+    void showBottom() {       
         mHandler.removeMessages(1003);
         mHandler.sendEmptyMessage(1002);
     }
 
     void hideBottom() {
-        bottomCenterContainer.setVisibility(VISIBLE);
         mHandler.removeMessages(1002);
         mHandler.sendEmptyMessage(1003);
     }
