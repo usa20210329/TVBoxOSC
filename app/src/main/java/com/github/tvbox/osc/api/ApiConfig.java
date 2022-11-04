@@ -405,7 +405,6 @@ public class ApiConfig {
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
         // 解析地址
-        //parseBeanList = new ArrayList<>();
         parseBeanList.clear();
         if(infoJson.has("parses")){
             JsonArray parses = infoJson.get("parses").getAsJsonArray();
@@ -419,6 +418,7 @@ public class ApiConfig {
                 pb.setType(DefaultConfig.safeJsonInt(obj, "type", 0));
                 parseBeanList.add(pb);
             }
+        }
         // 获取默认解析
         if (parseBeanList != null && parseBeanList.size() > 0) {
             String defaultParse = Hawk.get(HawkConfig.DEFAULT_PARSE, "");
