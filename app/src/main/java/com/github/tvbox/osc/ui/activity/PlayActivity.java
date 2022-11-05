@@ -546,7 +546,6 @@ public class PlayActivity extends BaseActivity {
                         }
                         mVideoView.start();
                         mController.resetSpeed();
-                        mController.initLandscapePortraitBtnInfo();
                     }
                 }
             }
