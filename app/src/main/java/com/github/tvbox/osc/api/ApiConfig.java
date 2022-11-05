@@ -91,15 +91,14 @@ public class ApiConfig {
     }
 
     public static String FindResult(String json, String configKey) {
+        String content = json;
         try {
-            String content = "";
-            if (AES.isJson(json)) {
-                return json;
-            } else if (json.contains("**")) {
-                String[] data = json.split("\\*\\*");
-                content = new String(Base64.decode(data[1], Base64.DEFAULT));
-            } else {
-                content = json;
+            if (AES.isJson(content)) return content;
+            Pattern pattern = Pattern.compile("[A-Za-z0]{8}\\*\\*");
+            Matcher matcher = pattern.matcher(content);
+            if(matcher.find()){
+                content=content.substring(content.indexOf(matcher.group()) + 10);
+                content = new String(Base64.decode(content, Base64.DEFAULT));
             }
             if (content.startsWith("2423")) {
                 String data = content.substring(content.indexOf("2324") + 4, content.length() - 26);
@@ -107,9 +106,10 @@ public class ApiConfig {
                 String key = AES.rightPadding(content.substring(content.indexOf("$#") + 2, content.indexOf("#$")), "0", 16);
                 String iv = AES.rightPadding(content.substring(content.length() - 13), "0", 16);
                 json = AES.CBC(data, key, iv);
-            } else if (configKey !=null) {
+            }else if (configKey !=null && !AES.isJson(content)) {
                 json = AES.ECB(content, configKey);
-            } else {
+            }
+            else{
                 json = content;
             }
         } catch (Exception e) {
