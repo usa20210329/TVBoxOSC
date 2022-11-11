@@ -962,6 +962,14 @@ public class PlayActivity extends BaseActivity {
 
     ExecutorService parseThreadPool;
 
+    private String encodeUrl(String url) {
+        try {
+            return URLEncoder.encode(url, "UTF-8");
+        } catch (Exception e) {
+            return url;
+        }
+    }
+    
     private void doParse(ParseBean pb) {
         stopParse();
         initParseLoadFound();
@@ -1181,14 +1189,6 @@ public class PlayActivity extends BaseActivity {
         }
     }
     
-    private String encodeUrl(String url) {
-        try {
-            return URLEncoder.encode(url, "UTF-8");
-        } catch (Exception e) {
-            return url;
-        }
-    }
-
     // webview
     private XWalkView mXwalkWebView;
     private XWalkWebClient mX5WebClient;
