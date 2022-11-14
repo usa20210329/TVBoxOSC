@@ -491,8 +491,8 @@ public class DetailActivity extends BaseActivity {
                     previewVodInfo.playFlag = vodInfo.playFlag;
                     previewVodInfo.playIndex = vodInfo.playIndex;
                     previewVodInfo.seriesMap = vodInfo.seriesMap;
-//                    bundle.putSerializable("VodInfo", previewVodInfo);
-                    App.getInstance().setVodInfo(previewVodInfo);
+                    bundle.putSerializable("VodInfo", previewVodInfo);
+                    //App.getInstance().setVodInfo(previewVodInfo);
                 }
                 playFragment.setData(bundle);
             } else {
