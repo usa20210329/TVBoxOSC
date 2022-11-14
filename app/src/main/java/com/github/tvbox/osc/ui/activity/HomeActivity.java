@@ -9,6 +9,17 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+package com.github.tvbox.osc.ui.activity;
+
+import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.IntEvaluator;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
@@ -117,7 +128,7 @@ public class HomeActivity extends BaseActivity {
         if (intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
             useCacheConfig = bundle.getBoolean("useCache", false);
-        }       
+        }
         initData();
     }
 
@@ -150,6 +161,7 @@ public class HomeActivity extends BaseActivity {
                             }
                             textView.invalidate();
                         }
+
                         public View v = view;
                         public int p = position;
                     }, 10);
@@ -182,16 +194,11 @@ public class HomeActivity extends BaseActivity {
                         ((GridFragment) baseLazyFragment).showFilter();
                     } else if (baseLazyFragment instanceof UserFragment) {
                         showSiteSwitch();
-                        /*Intent intent =new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("useCache", true);
-                        intent.putExtras(bundle);
-                        HomeActivity.this.startActivity(intent);*/                        
                     }
                 }
             }
         });
+
         this.mGridView.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
             public final boolean onInBorderKeyEvent(int direction, View view) {
                 if (direction != View.FOCUS_DOWN) {
@@ -208,7 +215,7 @@ public class HomeActivity extends BaseActivity {
                 return false;
             }
         });
-         tvName.setOnClickListener(new View.OnClickListener() {
+        tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dataInitOk = false;
@@ -216,7 +223,7 @@ public class HomeActivity extends BaseActivity {
                 showSiteSwitch();
             }
         });
-         tvName.setOnLongClickListener(new View.OnLongClickListener() {
+        tvName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -227,7 +234,7 @@ public class HomeActivity extends BaseActivity {
                 HomeActivity.this.startActivity(intent);
                 return true;
             }
-        });       
+        });
         setLoadSir(this.contentLayout);
         //mHandler.postDelayed(mFindFocus, 500);
     }
@@ -258,7 +265,6 @@ public class HomeActivity extends BaseActivity {
         if (dataInitOk && jarInitOk) {
             showLoading();
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
-            ((TextView) findViewById(R.id.tvName)).setText(ApiConfig.get().getHomeSourceBean().getName());
             if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 LOG.e("有");
             } else {
@@ -277,7 +283,7 @@ public class HomeActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 if (!useCacheConfig)
-                                    Toast.makeText(HomeActivity.this, "&( ^__^ )&", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(HomeActivity.this, "自定义jar加载成功", Toast.LENGTH_SHORT).show();
                                 initData();
                             }
                         }, 50);
@@ -294,7 +300,7 @@ public class HomeActivity extends BaseActivity {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(HomeActivity.this, "&(┬＿┬)&", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(HomeActivity.this, "jar加载失败", Toast.LENGTH_SHORT).show();
                                 initData();
                             }
                         });
@@ -434,7 +440,7 @@ public class HomeActivity extends BaseActivity {
             GridFragment grid = (GridFragment) baseLazyFragment;
             if (grid.restoreView()) {
                 return;
-            }// 还原上次保存的UI内容       
+            }// 还原上次保存的UI内容
             if (view != null && !view.isFocused()) {
                 this.sortFocusView.requestFocus();
             } else if (this.sortFocused != 0) {
@@ -511,9 +517,9 @@ public class HomeActivity extends BaseActivity {
             return false;
         int keyCode = event.getKeyCode();
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-              if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (keyCode == KeyEvent.KEYCODE_MENU) {
                 showSiteSwitch();
-            }          
+            }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
 
         }
@@ -589,9 +595,10 @@ public class HomeActivity extends BaseActivity {
         AppManager.getInstance().appExit(0);
         ControlManager.get().stopServer();
     }
+
     void showSiteSwitch() {
         List<SourceBean> sites = ApiConfig.get().getSourceBeanList();
-        if (sites.size() > 0) {          
+        if (sites.size() > 0) {
             SelectDialog<SourceBean> dialog = new SelectDialog<>(HomeActivity.this);
             TvRecyclerView tvRecyclerView = dialog.findViewById(R.id.list);
             int spanCount;
@@ -600,7 +607,7 @@ public class HomeActivity extends BaseActivity {
             tvRecyclerView.setLayoutManager(new V7GridLayoutManager(dialog.getContext(), spanCount+1));
             ConstraintLayout cl_root = dialog.findViewById(R.id.cl_root);
             ViewGroup.LayoutParams clp = cl_root.getLayoutParams();
-            clp.width = AutoSizeUtils.mm2px(dialog.getContext(), 380+200*spanCount);            
+            clp.width = AutoSizeUtils.mm2px(dialog.getContext(), 380+200*spanCount);
             dialog.setTip("请选择首页数据源");
             dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<SourceBean>() {
                 @Override
@@ -611,7 +618,7 @@ public class HomeActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("useCache", true);
                     intent.putExtras(bundle);
-                    HomeActivity.this.startActivity(intent);                   
+                    HomeActivity.this.startActivity(intent);
                 }
 
                 @Override
