@@ -205,15 +205,8 @@ public class DetailActivity extends BaseActivity {
                 TextView tvSeries = helper.getView(R.id.tvSeriesGroup);
                 tvSeries.setText(item);
             }
-        };
-        mSeriesGroupView.setAdapter(seriesGroupAdapter);
-        
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tvPlay.requestFocus();
-            }
-        },500);   
+        };        
+        mSeriesGroupView.setAdapter(seriesGroupAdapter);  
         //禁用播放地址焦点
         tvPlayUrl.setFocusable(false);
 
@@ -541,13 +534,6 @@ public class DetailActivity extends BaseActivity {
         seriesAdapter.setNewData(vodInfo.seriesMap.get(vodInfo.playFlag));
 
         setSeriesGroupOptions();
-
-        mGridView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mGridView.smoothScrollToPosition(vodInfo.playIndex);
-            }
-        }, 100);
     }
 
     @SuppressLint("NotifyDataSetChanged")
