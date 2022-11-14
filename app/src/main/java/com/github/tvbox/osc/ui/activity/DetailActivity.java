@@ -135,7 +135,7 @@ public class DetailActivity extends BaseActivity {
     private HashMap<String, String> mCheckSources = null;
     private final ArrayList<String> seriesGroupOptions = new ArrayList<>();
     private View currentSeriesGroupView;
-    private int GroupCount;
+    private int GroupCount = 24 ;
     
     @Override
     protected int getLayoutResID() {
@@ -176,13 +176,13 @@ public class DetailActivity extends BaseActivity {
         mGridView = findViewById(R.id.mGridView);
         mGridView.setHasFixedSize(true);
         mGridView.setHasFixedSize(false);
-        this.mGridViewLayoutMgr = new V7GridLayoutManager(this.mContext, 6);
+        this.mGridViewLayoutMgr = new V7GridLayoutManager(this.mContext, isBaseOnWidth() ? 6 : 7);
         mGridView.setLayoutManager(this.mGridViewLayoutMgr);
         seriesAdapter = new SeriesAdapter();
         mGridView.setAdapter(seriesAdapter);
         mGridViewFlag = findViewById(R.id.mGridViewFlag);
         mGridViewFlag.setHasFixedSize(true);
-        //mGridViewFlag.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
+        mGridViewFlag.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
         seriesFlagAdapter = new SeriesFlagAdapter();
         mGridViewFlag.setAdapter(seriesFlagAdapter);
         isReverse = false;
@@ -230,7 +230,7 @@ public class DetailActivity extends BaseActivity {
                     vodInfo.playIndex=(vodInfo.seriesMap.get(vodInfo.playFlag).size()-1)-vodInfo.playIndex;
                     //insertVod(sourceKey, vodInfo);
                     firstReverse = true;
-                    setSeriesGroupOptions();
+                    Collections.reverse(seriesGroupOptions);
                     seriesAdapter.notifyDataSetChanged();
                 }
             }
@@ -414,7 +414,7 @@ public class DetailActivity extends BaseActivity {
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
                 TextView txtView = itemView.findViewById(R.id.tvSeriesGroup);
                 txtView.setTextColor(Color.WHITE);
-                //currentSeriesGroupView = null;
+                currentSeriesGroupView = null;
             }
 
             @Override
@@ -422,8 +422,8 @@ public class DetailActivity extends BaseActivity {
                 TextView txtView = itemView.findViewById(R.id.tvSeriesGroup);
                 txtView.setTextColor(mContext.getResources().getColor(R.color.color_02F8E1));
                 if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
-                    int targetPos = position * GroupCount+1;
-                    mGridView.smoothScrollToPosition(targetPos);
+                    int targetPos = position * GroupCount;
+                    mGridView.scrollToPosition(targetPos);
                 }
                 currentSeriesGroupView = itemView;
                 currentSeriesGroupView.isSelected();
@@ -436,16 +436,15 @@ public class DetailActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FastClickCheckUtil.check(view);
-                TextView newTxtView = view.findViewById(R.id.tvSeriesGroup);
-                newTxtView.setTextColor(mContext.getResources().getColor(R.color.color_02F8E1));
-                if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
-                    int targetPos =  position * GroupCount+1;
-//                    mGridView.scrollToPosition(targetPos);
-                    mGridView.smoothScrollToPosition(targetPos);
-                }
                 if(currentSeriesGroupView != null) {
                     TextView txtView = currentSeriesGroupView.findViewById(R.id.tvSeriesGroup);
                     txtView.setTextColor(Color.WHITE);
+                }
+                TextView newTxtView = view.findViewById(R.id.tvSeriesGroup);
+                newTxtView.setTextColor(mContext.getResources().getColor(R.color.color_02F8E1));
+                if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
+                    int targetPos =  position * GroupCount;
+                    mGridView.scrollToPosition(targetPos);
                 }
                 currentSeriesGroupView = view;
                 currentSeriesGroupView.isSelected();
@@ -540,49 +539,38 @@ public class DetailActivity extends BaseActivity {
         mGridViewLayoutMgr.setSpanCount(offset);
         seriesAdapter.setNewData(vodInfo.seriesMap.get(vodInfo.playFlag));
 
-        setSeriesGroupOptions();
-
-        mGridView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mGridView.smoothScrollToPosition(vodInfo.playIndex);
-            }
-        }, 100);
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void setSeriesGroupOptions(){
-        List<VodInfo.VodSeries> list = vodInfo.seriesMap.get(vodInfo.playFlag);
-        int listSize = list.size();
-        int offset = mGridViewLayoutMgr.getSpanCount();        
         seriesGroupOptions.clear();
-        GroupCount=(offset==3 || offset==6)?30:20;
-        if(listSize>100 && listSize<=400)GroupCount=60;
-        if(listSize>400)GroupCount=120;
+        if(listSize>100 && listSize<=400)GroupCount=50;
+        if(listSize>400)GroupCount=200;
         if(listSize > GroupCount) {
             mSeriesGroupView.setVisibility(View.VISIBLE);
             int remainedOptionSize = listSize % GroupCount;
             int optionSize = listSize / GroupCount;
             for(int i = 0; i < optionSize; i++) {
                 if(vodInfo.reverseSort)
-//                    seriesGroupOptions.add(String.format("%d - %d", i * GroupCount + GroupCount, i * GroupCount + 1));
-                    seriesGroupOptions.add(String.format("%d - %d", listSize - (i * GroupCount + 1)+1, listSize - (i * GroupCount + GroupCount)+1));
+                    seriesGroupOptions.add(String.format("%d - %d", i * GroupCount + GroupCount, i * GroupCount + 1));
                 else
                     seriesGroupOptions.add(String.format("%d - %d", i * GroupCount + 1, i * GroupCount + GroupCount));
             }
             if(remainedOptionSize > 0) {
                 if(vodInfo.reverseSort)
-//                    seriesGroupOptions.add(String.format("%d - %d", optionSize * GroupCount + remainedOptionSize, optionSize * GroupCount + 1));
-                    seriesGroupOptions.add(String.format("%d - %d", listSize - (optionSize * GroupCount + 1)+1, listSize - (optionSize * GroupCount + remainedOptionSize)+1));
+                    seriesGroupOptions.add(String.format("%d - %d", optionSize * GroupCount + remainedOptionSize, optionSize * GroupCount + 1));
                 else
                     seriesGroupOptions.add(String.format("%d - %d", optionSize * GroupCount + 1, optionSize * GroupCount + remainedOptionSize));
             }
-//            if(vodInfo.reverseSort) Collections.reverse(seriesGroupOptions);
+            if(vodInfo.reverseSort) Collections.reverse(seriesGroupOptions);
 
             seriesGroupAdapter.notifyDataSetChanged();
         }else {
             mSeriesGroupView.setVisibility(View.GONE);
         }
+        
+        mGridView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                 mGridView.smoothScrollToPosition(vodInfo.playIndex);
+            }
+        }, 100);
     }
 
     private void setTextShow(TextView view, String tag, String info) {
