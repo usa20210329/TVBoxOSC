@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -207,6 +208,13 @@ public class DetailActivity extends BaseActivity {
         };
         mSeriesGroupView.setAdapter(seriesGroupAdapter);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tvPlay.requestFocus();
+            }
+        },500);   
+
         //禁用播放地址焦点
         tvPlayUrl.setFocusable(false);
 
@@ -316,7 +324,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
         mGridViewFlag.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            private void refresh(View itemView, int position) {
+            private void refresh(View itemView, int position, boolean isClick) {
                 String newFlag = seriesFlagAdapter.getData().get(position).name;
                 if (vodInfo != null && !vodInfo.playFlag.equals(newFlag)) {
                     for (int i = 0; i < vodInfo.seriesFlags.size(); i++) {
@@ -334,8 +342,20 @@ public class DetailActivity extends BaseActivity {
                         vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = false;
                     }
                     vodInfo.playFlag = newFlag;
+                    //更新播放地址
+                    setTextShow(tvPlayUrl, "播放地址:", vodInfo.seriesMap.get(vodInfo.playFlag).get(0).url);                      
                     seriesFlagAdapter.notifyItemChanged(position);
                     refreshList();
+                      }else if (isClick && vodInfo.playFlag.equals(newFlag)){
+                    // 如果是在当前分类上点击, 则调整排序
+                    if (!vodInfo.isSeriesEmpty()) {
+                        vodInfo.reverseSort = !vodInfo.reverseSort;
+                        vodInfo.reverse();
+                        // 调整排序时 同时更新播放位置坐标
+                        vodInfo.playIndex = vodInfo.getFlagSeries(vodInfo.playFlag).size() - vodInfo.playIndex - 1;
+                        insertVod(sourceKey, vodInfo);
+                        seriesAdapter.notifyDataSetChanged();
+                    }                       
                 }
                 seriesFlagFocus = itemView;
             }
@@ -347,13 +367,13 @@ public class DetailActivity extends BaseActivity {
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position);
+                refresh(itemView, position, false);
 //                if(isReverse)vodInfo.reverse();
             }
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                refresh(itemView, position);
+                refresh(itemView, position, true);
 //                if(isReverse)vodInfo.reverse();
             }
         });
