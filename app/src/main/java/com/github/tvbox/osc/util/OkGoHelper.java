@@ -1,7 +1,7 @@
 package com.github.tvbox.osc.util;
 
 import com.github.tvbox.osc.base.App;
-import com.github.tvbox.osc.util.TLSSocketFactory;
+import com.github.tvbox.osc.util.SSL.SSLSocketFactoryCompat;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
@@ -11,44 +11,23 @@ import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.security.Security;
-import java.security.Provider;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.SSLContext;
-
-import org.conscrypt.Conscrypt;
 
 import okhttp3.Cache;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.dnsoverhttps.DnsOverHttps;
 import okhttp3.internal.Version;
-import okhttp3.ConnectionSpec;
 import xyz.doikki.videoplayer.exo.ExoMediaSourceHelper;
-import okhttp3.Interceptor;
-import okhttp3.Response;
-import java.io.IOException;
-import android.os.Environment;
 
 public class OkGoHelper {
     public static final long DEFAULT_MILLISECONDS = 10000;      //默认的超时时间
-    public static final Provider conscrypt = Conscrypt.newProvider();
-    static {
-        Security.insertProviderAt(conscrypt, 1);
-    }    
 
     static void initExoOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -103,7 +82,6 @@ public class OkGoHelper {
         dnsHttpsList.add("腾讯");
         dnsHttpsList.add("阿里");
         dnsHttpsList.add("360");
-        //dnsHttpsList.add("CloudFlare");
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkExoPlayer");
         if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
@@ -136,16 +114,11 @@ public class OkGoHelper {
     public static OkHttpClient getNoRedirectClient() {
         return noRedirectClient;
     }
-    
+
     public static void init() {
         initDnsOverHttps();
-        initExoOkHttpClient();
-        initPicasso();
-    }
-    
-    static void initPicasso() {
-        List connectionSpecs = Arrays.asList(ConnectionSpec.RESTRICTED_TLS, ConnectionSpec.CLEARTEXT);
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectionSpecs(connectionSpecs);
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
 
         if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
@@ -158,21 +131,19 @@ public class OkGoHelper {
 
         //builder.retryOnConnectionFailure(false);
 
-        builder = builder.addInterceptor(loggingInterceptor)
-                .readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
-                .dns(dnsOverHttps);
+        builder.addInterceptor(loggingInterceptor);
+
+        builder.readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+
+        builder.dns(dnsOverHttps);
         try {
-            builder = setOkHttpSsl(builder);
+            setOkHttpSsl(builder);
         } catch (Throwable th) {
             th.printStackTrace();
         }
-        
-        File cacheDirectory = new File(App.getInstance().getCacheDir().getAbsolutePath(), "picasso_cache");
-        // 缓存目录大小 100M
-        builder.cache(new Cache(cacheDirectory, 100*1024*1024));
-        
+
         HttpHeaders.setUserAgent(Version.userAgent());
 
         OkHttpClient okHttpClient = builder.build();
@@ -183,7 +154,7 @@ public class OkGoHelper {
         builder.followRedirects(false);
         builder.followSslRedirects(false);
         noRedirectClient = builder.build();
-        
+
         initExoOkHttpClient();
         initPicasso(okHttpClient);
     }
@@ -191,19 +162,10 @@ public class OkGoHelper {
     static void initPicasso(OkHttpClient client) {
         OkHttp3Downloader downloader = new OkHttp3Downloader(client);
         Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).build();
-        if (Hawk.get(HawkConfig.DEBUG_OPEN, false)) {
-            // 缓存指示器，查看图片来源于何处
-            // 蓝色：从内存中获取，性能最佳；
-            // 绿色：从本地获取，性能一般；
-            // 红色：从网络加载，性能最差。
-            picasso.setIndicatorsEnabled(true);
-            // 查看图片加载用时
-            picasso.setLoggingEnabled(true);
-        }        
         Picasso.setSingletonInstance(picasso);
     }
 
-    private static synchronized OkHttpClient.Builder setOkHttpSsl(OkHttpClient.Builder builder) {
+    private static synchronized void setOkHttpSsl(OkHttpClient.Builder builder) {
         try {
             // 自定义一个信任所有证书的TrustManager，添加SSLSocketFactory的时候要用到
             final X509TrustManager trustAllCert =
@@ -221,69 +183,11 @@ public class OkGoHelper {
                             return new java.security.cert.X509Certificate[]{};
                         }
                     };
-            final SSLContext sslContext = SSLContext.getInstance("TLS", conscrypt);
-	        sslContext.init(null, new TrustManager[] { trustAllCert }, null);
-
-            final SSLSocketFactory sslSocketFactory = new TLSSocketFactory(sslContext.getSocketFactory());
-            return builder
-                    .sslSocketFactory(sslSocketFactory, trustAllCert)
-                    .hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
+            final SSLSocketFactory sslSocketFactory = new SSLSocketFactoryCompat(trustAllCert);
+            builder.sslSocketFactory(sslSocketFactory, trustAllCert);
+            builder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private static class Tls12SocketFactory extends SSLSocketFactory {
-
-        private static final String[] TLS_SUPPORT_VERSION = {"TLSv1.1", "TLSv1.2"};
-
-        final SSLSocketFactory delegate;
-
-        private Tls12SocketFactory(SSLSocketFactory base) {
-            this.delegate = base;
-        }
-
-        @Override
-        public String[] getDefaultCipherSuites() {
-            return delegate.getDefaultCipherSuites();
-        }
-
-        @Override
-        public String[] getSupportedCipherSuites() {
-            return delegate.getSupportedCipherSuites();
-        }
-
-        @Override
-        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
-            return patch(delegate.createSocket(s, host, port, autoClose));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port) throws IOException {
-            return patch(delegate.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
-            return patch(delegate.createSocket(host, port, localHost, localPort));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress host, int port) throws IOException {
-            return patch(delegate.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
-            return patch(delegate.createSocket(address, port, localAddress, localPort));
-        }
-
-        private Socket patch(Socket s) {
-            //代理SSLSocketFactory在创建一个Socket连接的时候，会设置Socket的可用的TLS版本。
-            if (s instanceof SSLSocket) {
-                ((SSLSocket) s).setEnabledProtocols(TLS_SUPPORT_VERSION);
-            }
-            return s;
         }
     }
 }
