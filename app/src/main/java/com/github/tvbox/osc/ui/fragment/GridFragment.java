@@ -58,7 +58,7 @@ public class GridFragment extends BaseLazyFragment {
         public View focusedView= null;
     }
     Stack<GridInfo> mGrids = new Stack<GridInfo>(); //ui栈
-    
+
     public static GridFragment newInstance(MovieSort.SortData sortData) {
         return new GridFragment().setArguments(sortData);
     }
@@ -156,7 +156,7 @@ public class GridFragment extends BaseLazyFragment {
         }else{
             mGridView.setLayoutManager(new V7GridLayoutManager(this.mContext, isBaseOnWidth() ? 5 : 6));
         }
-        
+
         gridAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -167,13 +167,11 @@ public class GridFragment extends BaseLazyFragment {
         mGridView.setOnItemListener(new TvRecyclerView.OnItemListener() {
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-                itemView.findViewById(R.id.tvName).setSelected(false);
                 itemView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
             }
 
             @Override
             public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                itemView.findViewById(R.id.tvName).setSelected(true);
                 itemView.animate().scaleX(1.05f).scaleY(1.05f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
             }
 
@@ -200,6 +198,7 @@ public class GridFragment extends BaseLazyFragment {
                     bundle.putString("id", video.id);
                     bundle.putString("sourceKey", video.sourceKey);
                     bundle.putString("title", video.name);
+
                     SourceBean homeSourceBean = ApiConfig.get().getHomeSourceBean();
                     if(("12".indexOf(getUITag()) != -1) && video.tag.equals("folder")){
                         focusedView = view;
@@ -214,6 +213,7 @@ public class GridFragment extends BaseLazyFragment {
                             jumpActivity(DetailActivity.class, bundle);
                         }
                     }
+
                 }
             }
         });
@@ -231,7 +231,7 @@ public class GridFragment extends BaseLazyFragment {
                 }
                 return true;
             }
-        });        
+        });
         gridAdapter.setLoadMoreView(new LoadMoreView());
         setLoadSir2(mGridView);
     }
@@ -242,7 +242,7 @@ public class GridFragment extends BaseLazyFragment {
         sourceViewModel.listResult.observe(this, new Observer<AbsXml>() {
             @Override
             public void onChanged(AbsXml absXml) {
-                //if(mGridView != null) mGridView.requestFocus();
+//                if(mGridView != null) mGridView.requestFocus();
                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                     if (page == 1) {
                         showSuccess();
@@ -260,14 +260,14 @@ public class GridFragment extends BaseLazyFragment {
                     } else {
                         gridAdapter.loadMoreComplete();
                         gridAdapter.setEnableLoadMore(true);
-                    }                    
+                    }
                 } else {
                     if(page == 1){
                         showEmpty();
                     }
-                     if(page > maxPage){
+                    if(page > maxPage){
                         Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
-                    }                   
+                    }
                     if (page > maxPage) {
                         gridAdapter.loadMoreEnd();
                     } else {
