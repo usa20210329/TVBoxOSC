@@ -21,8 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.net.Uri;
-import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -52,6 +50,7 @@ import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ChannelListView;
 import com.github.tvbox.osc.ui.tv.widget.ViewObj;
+import com.github.tvbox.osc.util.EpgNameFuzzyMatch;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
@@ -59,7 +58,6 @@ import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.live.TxtSubscribe;
 import com.github.tvbox.osc.util.urlhttp.CallBackUtil;
 import com.github.tvbox.osc.util.urlhttp.UrlHttpUtil;
-import com.github.tvbox.osc.util.LOG;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import org.apache.commons.lang3.StringUtils;
@@ -89,7 +87,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.lang.Boolean;
 
 import xyz.doikki.videoplayer.player.VideoView;
 
@@ -520,7 +517,6 @@ public class LivePlayActivity extends BaseActivity {
             countDownTimer = new CountDownTimer(5000, 1000) {//底部epg隐藏时间设定
                 public void onTick(long j) {
                 }
-
                 public void onFinish() {
                     findViewById(R.id.ll_epg).setVisibility(View.GONE);
                 }
