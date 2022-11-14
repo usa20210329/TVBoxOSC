@@ -49,7 +49,7 @@ public class DefaultConfig {
             }
         }
         if (withMy)
-            data.add(0, new MovieSort.SortData("my0", "我的"));
+            data.add(0, new MovieSort.SortData("my0", "主页"));
         Collections.sort(data);
         return data;
     }
@@ -127,10 +127,14 @@ public class DefaultConfig {
         String path = uri.getPath();
         if (TextUtils.isEmpty(path)) {
             return false;
-        }      
-        if (snifferMatch.matcher(url).find()) return true;    
+        }
+//        if (path.endsWith(".js") || path.endsWith(".css") || path.endsWith(".html")) {
+//            return false;
+//        }
+        if (snifferMatch.matcher(url).find()) return true;
         return false;
     }
+
 
     public static String safeJsonString(JsonObject obj, String key, String defaultVal) {
         try {
