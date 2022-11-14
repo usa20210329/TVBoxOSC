@@ -3,6 +3,7 @@ package com.github.tvbox.osc.base;
 import android.app.Activity;
 import androidx.multidex.MultiDexApplication;
 
+import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.data.AppDataManager;
@@ -18,6 +19,7 @@ import com.orhanobut.hawk.Hawk;
 
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.unit.Subunits;
+
 /**
  * @author pj567
  * @date :2020/12/17
@@ -31,8 +33,8 @@ public class App extends MultiDexApplication {
         super.onCreate();
         instance = this;
         initParams();
-        // OKGo        
-        OkGoHelper.init();
+        // OKGo
+        OkGoHelper.init(); //台标获取
         EpgUtil.init();
         // 初始化Web服务器
         ControlManager.init(this);
@@ -57,16 +59,6 @@ public class App extends MultiDexApplication {
         if (!Hawk.contains(HawkConfig.PLAY_TYPE)) {
             Hawk.put(HawkConfig.PLAY_TYPE, 1);
         }
-        //自定义默认配置，硬解，安全dns，缩略图
-        if (!Hawk.contains(HawkConfig.IJK_CODEC)) {
-            Hawk.put(HawkConfig.IJK_CODEC, "硬解码");
-        }
-        /*if (!Hawk.contains(HawkConfig.DOH_URL)) {
-            Hawk.put(HawkConfig.DOH_URL, 2);
-        }
-        if (!Hawk.contains(HawkConfig.SEARCH_VIEW)) {
-            Hawk.put(HawkConfig.SEARCH_VIEW, 2);
-        }*/
     }
 
     public static App getInstance() {
@@ -77,9 +69,18 @@ public class App extends MultiDexApplication {
     public void onTerminate() {
         super.onTerminate();
         JSEngine.getInstance().destroy();
-    } 
+    }
+
+
+    private VodInfo vodInfo;
+    public void setVodInfo(VodInfo vodinfo){
+        this.vodInfo = vodinfo;
+    }
+    public VodInfo getVodInfo(){
+        return this.vodInfo;
+    }
 
     public Activity getCurrentActivity() {
         return AppManager.getInstance().currentActivity();
-    }    
+    }
 }
