@@ -32,7 +32,6 @@ import java.io.InputStreamReader;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.internal.CustomAdapt;
 import xyz.doikki.videoplayer.util.CutoutUtil;
-import java.lang.Math;
 
 /**
  * @author pj567
@@ -55,15 +54,15 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
                 int screenHeight = dm.heightPixels;
                 screenRatio = (float) Math.max(screenWidth, screenHeight) / (float) Math.min(screenWidth, screenHeight);
             }
-            super.onCreate(savedInstanceState);
-            setContentView(getLayoutResID());
-            mContext = this;
-            CutoutUtil.adaptCutoutAboveAndroidP(mContext, true);//设置刘海
-            AppManager.getInstance().addActivity(this);
-            init();    
         } catch (Throwable th) {
             th.printStackTrace();
         }
+        super.onCreate(savedInstanceState);
+        setContentView(getLayoutResID());
+        mContext = this;
+        CutoutUtil.adaptCutoutAboveAndroidP(mContext, true);//设置刘海
+        AppManager.getInstance().addActivity(this);
+        init();
     }
 
     @Override
@@ -74,19 +73,6 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     }
 
     public void hideSysBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-            uiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            //    uiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-            uiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            //    uiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-            uiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
-            uiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-            getWindow().getDecorView().setSystemUiVisibility(uiOptions);
-        }
-    }
-
-    public void vidHideSysBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
             uiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -191,18 +177,12 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     public boolean isBaseOnWidth() {
         return !(screenRatio >= 4.0f);
     }
-    
-    public boolean supportsPiPMode() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
-    
+
     protected static BitmapDrawable globalWp = null;
 
     public void changeWallpaper(boolean force) {
-        if (!force && globalWp != null) {
+        if (!force && globalWp != null)
             getWindow().setBackgroundDrawable(globalWp);
-            return;
-        }    
         try {
             File wp = new File(getFilesDir().getAbsolutePath() + "/wp");
             if (wp.exists()) {
@@ -216,27 +196,27 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
                 int picWidth = 1080;
                 int scaleX = imageWidth / picWidth;
                 int scaleY = imageHeight / picHeight;
-                int scale = Math.max(Math.max(scaleX, scaleY), 1);
-                /*int scale = 1;
+                int scale = 1;
                 if (scaleX > scaleY && scaleY >= 1) {
                     scale = scaleX;
                 }
                 if (scaleX < scaleY && scaleX >= 1) {
                     scale = scaleY;
-                }*/
+                }
                 opts.inJustDecodeBounds = false;
                 // 采样率
                 opts.inSampleSize = scale;
                 globalWp = new BitmapDrawable(BitmapFactory.decodeFile(wp.getAbsolutePath(), opts));
+            } else {
+                globalWp = null;
             }
         } catch (Throwable throwable) {
             throwable.printStackTrace();
             globalWp = null;
         }
-        if (globalWp != null) {
+        if (globalWp != null)
             getWindow().setBackgroundDrawable(globalWp);
-        } else {
+        else
             getWindow().setBackgroundDrawableResource(R.drawable.app_bg);
-        }    
     }
 }
