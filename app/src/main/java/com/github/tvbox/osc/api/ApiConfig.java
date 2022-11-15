@@ -119,6 +119,16 @@ public class ApiConfig {
         }
         return json;
     }
+    
+    private static byte[] getImgJar(String body){
+        Pattern pattern = Pattern.compile("[A-Za-z0]{8}\\*\\*");
+        Matcher matcher = pattern.matcher(body);
+        if(matcher.find()){
+            body = body.substring(body.indexOf(matcher.group()) + 10);
+            return Base64.decode(body, Base64.DEFAULT);
+        }
+        return "".getBytes();
+    }
    
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         String apiUrl = Hawk.get(HawkConfig.API_URL, "asset://cfg.json");
@@ -317,10 +327,10 @@ public class ApiConfig {
                 if (cache.exists())
                     cache.delete();
                 FileOutputStream fos = new FileOutputStream(cache);
-                if (isJarInImg) {
+                if(isJarInImg) {
                     String respData = response.body().string();
-                    byte[] decodedSpider = AES.decodeSpider(respData);
-                    fos.write(decodedSpider);
+                    byte[] imgJar = getImgJar(respData);
+                    fos.write(imgJar);
                 } else {
                     fos.write(response.body().bytes());
                 }
