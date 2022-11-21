@@ -609,7 +609,7 @@ public class HomeActivity extends BaseActivity {
             int spanCount;
             spanCount = (int)Math.floor(sites.size()/60);
             spanCount = Math.min(spanCount, 2);
-            tvRecyclerView.setLayoutManager(new V7GridLayoutManager(dialog.getContext(), spanCount+1));
+            tvRecyclerView.setLayoutManager(new V7GridLayoutManager(dialog.getContext(), spanCount+2));
             ConstraintLayout cl_root = dialog.findViewById(R.id.cl_root);
             ViewGroup.LayoutParams clp = cl_root.getLayoutParams();
             clp.width = AutoSizeUtils.mm2px(dialog.getContext(), 380+200*spanCount);
