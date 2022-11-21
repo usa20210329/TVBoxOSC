@@ -152,13 +152,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     if(Hawk.get(HawkConfig.HOME_REC, 0)==1 && Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
                         bundle.putString("title", vod.name);
                         jumpActivity(FastSearchActivity.class, bundle);
-                    }else if (vod.id.startsWith("msearch:"))
-                    {
-                        bundle.putString("title", vod.name);
-                        jumpActivity(FastSearchActivity.class, bundle);
-                    }
-                    else
-                    {
+                    }else {
                         jumpActivity(DetailActivity.class, bundle);
                     }
                 } else {
