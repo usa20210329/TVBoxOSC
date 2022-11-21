@@ -16,7 +16,6 @@ import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.event.ServerEvent;
 import com.github.tvbox.osc.ui.activity.CollectActivity;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
-import com.github.tvbox.osc.ui.activity.DriveActivity;
 import com.github.tvbox.osc.ui.activity.FastSearchActivity;
 import com.github.tvbox.osc.ui.activity.HistoryActivity;
 import com.github.tvbox.osc.ui.activity.LivePlayActivity;
@@ -53,7 +52,6 @@ import java.util.List;
  * @description:
  */
 public class UserFragment extends BaseLazyFragment implements View.OnClickListener {
-    private LinearLayout tvDrive;
     private LinearLayout tvLive;
     private LinearLayout tvSearch;
     private LinearLayout tvSetting;
@@ -88,7 +86,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         }else {
             tvHotList1.setVisibility(View.GONE);
             tvHotList2.setVisibility(View.VISIBLE);
-        }        
+        }
         super.onFragmentResume();
         if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
             List<VodInfo> allVodRecord = RoomDataManger.getAllVodRecord(30);
@@ -115,21 +113,18 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     @Override
     protected void init() {
         EventBus.getDefault().register(this);
-        tvDrive = findViewById(R.id.tvDrive);
         tvLive = findViewById(R.id.tvLive);
         tvSearch = findViewById(R.id.tvSearch);
         tvSetting = findViewById(R.id.tvSetting);
         tvCollect = findViewById(R.id.tvFavorite);
         tvHistory = findViewById(R.id.tvHistory);
         tvPush = findViewById(R.id.tvPush);
-        tvDrive.setOnClickListener(this);
         tvLive.setOnClickListener(this);
         tvSearch.setOnClickListener(this);
         tvSetting.setOnClickListener(this);
         tvHistory.setOnClickListener(this);
         tvPush.setOnClickListener(this);
         tvCollect.setOnClickListener(this);
-        tvDrive.setOnFocusChangeListener(focusChangeListener);;
         tvLive.setOnFocusChangeListener(focusChangeListener);
         tvSearch.setOnFocusChangeListener(focusChangeListener);
         tvSetting.setOnFocusChangeListener(focusChangeListener);
@@ -137,7 +132,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         tvPush.setOnFocusChangeListener(focusChangeListener);
         tvCollect.setOnFocusChangeListener(focusChangeListener);
         tvHotList1 = findViewById(R.id.tvHotList1);
-        tvHotList2 = findViewById(R.id.tvHotList2);       
+        tvHotList2 = findViewById(R.id.tvHotList2);
         homeHotVodAdapter = new HomeHotVodAdapter();
         homeHotVodAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -152,7 +147,13 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     if(Hawk.get(HawkConfig.HOME_REC, 0)==1 && Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
                         bundle.putString("title", vod.name);
                         jumpActivity(FastSearchActivity.class, bundle);
-                    }else {
+                    }else if (vod.id.startsWith("msearch:"))
+                    {
+                        bundle.putString("title", vod.name);
+                        jumpActivity(FastSearchActivity.class, bundle);
+                    }
+                    else
+                    {
                         jumpActivity(DetailActivity.class, bundle);
                     }
                 } else {
@@ -180,7 +181,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 return true;
             }
         });
-        
+
         tvHotList1.setOnItemListener(new TvRecyclerView.OnItemListener() {
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
@@ -215,7 +216,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             }
         });
         tvHotList2.setAdapter(homeHotVodAdapter);
-        
+
         initHomeHotVod(homeHotVodAdapter);
     }
 
@@ -315,9 +316,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         } else if (v.getId() == R.id.tvPush) {
             jumpActivity(PushActivity.class);
         } else if (v.getId() == R.id.tvFavorite) {
-            jumpActivity(CollectActivity.class);    
-        } else if(v.getId() == R.id.tvDrive) {
-            jumpActivity(DriveActivity.class);            
+            jumpActivity(CollectActivity.class);
         }
     }
 
