@@ -647,7 +647,7 @@ public class ApiConfig {
             } catch (IOException e) {
                 ext = null;
             }
-        }  else if sourceBean.getApi().startsWith("js_") || sourceBean.getApi().endsWith(".js") || sourceBean.getApi().contains(".js?") {
+        }  else if (sourceBean.getApi().startsWith("js_") || sourceBean.getApi().endsWith(".js") || sourceBean.getApi().contains(".js?")) {
             return JSEngine.getInstance().getSpider(sourceBean);
         }  else {
         return jarLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), ext, sourceBean.getJar());
