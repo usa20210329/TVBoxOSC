@@ -192,8 +192,8 @@ public class SearchActivity extends BaseActivity {
                 if (video != null) {
                     try {
                         if (searchExecutorService != null) {
-                            pauseRunnable = searchExecutorService.shutdownNow();
                             JSEngine.getInstance().stopAll();
+                            pauseRunnable = searchExecutorService.shutdownNow();
                             searchExecutorService = null;
                         }
                     } catch (Throwable th) {
@@ -443,7 +443,6 @@ public class SearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
-                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
@@ -510,6 +509,7 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
+
     private void cancel() {
         OkGo.getInstance().cancelTag("search");
     }
@@ -521,7 +521,6 @@ public class SearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
-                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
