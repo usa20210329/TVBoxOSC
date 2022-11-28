@@ -646,10 +646,9 @@ public class ApiConfig {
                 ext = readAssetsText(ext.replace("asset://",""));
             } catch (IOException e) {
                 ext = null;
-            }
-        } else if (js) {
-            return JSEngine.getInstance().getSpider(sourceBean);
-    }else {
+         } else if (js) {
+         return JSEngine.getInstance().getSpider(sourceBean);
+         } else {
         return jarLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), ext, sourceBean.getJar());
     }
 
