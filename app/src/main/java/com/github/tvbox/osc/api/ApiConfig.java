@@ -641,14 +641,15 @@ public class ApiConfig {
     public Spider getCSP(SourceBean sourceBean) {
         boolean js = sourceBean.getApi().startsWith("js_") || sourceBean.getApi().endsWith(".js") || sourceBean.getApi().contains(".js?");
         String ext = sourceBean.getExt();
+        if (js) {
+            return JSEngine.getInstance().getSpider(sourceBean);
+        }        
         if (ext.startsWith("asset://")) {
             try {
                 ext = readAssetsText(ext.replace("asset://",""));
             } catch (IOException e) {
                 ext = null;
             }
-        } else if (js) {
-            return JSEngine.getInstance().getSpider(sourceBean);
         } 
         return jarLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), ext, sourceBean.getJar());
     }
