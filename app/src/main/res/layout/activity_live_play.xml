@@ -707,8 +707,6 @@
 			android:paddingLeft="20px" />
 	</RelativeLayout>
 
-
-
 	<!--右上角动态状态栏-->
 	<RelativeLayout
 		android:layout_gravity="center|right|top"
@@ -768,7 +766,8 @@
 			android:layout_toLeftOf="@+id/iv_circle_bg"
 			android:gravity="center"
 			android:singleLine="true"
-			android:text="11Kb/s"
+			android:text=""
+			tools:text="0Kb/s"
 			android:textColor="#FFFCFFFF"
 			android:textSize="@dimen/vs_20" />
 	</RelativeLayout>
