@@ -28,8 +28,10 @@ import com.github.tvbox.osc.ui.dialog.SearchRemoteTvDialog;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
 import com.github.tvbox.osc.ui.dialog.XWalkInitDialog;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
+import com.github.tvbox.osc.util.FileUtils;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.HistoryHelper;
+import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.lzy.okgo.OkGo;
@@ -107,6 +109,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvDebugOpen.setText(Hawk.get(HawkConfig.DEBUG_OPEN, false) ? "已打开" : "已关闭");
         tvParseWebView.setText(Hawk.get(HawkConfig.PARSE_WEBVIEW, true) ? "系统自带" : "XWalkView");
         tvApi.setText(Hawk.get(HawkConfig.API_URL, ""));
+
         tvDns.setText(OkGoHelper.dnsHttpsList.get(Hawk.get(HawkConfig.DOH_URL, 0)));
         tvHomeRec.setText(getHomeRecName(Hawk.get(HawkConfig.HOME_REC, 0)));
         tvHistoryNum.setText(HistoryHelper.getHistoryNumName(Hawk.get(HawkConfig.HISTORY_NUM, 0)));
@@ -291,6 +294,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 dialog.show();
             }
         });
+
+
 
         findViewById(R.id.llMediaCodec).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -650,6 +655,28 @@ public class ModelSettingFragment extends BaseLazyFragment {
 
             }
         });
+
+        findViewById(R.id.llClearIjkCache).setOnClickListener((view -> onClickClearIjkCache()));
+    }
+
+    private void onClickClearIjkCache() {
+        String cachePath = FileUtils.getExternalCachePath() + "/ijkcaches/";
+        File cacheDir = new File(cachePath);
+        if (!cacheDir.exists()) return;
+        File[] files = cacheDir.listFiles();
+        if (files != null && files.length > 0) {
+            try {
+                for(File one : files) {
+                    LOG.i("ijkplayer cache:" + one.getAbsolutePath());
+                    one.delete();
+                }
+                Toast.makeText(getContext(), "ijk缓存已清空", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getContext(), "暂无ijk缓存", Toast.LENGTH_LONG).show();
+        }
     }
 
 
