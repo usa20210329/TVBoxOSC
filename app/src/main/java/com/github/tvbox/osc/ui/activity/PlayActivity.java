@@ -131,6 +131,23 @@ public class PlayActivity extends BaseActivity {
         initViewModel();
         initData();
     }
+    
+    public long getSavedProgress(String url) {
+        int st = 0;
+        try {
+            st = mVodPlayerCfg.getInt("st");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        long skip = st * 1000;
+        if (CacheManager.getCache(MD5.string2MD5(url)) == null) {
+            return skip;
+        }
+        long rec = (long) CacheManager.getCache(MD5.string2MD5(url));
+        if (rec < skip)
+            return skip;
+        return rec;
+    }
 
     private void initView() {
         mHandler = new Handler(new Handler.Callback() {
