@@ -390,8 +390,9 @@ public class DriveActivity extends BaseActivity {
         delMode = !delMode;
         if (delMode) {
             // takagen99: Added Theme Color
-//            this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_theme));
-            this.btnRemoveServer.setColorFilter(getThemeColor());
+            // this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_theme));
+            // this.btnRemoveServer.setColorFilter(getThemeColor());
+            this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FF0057));
         } else {
             this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FFFFFF));
         }
@@ -399,7 +400,7 @@ public class DriveActivity extends BaseActivity {
     }
 
     private void initData() {
-        this.txtTitle.setText(getString(R.string.act_drive));
+        this.txtTitle.setText("存储空间"));
         sortType = Hawk.get(HawkConfig.STORAGE_DRIVE_SORT, 0);
         btnSort.setVisibility(View.GONE);
         if (drives == null) {
