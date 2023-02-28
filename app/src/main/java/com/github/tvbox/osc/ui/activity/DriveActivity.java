@@ -400,7 +400,7 @@ public class DriveActivity extends BaseActivity {
     }
 
     private void initData() {
-        this.txtTitle.setText("存储空间"));
+        this.txtTitle.setText("存储空间");
         sortType = Hawk.get(HawkConfig.STORAGE_DRIVE_SORT, 0);
         btnSort.setVisibility(View.GONE);
         if (drives == null) {
