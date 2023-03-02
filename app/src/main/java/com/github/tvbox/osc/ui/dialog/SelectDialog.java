@@ -52,6 +52,7 @@ public class SelectDialog<T> extends BaseDialog {
             @Override
             public void run() {
                 tvRecyclerView.smoothScrollToPosition(select);
+                tvRecyclerView.setSelectionWithSmooth(select);
             }
         });
     }
