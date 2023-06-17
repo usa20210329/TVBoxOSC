@@ -424,9 +424,13 @@ public class LivePlayActivity extends BaseActivity {
         }else {
             url= epgStringAddress + "?ch="+ URLEncoder.encode(epgTagName) + "&date=" + timeFormat.format(date);
         }
-        OkGo.<String>get(epgUrl).execute(new StringCallback() {
-            public void onSuccess(Response<String> response) {
-                String paramString = response.body();
+        UrlHttpUtil.get(url, new CallBackUtil.CallBackString() {
+            public void onFailure(int i, String str) {
+                showEpg(date, new ArrayList());
+                showBottomEpg();
+            }
+
+            public void onResponse(String paramString) {
 
                 ArrayList arrayList = new ArrayList();
 
@@ -452,10 +456,6 @@ public class LivePlayActivity extends BaseActivity {
                     hsEpg.put(savedEpgKey, arrayList);
                 showBottomEpg();
             }
-              public void onFailure(int i, String str) {
-                showEpg(date, new ArrayList());
-                showBottomEpg();
-            }          
         });
     }
 
