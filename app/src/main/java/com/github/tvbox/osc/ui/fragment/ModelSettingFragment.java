@@ -60,6 +60,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvMediaCodec;
     private TextView tvParseWebView;
     private TextView tvPlay;
+    private TextView tvVideoPurifyText;
     private TextView tvRender;
     private TextView tvScale;
     private TextView tvApi;
@@ -108,6 +109,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
         tvSearchView = findViewById(R.id.tvSearchView);
         tvIjkCachePlay = findViewById(R.id.tvIjkCachePlay);
         tvMediaCodec.setText(Hawk.get(HawkConfig.IJK_CODEC, ""));
+        tvVideoPurifyText = findViewById(R.id.tvVideoPurifyText);
+        tvVideoPurifyText.setText(Hawk.get(HawkConfig.VIDEO_PURIFY, true) ? "开启" : "关闭");
         tvDebugOpen.setText(Hawk.get(HawkConfig.DEBUG_OPEN, false) ? "已打开" : "已关闭");
         tvParseWebView.setText(Hawk.get(HawkConfig.PARSE_WEBVIEW, true) ? "系统自带" : "XWalkView");
         tvApi.setText(Hawk.get(HawkConfig.API_URL, ""));
@@ -129,6 +132,12 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 tvDebugOpen.setText(Hawk.get(HawkConfig.DEBUG_OPEN, false) ? "已打开" : "已关闭");
             }
         });
+        // toggle purify video -------------------------------------
+        findViewById(R.id.llVideoPurify).setOnClickListener(v -> {
+            FastClickCheckUtil.check(v);
+            Hawk.put(HawkConfig.VIDEO_PURIFY, !Hawk.get(HawkConfig.VIDEO_PURIFY, true));
+            tvVideoPurifyText.setText(Hawk.get(HawkConfig.VIDEO_PURIFY, true) ? "开启" : "关闭");
+        });        
         findViewById(R.id.llParseWebVew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
