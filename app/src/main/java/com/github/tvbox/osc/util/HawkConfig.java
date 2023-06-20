@@ -12,7 +12,6 @@ public class HawkConfig {
     public static final String API_HISTORY = "api_history";
     public static final String EPG_HISTORY = "epg_history";
     public static final String HOME_API = "home_api";
-    public static final String STORAGE_DRIVE_SORT = "storage_drive_sort";
     public static final String DEFAULT_PARSE = "parse_default";
     public static final String DEBUG_OPEN = "debug_open";
     public static final String PARSE_WEBVIEW = "parse_webview"; // true 系统 false xwalk
