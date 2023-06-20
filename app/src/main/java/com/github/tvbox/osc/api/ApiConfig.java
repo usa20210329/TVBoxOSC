@@ -17,6 +17,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.util.AES;
 import com.github.tvbox.osc.util.AdBlocker;
+import com.github.tvbox.osc.util.AlistDriveUtil;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.MD5;
@@ -26,8 +27,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.orhanobut.hawk.Hawk;
 
@@ -406,6 +409,19 @@ public class ApiConfig {
             if (firstSite == null)
                 firstSite = sb;
             sourceBeanList.put(siteKey, sb);
+            if (siteKey.toLowerCase().contains("alist") || sb.getApi().toLowerCase().contains("alist")) {
+                executorService.execute(() -> OkGo.<String>get(sb.getExt()).execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        try {
+                            AlistDriveUtil.saveAlist(JsonParser.parseString(response.body().trim()).getAsJsonObject());
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                }));
+            }            
         }
         if (sourceBeanList != null && sourceBeanList.size() > 0) {
             String home = Hawk.get(HawkConfig.HOME_API, "");
