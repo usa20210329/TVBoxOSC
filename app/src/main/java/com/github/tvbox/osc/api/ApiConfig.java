@@ -51,6 +51,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -377,6 +379,8 @@ public class ApiConfig {
         parseJson(apiUrl, sb.toString());
     }
 
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    
     private void parseJson(String apiUrl, String jsonStr) {
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
         // spider
