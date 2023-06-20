@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,8 @@ public class DriveActivity extends BaseActivity {
     private View footLoading;
     private boolean isInSearch = false;
 
+    private boolean autoSaveDrive = Hawk.get(HawkConfig.DRIVE_AUTO_SAVE, false);
+    
     private boolean delMode = false;
 
     private Handler mHandler = new Handler();
@@ -116,6 +119,23 @@ public class DriveActivity extends BaseActivity {
                 DriveActivity.super.onBackPressed();
             }
         });
+        
+        ImageView imageView = findViewById(R.id.icon_lock);
+        if (autoSaveDrive) {
+            imageView.setImageResource(R.drawable.icon_unlock);
+        } else {
+            imageView.setImageResource(R.drawable.icon_lock);
+        }
+
+        findViewById(R.id.icon_lock).setOnClickListener(v -> {
+            autoSaveDrive = !autoSaveDrive;
+            Hawk.put(HawkConfig.DRIVE_AUTO_SAVE, autoSaveDrive);
+            if (autoSaveDrive) {
+                imageView.setImageResource(R.drawable.icon_unlock);
+            } else {
+                imageView.setImageResource(R.drawable.icon_lock);
+            }
+        });        
         this.btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -392,7 +412,7 @@ public class DriveActivity extends BaseActivity {
             // takagen99: Added Theme Color
             // this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_theme));
             // this.btnRemoveServer.setColorFilter(getThemeColor());
-            this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FF0057));
+            this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_1890FF));
         } else {
             this.btnRemoveServer.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FFFFFF));
         }
