@@ -245,10 +245,9 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     }
                 }
             }
-            String doubanUrl = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-            OkGo.<String>get(doubanUrl)
-                    .headers("User-Agent", UA.randomOne())
-                    .execute(new AbsCallback<String>() {
+            String doubanHotURL = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
+            String userAgent = UA.random();
+            OkGo.<String>get(doubanHotURL).headers("User-Agent", userAgent).execute(new AbsCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     String netJson = response.body();
@@ -276,6 +275,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         ArrayList<Movie.Video> result = new ArrayList<>();
         try {
             JsonObject infoJson = new Gson().fromJson(json, JsonObject.class);
+            String userAgent = UA.getSystemWebviewUserAgent();
             JsonArray array = infoJson.getAsJsonArray("data");
             for (JsonElement ele : array) {
                 JsonObject obj = (JsonObject) ele;
@@ -283,7 +283,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 vod.name = obj.get("title").getAsString();
                 vod.note = obj.get("rate").getAsString();
                 if(!vod.note.isEmpty())vod.note+=" 分";
-                vod.pic = obj.get("cover").getAsString()+"@User-Agent=com.douban.frodo";
+                vod.pic = obj.get("cover").getAsString() + "@Referer=https://movie.douban.com/@User-Agent=" + userAgent;
                 result.add(vod);
             }
         } catch (Throwable th) {
