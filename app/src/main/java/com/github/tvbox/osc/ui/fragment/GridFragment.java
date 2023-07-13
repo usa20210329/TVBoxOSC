@@ -260,6 +260,7 @@ public class GridFragment extends BaseLazyFragment {
                     if (page > maxPage) {
                         gridAdapter.loadMoreEnd();
                         gridAdapter.setEnableLoadMore(false);
+                        if(page>2)Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
                     } else {
                         gridAdapter.loadMoreComplete();
                         gridAdapter.setEnableLoadMore(true);
@@ -267,14 +268,9 @@ public class GridFragment extends BaseLazyFragment {
                 } else {
                     if(page == 1){
                         showEmpty();
-                    }
-                    if(page > maxPage){
+                    }else{
                         Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
-                    }
-                    if (page > maxPage) {
                         gridAdapter.loadMoreEnd();
-                    } else {
-                        gridAdapter.loadMoreComplete();
                     }
                     gridAdapter.setEnableLoadMore(false);
                 }
@@ -294,13 +290,13 @@ public class GridFragment extends BaseLazyFragment {
         sourceViewModel.getList(sortData, page);
     }
 
-     private void toggleFilterColor() {
+    private void toggleFilterColor() {
         if (sortData.filters != null && !sortData.filters.isEmpty()) {
             int count = sortData.filterSelectCount();
             EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_FILTER_CHANGE, count));
         }
     }
-    
+
     public boolean isTop() {
         return isTop;
     }
