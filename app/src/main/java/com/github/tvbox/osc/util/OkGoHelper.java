@@ -3,7 +3,8 @@ package com.github.tvbox.osc.util;
 import android.graphics.Bitmap;
 
 import com.github.tvbox.osc.base.App;
-import com.github.tvbox.osc.picasso.CustomImageDownloader;
+import com.github.tvbox.osc.picasso.MyOkhttpDownLoader;
+//import com.github.tvbox.osc.picasso.CustomImageDownloader;
 import com.github.tvbox.osc.util.SSL.SSLSocketFactoryCompat;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.https.HttpsUtils;
@@ -163,8 +164,8 @@ public class OkGoHelper {
 
     static void initPicasso(OkHttpClient client) {
         client.dispatcher().setMaxRequestsPerHost(10);
-        //MyOkhttpDownLoader downloader = new MyOkhttpDownLoader(client);
-        CustomImageDownloader downloader = new CustomImageDownloader();
+        MyOkhttpDownLoader downloader = new MyOkhttpDownLoader(client);
+        //CustomImageDownloader downloader = new CustomImageDownloader();
         Picasso picasso = new Picasso.Builder(App.getInstance())
                 .downloader(downloader)
                 .defaultBitmapConfig(Bitmap.Config.RGB_565)
