@@ -5424,7 +5424,15 @@ public class UA {
         int key = (int)(Math.random()*num);
         return uas[key];
     }
-
+    
+    public static String getSystemWebviewUserAgent() {
+        String userAgent = System.getProperty("http.agent");
+        if (userAgent == null) {
+            userAgent = "Mozilla/5.0 (Linux; Android 11; Pixel 2 Build/RPB3.200720.005) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
+        }
+        return userAgent;
+    }
+    
     public static String random() {
         try {
             InputStream fis = App.getInstance().getAssets().open("ua.db");
