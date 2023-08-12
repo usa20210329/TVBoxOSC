@@ -1023,23 +1023,7 @@ public class PlayActivity extends BaseActivity {
                 playUrl(Jianpian.JPUrlDec(jp_url), null);
             }
             return;
-        }        
-        if(vs.url.startsWith("tvbox-drive://")) {
-            mController.showParse(false);
-            HashMap<String, String> headers = null;
-            if(mVodInfo.playerCfg != null && mVodInfo.playerCfg.length() > 0) {
-                JsonObject playerConfig = JsonParser.parseString(mVodInfo.playerCfg).getAsJsonObject();
-                if(playerConfig.has("headers")) {
-                    headers = new HashMap<>();
-                    for (JsonElement headerEl: playerConfig.getAsJsonArray("headers")) {
-                        JsonObject headerJson = headerEl.getAsJsonObject();
-                        headers.put(headerJson.get("name").getAsString(), headerJson.get("value").getAsString());
-                    }
-                }
-            }
-            playUrl(vs.url.replace("tvbox-drive://", ""), headers);
-            return;
-        }         
+        }            
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
             public void status(int code, String info) {
