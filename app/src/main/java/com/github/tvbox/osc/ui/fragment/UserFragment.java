@@ -171,23 +171,23 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             }
         });
         
-       // takagen99 : Long press to trigger Delete Mode for VOD History on Home Page   
+        // takagen99 : Long press to trigger Delete Mode for VOD History on Home Page       
         homeHotVodAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 if (ApiConfig.get().getSourceBeanList().isEmpty()) return false;
                 Movie.Video vod = ((Movie.Video) adapter.getItem(position));
-                 // Additional Check if : Home Rec 0=豆瓣, 1=推荐, 2=历史
+                // Additional Check if : Home Rec 0=豆瓣, 1=推荐, 2=历史
                 if ((vod.id != null && !vod.id.isEmpty()) && (Hawk.get(HawkConfig.HOME_REC, 0) == 2)) {
                     HawkConfig.hotVodDelete = !HawkConfig.hotVodDelete;
                     homeHotVodAdapter.notifyDataSetChanged();
-                } else {               
+                } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", vod.name);
                     jumpActivity(FastSearchActivity.class, bundle);                    
                 }
                 return true;
-            }
+            }    
         });
         
         tvHotList1.setOnItemListener(new TvRecyclerView.OnItemListener() {
