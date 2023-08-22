@@ -700,10 +700,14 @@ public class PlayFragment extends BaseLazyFragment {
         if(autoRetryCount>0 && url.contains(".m3u8")){
            url="http://home.jundie.top:666/unBom.php?m3u8="+url;
         }
-
         if (url.startsWith("data:application/dash+xml;base64,")) {
+            PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
             App.getInstance().setDashData(url.split("base64,")[1]);
             url = ControlManager.get().getAddress(true) + "dash/proxy.mpd";
+        } else if (url.contains(".mpd") || url.contains("type=mpd")) {
+            PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg, 2);
+        } else {
+            PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);            
         }
         
         String finalUrl = url;    
@@ -732,7 +736,7 @@ public class PlayFragment extends BaseLazyFragment {
                             e.printStackTrace();
                         }
                         hideTip();
-                        PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
+                        //PlayerHelper.updateCfg(mVideoView, mVodPlayerCfg);
                         mVideoView.setProgressKey(progressKey);
                         if (headers != null) {
                             mVideoView.setUrl(finalUrl, headers);
