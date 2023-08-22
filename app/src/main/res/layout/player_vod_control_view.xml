@@ -578,7 +578,7 @@
 
 
     <ImageView
-        android:id="@+id/tv_vlock"
+        android:id="@+id/tv_lock"
         android:layout_width="@dimen/vs_80"
         android:layout_height="@dimen/vs_80"
         android:layout_gravity="right|center"
