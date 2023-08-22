@@ -28,7 +28,7 @@ import java.util.Map;
 
 import xyz.doikki.videoplayer.player.AbstractPlayer;
 import xyz.doikki.videoplayer.player.VideoViewManager;
-mport xyz.doikki.videoplayer.util.PlayerUtils;
+import xyz.doikki.videoplayer.util.PlayerUtils;
 
 
 public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
