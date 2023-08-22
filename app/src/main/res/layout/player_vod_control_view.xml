@@ -564,5 +564,27 @@
         android:text="0"
         android:textColor="@color/color_CC000000"
         android:textSize="@dimen/ts_20" />
+     <ImageView
+        android:id="@+id/tv_back"
+        android:layout_width="@dimen/vs_80"
+        android:layout_height="@dimen/vs_80"
+        android:layout_gravity="left|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="@dimen/vs_20"
+        android:src="@drawable/icon_back"
+        android:visibility="invisible" />
+
+
+    <ImageView
+        android:id="@+id/tv_vlock"
+        android:layout_width="@dimen/vs_80"
+        android:layout_height="@dimen/vs_80"
+        android:layout_gravity="right|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="@dimen/vs_20"
+        android:src="@drawable/icon_vunlock"
+        android:visibility="invisible" />   
 
 </FrameLayout>
