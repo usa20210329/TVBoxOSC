@@ -721,6 +721,7 @@ public class SourceViewModel extends ViewModel {
                 @Override
                 public void run() {
                     Spider sp = ApiConfig.get().getCSP(sourceBean);
+                    if(TextUtils.isEmpty(url))return;
                     String json = sp.playerContent(playFlag, url, ApiConfig.get().getVipParseFlags());
                     try {
                         JSONObject result = new JSONObject(json);
@@ -759,8 +760,8 @@ public class SourceViewModel extends ViewModel {
             }
         } else if (type == 4) {
             String extend=sourceBean.getExt();
-            String apiUrl = Hawk.get(HawkConfig.API_URL, "");
-            extend=getFixUrl(apiUrl,extend);
+            extend=getFixUrl(extend);
+            if(URLEncoder.encode(extend).length()>1000)extend="";
             OkGo.<String>get(sourceBean.getApi())
                 .params("play", url)
                 .params("flag" ,playFlag)
@@ -805,12 +806,11 @@ public class SourceViewModel extends ViewModel {
         }
     }
     
-    private String getFixUrl(String url,String content){
-        if (content.contains("\"./")) {
-            if(!url.startsWith("http") && !url.startsWith("clan://")){
-                url = "http://" + url;
-            }
-            content = content.replace("./", url.substring(0,url.lastIndexOf("/") + 1));
+    private String getFixUrl(String content){
+        if (content.startsWith("http://127.0.0.1")) {
+            String path = content.replaceAll("^http.+/file/", FileUtils.getRootPath()+"/");
+            path = path.replaceAll("localhost/", "/");
+            content = FileUtils.readFileToString(path,"UTF-8");
         }
         return content;
     }
