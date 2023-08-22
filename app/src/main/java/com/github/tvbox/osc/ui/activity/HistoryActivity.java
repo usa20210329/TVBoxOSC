@@ -53,9 +53,9 @@ public class HistoryActivity extends BaseActivity {
 
     private void toggleDelMode() {
     	HawkConfig.hotVodDelete = !HawkConfig.hotVodDelete;
-        historyAdapter.notifyDataSetChanged();        
+        historyAdapter.notifyDataSetChanged();
         delMode = !delMode;
-        tvDelTip.setVisibility(delMode ? View.VISIBLE : View.GONE); 
+        tvDelTip.setVisibility(delMode ? View.VISIBLE : View.GONE);        
     }
 
     private void initView() {
@@ -80,7 +80,7 @@ public class HistoryActivity extends BaseActivity {
                 ConfirmClearDialog dialog = new ConfirmClearDialog(mContext, "History");
                 dialog.show();
             }
-        });        
+        });
         mGridView.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
             @Override
             public boolean onInBorderKeyEvent(int direction, View focused) {
@@ -112,7 +112,6 @@ public class HistoryActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FastClickCheckUtil.check(view);
-                if (position == -1) return;
                 VodInfo vodInfo = historyAdapter.getData().get(position);
 
                 if (vodInfo != null) {
@@ -139,7 +138,7 @@ public class HistoryActivity extends BaseActivity {
                 toggleDelMode();
                 return true;
             }
-        }); 
+        });
     }
 
     private void initData() {
