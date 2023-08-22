@@ -212,7 +212,7 @@ public class VodController extends BaseController {
             @Override
             public void onClick(View v) {
                 isLock = !isLock;
-                mLockView.setImageResource(isLock ? R.drawable.icon_lock : R.drawable.icon_unlock);
+                mLockView.setImageResource(isLock ? R.drawable.icon_vlock : R.drawable.icon_vunlock);
                 if (isLock) {
                     Message obtain = Message.obtain();
                     obtain.what = 1003;//隐藏底部菜单
