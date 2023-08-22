@@ -585,7 +585,7 @@
         android:clickable="true"
         android:focusable="true"
         android:paddingHorizontal="@dimen/vs_20"
-        android:src="@drawable/icon_vunlock"
+        android:src="@drawable/icon_tvunlock"
         android:visibility="invisible" />   
 
 </FrameLayout>
