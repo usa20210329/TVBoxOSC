@@ -801,6 +801,13 @@ public class LivePlayActivity extends BaseActivity {
         Integer[] groupChannelIndex = getNextChannel(1);
         playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
     }
+    
+    public void playCurrent() {
+        if (!isCurrentLiveChannelValid()) {
+            return;
+        }
+        playChannel(currentChannelGroupIndex, currentLiveChannelIndex, true);
+    }
 
     private void playPrevious() {
         if (!isCurrentLiveChannelValid()) return;
@@ -889,7 +896,14 @@ public class LivePlayActivity extends BaseActivity {
             }
         }
     };
-
+    
+    private final Runnable mConnectTimeoutReplayRun = new Runnable() {
+        @Override
+        public void run() {
+            playCurrent();
+        }
+    };
+    
     //laodao 7天Epg数据绑定和展示
     private void initEpgListView() {
         mRightEpgList.setHasFixedSize(true);
@@ -1178,16 +1192,24 @@ public class LivePlayActivity extends BaseActivity {
                     case VideoView.STATE_PLAYING:
                         currentLiveChangeSourceTimes = 0;
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
+                        mHandler.removeCallbacks(mConnectTimeoutReplayRun);
                         break;
                     case VideoView.STATE_ERROR:
                     case VideoView.STATE_PLAYBACK_COMPLETED:
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
+                        mHandler.removeCallbacks(mConnectTimeoutReplayRun);
                         mHandler.postDelayed(mConnectTimeoutChangeSourceRun, 2000);
                         break;
                     case VideoView.STATE_PREPARING:
                     case VideoView.STATE_BUFFERING:
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-                        mHandler.postDelayed(mConnectTimeoutChangeSourceRun, (Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1) + 1) * 5000);
+                        mHandler.removeCallbacks(mConnectTimeoutReplayRun);
+                        if(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 2) == 0 ){
+                            //缓冲30s重新播放
+                            mHandler.postDelayed(mConnectTimeoutReplayRun, 30 * 1000L);
+                        }else{
+                            mHandler.postDelayed(mConnectTimeoutChangeSourceRun, (Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 2)) * 5000L);
+                        }
                         break;
                 }
             }
@@ -1620,7 +1642,7 @@ public class LivePlayActivity extends BaseActivity {
         ArrayList<String> sourceItems = new ArrayList<>();
         ArrayList<String> scaleItems = new ArrayList<>(Arrays.asList("默认", "16:9", "4:3", "填充", "原始", "裁剪"));
         ArrayList<String> playerDecoderItems = new ArrayList<>(Arrays.asList("系统", "ijk硬解", "ijk软解", "exo"));
-        ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("5s", "10s", "15s", "20s", "25s", "30s"));
+        ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("关", "5s", "10s", "15s", "20s", "25s", "30s"));
         ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速", "换台反转", "跨选分类"));
         itemsArrayList.add(sourceItems);
         itemsArrayList.add(scaleItems);
