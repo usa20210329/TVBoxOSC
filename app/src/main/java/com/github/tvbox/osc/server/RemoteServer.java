@@ -80,7 +80,6 @@ public class RemoteServer extends NanoHTTPD {
         getRequestList.add(new RawRequestProcess(this.mContext, "/script.js", R.raw.script, "application/x-javascript"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/favicon.ico", R.drawable.app_icon, "image/x-icon"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/live.txt", R.raw.live, "text/plain"));
-        //getRequestList.add(new RawRequestProcess(this.mContext, "/live1.txt", R.raw.live1, "text/plain"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/spider.jar", R.raw.spider, "application/java-archive"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/a.json", R.raw.a, "application/json"));
         getRequestList.add(new RawRequestProcess(this.mContext, "/b.json", R.raw.b, "application/json"));
